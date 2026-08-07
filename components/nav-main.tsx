@@ -1,51 +1,55 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button';
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { CirclePlusIcon, MailIcon } from "lucide-react"
+} from '@/components/ui/sidebar';
+import { CirclePlusIcon, MailIcon } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export function NavMain({
   items,
 }: {
   items: {
-    title: string
-    url: string
-    icon?: React.ReactNode
-  }[]
+    title: string;
+    url: string;
+    icon?: React.ReactNode;
+  }[];
 }) {
+  const router = useRouter();
   return (
     <SidebarGroup>
-      <SidebarGroupContent className="flex flex-col gap-2">
+      <SidebarGroupContent className='flex flex-col gap-2'>
         <SidebarMenu>
-          <SidebarMenuItem className="flex items-center gap-2">
+          <SidebarMenuItem className='flex items-center gap-2'>
             <SidebarMenuButton
-              tooltip="Quick Create"
-              className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
+              tooltip='Quick Create'
+              className='min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground'
             >
-              <CirclePlusIcon
-              />
+              <CirclePlusIcon />
               <span>Quick Create</span>
             </SidebarMenuButton>
             <Button
-              size="icon"
-              className="size-8 group-data-[collapsible=icon]:opacity-0"
-              variant="outline"
+              size='icon'
+              className='size-8 group-data-[collapsible=icon]:opacity-0'
+              variant='outline'
             >
-              <MailIcon
-              />
-              <span className="sr-only">Inbox</span>
+              <MailIcon />
+              <span className='sr-only'>Inbox</span>
             </Button>
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
           {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
+            <SidebarMenuItem
+              key={item.title}
+              onClick={() => router.push(item.url)}
+            >
               <SidebarMenuButton tooltip={item.title}>
                 {item.icon}
                 <span>{item.title}</span>
@@ -55,5 +59,5 @@ export function NavMain({
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
-  )
+  );
 }
