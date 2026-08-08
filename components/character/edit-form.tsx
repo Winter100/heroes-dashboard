@@ -18,7 +18,6 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { characterSchema, Gender } from '@/schema/character.schema';
-import { Character, formatDate } from '@/app/dashboard/character/page';
 import {
   Select,
   SelectContent,
@@ -26,25 +25,43 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
+import { Character } from '@/types/character-type';
+import { formatDate } from '@/lib/utils';
 
 const EditForm = ({
   character,
   mode,
-  onSubmit,
+  mutate,
+  id,
+  onSuccess,
 }: {
   mode: 'create' | 'update';
-  onSubmit: (data: z.infer<typeof characterSchema>) => void;
+  mutate: (
+    data: z.infer<typeof characterSchema>,
+    id?: number,
+    options?: { onSuccess?: () => void },
+  ) => void;
   character?: Character;
+  id?: number;
+  onSuccess?: () => void;
 }) => {
   const form = useForm<z.infer<typeof characterSchema>>({
     resolver: zodResolver(characterSchema),
     defaultValues: {
-      id: character?.id || -1,
       name: character?.name || '',
       releaseDate: formatDate(character?.releaseDate || new Date()),
       gender: character?.gender || 'female',
     },
   });
+
+  const onSubmit = (data: z.infer<typeof characterSchema>) => {
+    const options = { onSuccess };
+    if (mode === 'create') {
+      mutate(data, undefined, options);
+      return;
+    }
+    mutate(data, id, options);
+  };
 
   return (
     <Card className='w-full sm:max-w-md'>
@@ -134,7 +151,10 @@ const EditForm = ({
             <Controller
               name='image'
               control={form.control}
-              render={({ field, fieldState }) => (
+              render={({
+                field: { value, onChange, ...field },
+                fieldState,
+              }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor='image'>이미지</FieldLabel>
                   <Input
@@ -145,6 +165,7 @@ const EditForm = ({
                     accept='image/*'
                     aria-invalid={fieldState.invalid}
                     placeholder='이미지'
+                    onChange={(e) => onChange(e.target.files)}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -157,11 +178,8 @@ const EditForm = ({
       </CardContent>
       <CardFooter>
         <Field orientation='horizontal'>
-          <Button type='button' variant='outline' onClick={() => form.reset()}>
-            리셋
-          </Button>
           <Button type='submit' form='form-character'>
-            수정
+            {mode === 'create' ? '생성' : '수정'}
           </Button>
         </Field>
       </CardFooter>

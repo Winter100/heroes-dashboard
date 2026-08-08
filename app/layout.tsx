@@ -4,6 +4,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import TanstackQueryProvider from '@/components/provider/tanstack-query-provider';
+import { Toaster } from '@/components/ui/toast';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
         <TanstackQueryProvider>
           <TooltipProvider>{children}</TooltipProvider>
         </TanstackQueryProvider>
+        <Toaster />
       </body>
     </html>
   );
