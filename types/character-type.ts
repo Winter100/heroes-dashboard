@@ -9,5 +9,5 @@ export type Character = {
 };
 
 export type CharacterDetailType = Character & {
-  skills: { name: string; image: string; description: string }[];
+  skills: { id: number; name: string; image: string; description: string }[];
 };

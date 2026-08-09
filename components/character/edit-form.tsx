@@ -151,24 +151,32 @@ const EditForm = ({
             <Controller
               name='image'
               control={form.control}
-              render={({
-                field: { value, onChange, ...field },
-                fieldState,
-              }) => (
-                <Field data-invalid={fieldState.invalid}>
+              render={({ field, fieldState }) => (
+                <Field>
                   <FieldLabel htmlFor='image'>이미지</FieldLabel>
+
                   <Input
-                    {...field}
                     type='file'
-                    multiple={false}
                     id='image'
                     accept='image/*'
+                    multiple={false}
                     aria-invalid={fieldState.invalid}
-                    placeholder='이미지'
-                    onChange={(e) => onChange(e.target.files)}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+
+                      if (file) {
+                        field.onChange(file);
+                      }
+                    }}
+                    onBlur={field.onBlur}
+                    name={field.name}
+                    ref={field.ref}
                   />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+
+                  {fieldState.error && (
+                    <p className='text-sm text-destructive'>
+                      {fieldState.error.message}
+                    </p>
                   )}
                 </Field>
               )}

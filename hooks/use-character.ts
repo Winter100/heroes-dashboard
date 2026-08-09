@@ -13,6 +13,13 @@ type MutateOptions = { onSuccess?: () => void };
 
 export const useCharacter = () => {
   const queryClient = useQueryClient();
+
+  const invalidateCharacterList = () => {
+    queryClient.invalidateQueries({
+      queryKey: [API_KEY.characterList],
+    });
+  };
+
   const { data } = useSuspenseQuery<Character[]>({
     queryKey: [API_KEY.characterList],
     queryFn: characterApi.get,
@@ -25,9 +32,7 @@ export const useCharacter = () => {
 
   const createMutation = useMutation({
     mutationFn: characterApi.create,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [API_KEY.characterList] });
-    },
+    onSuccess: invalidateCharacterList,
     onError: (error) => {
       console.log(error.message);
     },
@@ -35,9 +40,7 @@ export const useCharacter = () => {
 
   const updateMutation = useMutation({
     mutationFn: characterApi.update,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [API_KEY.characterList] });
-    },
+    onSuccess: invalidateCharacterList,
     onError: (error) => {
       console.log(error.message);
     },
@@ -45,9 +48,7 @@ export const useCharacter = () => {
 
   const deleteMutation = useMutation({
     mutationFn: characterApi.delete,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [API_KEY.characterList] });
-    },
+    onSuccess: invalidateCharacterList,
     onError: (error) => {
       console.log(error.message);
     },
@@ -63,21 +64,21 @@ export const useCharacter = () => {
     formData.append('gender', data.gender);
     formData.append('releaseDate', data.releaseDate);
 
-    if (data.image && data.image.length > 0) {
-      formData.append('image', data.image[0]);
+    if (data.image instanceof File) {
+      formData.append('image', data.image);
     }
 
-    toast.promise(
-      createMutation.mutateAsync(formData).then((res) => {
+    const promise = createMutation.mutateAsync(formData);
+
+    toast.promise(promise, {
+      loading: '캐릭터 생성중...',
+      success: () => {
         options?.onSuccess?.();
-        return res;
-      }),
-      {
-        loading: '캐릭터 생성중...',
-        success: '성공적으로 등록되었습니다.',
-        error: (err) => err.message ?? '등록에 실패했습니다.',
+        return '성공적으로 등록되었습니다.';
       },
-    );
+      error: (error) =>
+        error instanceof Error ? error.message : '등록에 실패했습니다.',
+    });
   };
 
   const onEdit = (
@@ -99,37 +100,37 @@ export const useCharacter = () => {
     formData.append('gender', data.gender);
     formData.append('releaseDate', data.releaseDate);
 
-    if (data.image && data.image.length > 0) {
-      formData.append('image', data.image[0]);
+    if (data.image instanceof File) {
+      formData.append('image', data.image);
     }
 
-    toast.promise(
-      updateMutation.mutateAsync(formData).then((res) => {
+    const promise = updateMutation.mutateAsync(formData);
+
+    toast.promise(promise, {
+      loading: `${data.name} 수정 중...`,
+      success: () => {
         options?.onSuccess?.();
-        return res;
-      }),
-      {
-        loading: `${data.name} 수정 중...`,
-        success: '성공적으로 수정되었습니다!',
-        error: (err) => err.message ?? '수정에 실패했습니다.',
+        return '성공적으로 수정되었습니다.';
       },
-    );
+      error: (error) =>
+        error instanceof Error ? error.message : '등록에 실패했습니다.',
+    });
   };
 
   const onDelete = (name?: string, id?: number, options?: MutateOptions) => {
     if (!id || !name) return;
 
-    toast.promise(
-      deleteMutation.mutateAsync({ id: id.toString(), name }).then((res) => {
+    const promise = deleteMutation.mutateAsync({ id: id.toString(), name });
+
+    toast.promise(promise, {
+      loading: `${name} 삭제 중...`,
+      success: () => {
         options?.onSuccess?.();
-        return res;
-      }),
-      {
-        loading: `${name} 삭제 중...`,
-        success: '성공적으로 삭제되었습니다!',
-        error: (err) => err.message ?? '삭제에 실패했습니다.',
+        return '성공적으로 삭제되었습니다.';
       },
-    );
+      error: (error) =>
+        error instanceof Error ? error.message : '등록에 실패했습니다.',
+    });
   };
 
   return { data, onCreate, onEdit, onDelete };
