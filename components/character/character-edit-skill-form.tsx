@@ -13,31 +13,30 @@ import {
 } from '@/schema/character.schema';
 import { Textarea } from '../ui/textarea';
 import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 type Props = {
-  onSubmit: (
-    data: z.infer<typeof characterSkillSchema>,
-    mode: 'create' | 'update',
-    optional?: () => void,
-  ) => void;
   mode: 'create' | 'update';
+  disabled: boolean;
+  onSubmit: (data: CharacterSkillFormValues, optional?: () => void) => void;
   onCancel: () => void;
-  defaultData?: CharacterSkillFormValues;
+  defaultValues?: CharacterSkillFormValues;
 };
 
-const ChracterEditSkill = ({
-  defaultData,
-  onSubmit,
+const CharacterEditSkillForm = ({
   mode,
+  disabled = false,
+  onSubmit,
   onCancel,
+  defaultValues,
 }: Props) => {
   const [preview, setPreview] = useState<string | null>(null);
 
-  const form = useForm<z.infer<typeof characterSkillSchema>>({
+  const form = useForm<CharacterSkillFormValues>({
     resolver: zodResolver(characterSkillSchema),
     defaultValues: {
-      name: defaultData ? defaultData.name : '',
-      description: defaultData ? defaultData.description : '',
+      name: defaultValues ? defaultValues.name : '',
+      description: defaultValues ? defaultValues.description : '',
     },
   });
 
@@ -50,16 +49,26 @@ const ChracterEditSkill = ({
   };
 
   const onSubmtForm = (data: z.infer<typeof characterSkillSchema>) => {
-    onSubmit(data, mode, onClickCancel);
+    onSubmit(data, onClickCancel);
   };
 
   return (
     <Card className='w-full sm:max-w-md'>
       <CardHeader className='flex items-center justify-end gap-0'>
-        <Button type='button' variant='secondary' onClick={onClickCancel}>
+        <Button
+          disabled={disabled}
+          type='button'
+          variant='secondary'
+          onClick={onClickCancel}
+        >
           취소
         </Button>
-        <Button type='submit' variant='secondary' form='form-skill'>
+        <Button
+          disabled={disabled}
+          type='submit'
+          variant='secondary'
+          form='form-skill'
+        >
           등록
         </Button>
       </CardHeader>
@@ -75,7 +84,9 @@ const ChracterEditSkill = ({
                     <Field>
                       <label
                         htmlFor='picture'
-                        className='flex h-20 cursor-pointer items-center justify-center overflow-hidden rounded-md border border-dashed'
+                        className={cn(
+                          'flex h-20 cursor-pointer items-center justify-center overflow-hidden rounded-md border border-dashed',
+                        )}
                       >
                         {preview ? (
                           <Image
@@ -91,6 +102,7 @@ const ChracterEditSkill = ({
                         )}
                       </label>
                       <Input
+                        disabled={disabled}
                         id='picture'
                         type='file'
                         accept='image/*'
@@ -114,6 +126,7 @@ const ChracterEditSkill = ({
               </div>
 
               <Controller
+                disabled={disabled}
                 name='name'
                 control={form.control}
                 render={({ field, fieldState }) => (
@@ -134,6 +147,7 @@ const ChracterEditSkill = ({
               />
             </div>
             <Controller
+              disabled={disabled}
               name='description'
               control={form.control}
               render={({ field, fieldState }) => (
@@ -159,4 +173,4 @@ const ChracterEditSkill = ({
   );
 };
 
-export default ChracterEditSkill;
+export default CharacterEditSkillForm;

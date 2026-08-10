@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -17,7 +16,11 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { characterSchema, Gender } from '@/schema/character.schema';
+import {
+  CharacterFormValues,
+  characterSchema,
+  Gender,
+} from '@/schema/character.schema';
 import {
   Select,
   SelectContent,
@@ -28,40 +31,23 @@ import {
 import { Character } from '@/types/character-type';
 import { formatDate } from '@/lib/utils';
 
-const EditForm = ({
-  character,
+const CharacterEditForm = ({
   mode,
   mutate,
-  id,
-  onSuccess,
+  defaultValues,
 }: {
   mode: 'create' | 'update';
-  mutate: (
-    data: z.infer<typeof characterSchema>,
-    id?: number,
-    options?: { onSuccess?: () => void },
-  ) => void;
-  character?: Character;
-  id?: number;
-  onSuccess?: () => void;
+  mutate: (data: CharacterFormValues) => void;
+  defaultValues?: Character;
 }) => {
-  const form = useForm<z.infer<typeof characterSchema>>({
+  const form = useForm<CharacterFormValues>({
     resolver: zodResolver(characterSchema),
     defaultValues: {
-      name: character?.name || '',
-      releaseDate: formatDate(character?.releaseDate || new Date()),
-      gender: character?.gender || 'female',
+      name: defaultValues?.name || '',
+      releaseDate: formatDate(defaultValues?.releaseDate || new Date()),
+      gender: defaultValues?.gender || 'female',
     },
   });
-
-  const onSubmit = (data: z.infer<typeof characterSchema>) => {
-    const options = { onSuccess };
-    if (mode === 'create') {
-      mutate(data, undefined, options);
-      return;
-    }
-    mutate(data, id, options);
-  };
 
   return (
     <Card className='w-full sm:max-w-md'>
@@ -72,7 +58,7 @@ const EditForm = ({
       <CardContent>
         <form
           id='form-character'
-          onSubmit={form.handleSubmit(onSubmit, (errors) =>
+          onSubmit={form.handleSubmit(mutate, (errors) =>
             console.log('유효성 검사 실패 목록:', errors),
           )}
         >
@@ -195,4 +181,4 @@ const EditForm = ({
   );
 };
 
-export default EditForm;
+export default CharacterEditForm;

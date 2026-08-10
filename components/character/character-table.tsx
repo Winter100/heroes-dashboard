@@ -1,4 +1,5 @@
 'use client';
+
 import {
   Table,
   TableBody,
@@ -16,36 +17,55 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import EditForm from '@/components/character/edit-form';
+import CharacterEditForm from '@/components/character/character-edit-form';
 import { Button } from '@/components/ui/button';
-import { useCharacter } from '@/hooks/use-character';
+import { useCharacter } from '@/hooks/character/use-character';
 import { SquarePen } from 'lucide-react';
-import { formatDate, getDaysSince } from '@/lib/utils';
+import { createCharacterFormData, formatDate, getDaysSince } from '@/lib/utils';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { CharacterFormValues } from '@/schema/character.schema';
+import { toast } from '../ui/toast';
+import { useAdminCreateCharacter } from '@/hooks/character/use-admin-create-character';
 
-// 캐릭터 생성은 여기서 Dialog로
-// 수정 삭제는 디테일 페이지에서 처리하기
 const CharacterTable = () => {
-  const [createOpen, setCreateOpen] = useState(false);
-  const { data, onCreate } = useCharacter();
   const router = useRouter();
+  const [createOpen, setCreateOpen] = useState(false);
+  const { data, isLoading, error } = useCharacter();
+  const createMutation = useAdminCreateCharacter();
+
+  if (isLoading) return <div>로딩</div>;
+  if (error) return <div>에러</div>;
+  const onCreate = (classData: CharacterFormValues) => {
+    const { name: className } = classData;
+    const formData = createCharacterFormData(classData);
+
+    const promise = createMutation.mutateAsync(formData);
+
+    toast.promise(promise, {
+      loading: `${className} 생성중...`,
+      success: () => {
+        setCreateOpen(false);
+        return `${className}가 생성되었습니다.`;
+      },
+      error: (error) =>
+        error instanceof Error ? error.message : '등록에 실패했습니다.',
+    });
+  };
 
   return (
     <div className='max-w-2xl mx-auto p-2 bg-muted/50 rounded-md'>
       {/* 직업 생성 버튼 & 모달 */}
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-        <DialogTrigger render={<Button variant='secondary'>New</Button>} />
+        <DialogTrigger
+          render={<Button variant='secondary'>직업 생성</Button>}
+        />
         <DialogContent>
           <DialogHeader>
             <DialogTitle></DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
-          <EditForm
-            mode='create'
-            mutate={onCreate}
-            onSuccess={() => setCreateOpen(false)}
-          />
+          <CharacterEditForm mode='create' mutate={onCreate} />
         </DialogContent>
       </Dialog>
 
@@ -59,7 +79,7 @@ const CharacterTable = () => {
               <TableHead>성별</TableHead>
               <TableHead>출시일</TableHead>
               <TableHead>출시일로부터</TableHead>
-              <TableHead className='text-center'>수정</TableHead>
+              <TableHead className='text-center'>상세</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

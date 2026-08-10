@@ -8,9 +8,8 @@ import {
 } from '@/components/ui/card';
 import { Button } from '../ui/button';
 import { useState } from 'react';
-import ChracterEditSkill from './character-edit-skill';
-import z from 'zod';
-import { characterSkillSchema } from '@/schema/character.schema';
+import ChracterEditSkill from './character-edit-skill-form';
+import { CharacterSkillFormValues } from '@/schema/character.schema';
 import {
   Dialog,
   DialogClose,
@@ -21,38 +20,88 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { useAdminCharacterSkill } from '@/hooks/character/use-admin-character-skill';
+import { createCharacterSkillFormData } from '@/lib/utils';
+import { toast } from '../ui/toast';
 
 type Props = {
   name: string;
   description: string;
-  id: number;
-  onSubmit: (
-    data: z.infer<typeof characterSkillSchema>,
-    mode: 'create' | 'update',
-    optional?: () => void,
-  ) => void;
-  onDelete: (skillName: string, skillId: number) => void;
+  id: string;
+  classId: string;
 };
-const CharacterSkillCard = ({
-  name,
-  description,
-  id,
-  onSubmit,
-  onDelete,
-}: Props) => {
-  const [isEdit, setIsEdit] = useState(false);
+const CharacterSkillCard = ({ id, name, description, classId }: Props) => {
+  const [updateOpen, setUpdateOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const { updateSkillMutation, deleteSkillMutation } =
+    useAdminCharacterSkill(classId);
+  const skillId = id;
 
-  const onCancel = () => {
-    setIsEdit((pre) => !pre);
+  const onEdit = async (
+    skill: CharacterSkillFormValues,
+    optional?: () => void,
+  ) => {
+    const formData = createCharacterSkillFormData(skill, classId, skillId);
+    const promise = updateSkillMutation.mutateAsync(formData);
+
+    toast.promise(promise, {
+      loading: `${name} 수정 중...`,
+      success: () => {
+        optional?.();
+        return {
+          type: 'success',
+          title: name,
+          description: '스킬이 수정되었습니다.',
+        };
+      },
+      error: (error) => {
+        return {
+          type: 'error',
+          title: name,
+          description:
+            error instanceof Error
+              ? error.message
+              : '처리 중 오류가 발생했습니다.',
+        };
+      },
+    });
   };
 
-  if (isEdit) {
+  const onDelete = async () => {
+    console.log(skillId, classId);
+    const promise = deleteSkillMutation.mutateAsync({ classId, skillId });
+
+    toast.promise(promise, {
+      loading: `${name} 삭제 중...`,
+      success: () => {
+        setDeleteOpen(false);
+        return {
+          type: 'success',
+          title: name,
+          description: '스킬이 삭제되었습니다.',
+        };
+      },
+      error: (error) => {
+        return {
+          type: 'error',
+          title: name,
+          description:
+            error instanceof Error
+              ? error.message
+              : '처리 중 오류가 발생했습니다.',
+        };
+      },
+    });
+  };
+
+  if (updateOpen) {
     return (
       <ChracterEditSkill
-        defaultData={{ name, description }}
-        onSubmit={onSubmit}
-        onCancel={onCancel}
+        defaultValues={{ name, description }}
+        onSubmit={onEdit}
+        onCancel={() => setUpdateOpen(false)}
         mode='update'
+        disabled={updateSkillMutation.isPending}
       />
     );
   }
@@ -66,12 +115,22 @@ const CharacterSkillCard = ({
         </CardTitle>
         <CardDescription></CardDescription>
         <CardAction>
-          <Button variant='secondary' onClick={() => setIsEdit((pre) => !pre)}>
+          <Button variant='secondary' onClick={() => setUpdateOpen(true)}>
             수정
           </Button>
 
-          <Dialog>
-            <DialogTrigger render={<Button variant='secondary'>삭제</Button>} />
+          <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+            <DialogTrigger
+              render={
+                <Button
+                  disabled={deleteSkillMutation.isPending}
+                  variant='secondary'
+                  onClick={() => setDeleteOpen(true)}
+                >
+                  삭제
+                </Button>
+              }
+            />
             <DialogContent className='sm:max-w-sm'>
               <DialogHeader>
                 <DialogTitle>{name}</DialogTitle>
@@ -80,10 +139,14 @@ const CharacterSkillCard = ({
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
-                <DialogClose render={<Button variant='outline'>취소</Button>} />
+                <DialogClose
+                  disabled={deleteSkillMutation.isPending}
+                  render={<Button variant='outline'>취소</Button>}
+                />
                 <Button
+                  disabled={deleteSkillMutation.isPending}
                   variant='destructive'
-                  onClick={() => onDelete(name, id)}
+                  onClick={onDelete}
                 >
                   삭제
                 </Button>

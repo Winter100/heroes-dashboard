@@ -1,7 +1,6 @@
 'use client';
 
 import CharacterTable from '@/components/character/character-table';
-import { Suspense } from 'react';
 
 /**
  * Todo
@@ -17,9 +16,7 @@ const Page = () => {
   return (
     <div className='max-w-6xl mx-auto w-full'>
       <div>각종 차트 자리</div>
-      <Suspense fallback={<div>로딩 테스트</div>}>
-        <CharacterTable />
-      </Suspense>
+      <CharacterTable />
     </div>
   );
 };

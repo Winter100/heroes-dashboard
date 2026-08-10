@@ -1,6 +1,6 @@
 type Gender = 'male' | 'female';
 export type Character = {
-  id: number;
+  id: string;
   name: string;
   image: string;
   gender: Gender;
@@ -9,5 +9,5 @@ export type Character = {
 };
 
 export type CharacterDetailType = Character & {
-  skills: { id: number; name: string; image: string; description: string }[];
+  skills: { id: string; name: string; image: string; description: string }[];
 };
