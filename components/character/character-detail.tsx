@@ -46,9 +46,9 @@ const CharacterDetail = ({ classId }: { classId: string }) => {
   }
 
   const onEdit = (classData: CharacterFormValues) => {
-    const formData = createCharacterFormData(classData, classId);
+    const formData = createCharacterFormData(classData);
 
-    const promise = updateMutation.mutateAsync(formData);
+    const promise = updateMutation.mutateAsync({ formData, classId });
 
     toast.promise(promise, {
       loading: `${classData.name} 수정 중...`,
@@ -78,7 +78,7 @@ const CharacterDetail = ({ classId }: { classId: string }) => {
   };
 
   return (
-    <div className='border gap-4 p-6 flex-col border-red-300 mx-auto flex items-center'>
+    <div className='gap-2 flex-col mx-auto flex items-center'>
       <Card className='max-w-sm w-full'>
         <div className='flex items-center gap-2'>
           <CardHeader className='flex-1'>

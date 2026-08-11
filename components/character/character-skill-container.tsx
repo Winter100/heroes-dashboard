@@ -18,7 +18,7 @@ const CharacterSkillContainer = ({ classId, data }: Props) => {
     optional?: () => void,
   ) => {
     const { name: skillName } = skill;
-    const formData = createCharacterSkillFormData(skill, classId);
+    const formData = createCharacterSkillFormData(skill, [classId]);
     const promise = createSkillMutation.mutateAsync(formData);
 
     toast.promise(promise, {
@@ -45,7 +45,7 @@ const CharacterSkillContainer = ({ classId, data }: Props) => {
   };
 
   return (
-    <div className='grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-4 w-full'>
+    <div className='grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-2 w-full'>
       {data?.skills.map((skill) => (
         <CharacterSkillCard key={skill.name} classId={classId} {...skill} />
       ))}

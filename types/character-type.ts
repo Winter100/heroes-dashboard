@@ -5,6 +5,7 @@ export type Character = {
   image: string;
   gender: Gender;
   releaseDate: string;
+  skillCount: string;
   battleType?: string;
 };
 

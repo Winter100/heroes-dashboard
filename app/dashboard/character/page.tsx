@@ -1,5 +1,6 @@
 'use client';
 
+import CharacterCreate from '@/components/character/character-create';
 import CharacterTable from '@/components/character/character-table';
 
 /**
@@ -16,6 +17,9 @@ const Page = () => {
   return (
     <div className='max-w-6xl mx-auto w-full'>
       <div>각종 차트 자리</div>
+      <div className='flex items-center justify-end mb-2'>
+        <CharacterCreate />
+      </div>
       <CharacterTable />
     </div>
   );

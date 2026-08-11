@@ -41,8 +41,9 @@ const CharacterSkillCard = ({ id, name, description, classId }: Props) => {
     skill: CharacterSkillFormValues,
     optional?: () => void,
   ) => {
-    const formData = createCharacterSkillFormData(skill, classId, skillId);
-    const promise = updateSkillMutation.mutateAsync(formData);
+    // classId 다른 직업도 받게 하기 (skill 데이터에 포함시키기)
+    const formData = createCharacterSkillFormData(skill, [classId]);
+    const promise = updateSkillMutation.mutateAsync({ formData, skillId });
 
     toast.promise(promise, {
       loading: `${name} 수정 중...`,
@@ -68,7 +69,7 @@ const CharacterSkillCard = ({ id, name, description, classId }: Props) => {
   };
 
   const onDelete = async () => {
-    console.log(skillId, classId);
+    // 해당 캐릭터와 스킬의 관계만 끊고있음
     const promise = deleteSkillMutation.mutateAsync({ classId, skillId });
 
     toast.promise(promise, {

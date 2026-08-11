@@ -4,7 +4,7 @@ const Page = async ({ params }: { params: Promise<{ classId: string }> }) => {
   const { classId } = await params;
 
   return (
-    <div>
+    <div className='max-w-6xl mx-auto w-full'>
       <CharacterDetail classId={classId} />
     </div>
   );

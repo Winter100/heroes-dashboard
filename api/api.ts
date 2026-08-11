@@ -30,11 +30,20 @@ export const characterApi = {
     if (!res.ok) throw new Error(data.message);
     return data;
   },
-  update: async (formData: FormData) => {
-    const res = await fetch(`${BACKEND_URL}/characters-admin/update`, {
-      method: 'POST',
-      body: formData,
-    });
+  update: async ({
+    formData,
+    classId,
+  }: {
+    formData: FormData;
+    classId: string;
+  }) => {
+    const res = await fetch(
+      `${BACKEND_URL}/characters-admin/update/${classId}`,
+      {
+        method: 'POST',
+        body: formData,
+      },
+    );
     const data = await res.json();
 
     if (!res.ok) throw new Error(data.message);
@@ -47,12 +56,12 @@ export const characterApi = {
     classId: string;
     className: string;
   }) => {
-    const res = await fetch(`${BACKEND_URL}/characters-admin`, {
+    const res = await fetch(`${BACKEND_URL}/characters-admin/${classId}`, {
       headers: {
         'Content-Type': 'application/json',
       },
       method: 'DELETE',
-      body: JSON.stringify({ classId, className }),
+      body: JSON.stringify({ className }),
     });
 
     const data = await res.json();
@@ -80,11 +89,20 @@ export const characterApi = {
     return text ? JSON.parse(text) : (undefined as T);
   },
 
-  updateSkill: async <T>(formData: FormData): Promise<T> => {
-    const res = await fetch(`${BACKEND_URL}/characters-admin/skill/update`, {
-      method: 'POST',
-      body: formData,
-    });
+  updateSkill: async <T>({
+    formData,
+    skillId,
+  }: {
+    formData: FormData;
+    skillId: string;
+  }): Promise<T> => {
+    const res = await fetch(
+      `${BACKEND_URL}/characters-admin/skill/update/${skillId}`,
+      {
+        method: 'POST',
+        body: formData,
+      },
+    );
     if (!res.ok) {
       const error = await res.json().catch(() => null);
       throw new Error(error?.message ?? '요청 처리 중 오류가 발생했습니다.');
@@ -105,13 +123,16 @@ export const characterApi = {
     classId: string;
   }) => {
     // 직업과 스킬의 연결끊기
-    const res = await fetch(`${BACKEND_URL}/characters-admin/skill/delete`, {
-      headers: {
-        'Content-Type': 'application/json',
+    const res = await fetch(
+      `${BACKEND_URL}/characters-admin/skill/delete/${skillId}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'DELETE',
+        body: JSON.stringify({ classId }),
       },
-      method: 'DELETE',
-      body: JSON.stringify({ skillId, classId }),
-    });
+    );
     const data = await res.json();
     if (!res.ok) throw new Error(data.message);
     return data;
