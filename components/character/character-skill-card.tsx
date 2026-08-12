@@ -20,9 +20,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { useAdminCharacterSkill } from '@/hooks/character/use-admin-character-skill';
 import { createCharacterSkillFormData } from '@/lib/utils';
 import { toast } from '../ui/toast';
+import {
+  useAdminDeleteSkill,
+  useAdminUpdateSkill,
+} from '@/hooks/character/use-admin-character';
 
 type Props = {
   name: string;
@@ -30,12 +33,16 @@ type Props = {
   id: string;
   classId: string;
 };
-const CharacterSkillCard = ({ id, name, description, classId }: Props) => {
+const CharacterSkillCard = ({
+  id: skillId,
+  name,
+  description,
+  classId,
+}: Props) => {
   const [updateOpen, setUpdateOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const { updateSkillMutation, deleteSkillMutation } =
-    useAdminCharacterSkill(classId);
-  const skillId = id;
+  const updateSkillMutation = useAdminUpdateSkill(classId);
+  const deleteSkillMutation = useAdminDeleteSkill(classId);
 
   const onEdit = async (
     skill: CharacterSkillFormValues,

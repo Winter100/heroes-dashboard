@@ -1,13 +1,10 @@
 'use client';
 
-import { TrendingUp } from 'lucide-react';
 import { LabelList, Pie, PieChart } from 'recharts';
-
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -17,13 +14,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from '@/components/ui/chart';
-
-export const description = 'A pie chart with a label';
-
-const chartData = [
-  { gender: 'male', count: 10, fill: 'var(--color-male)' },
-  { gender: 'female', count: 13, fill: 'var(--color-female)' },
-];
+import { GenderCount } from '@/types/character-type';
 
 const chartConfig = {
   count: {
@@ -39,22 +30,22 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function ChartPieLabel() {
+export function ChartPieLabel({ genderCount }: { genderCount: GenderCount[] }) {
   return (
-    <Card className='flex flex-col'>
+    <Card className='flex flex-col w-full max-w-sm'>
       <CardHeader className='items-center pb-0'>
         <CardTitle>직업 성별</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardDescription></CardDescription>
       </CardHeader>
-      <CardContent className='flex-1 pb-0'>
+      <CardContent className='pb-0 flex-1'>
         <ChartContainer
           config={chartConfig}
-          className='mx-auto aspect-square max-h-[250px] pb-0 [&_.recharts-pie-label-text]:fill-foreground'
+          className='mx-auto max-h-64 w-full aspect-square pb-0 [&_.recharts-pie-label-text]:fill-foreground'
         >
           <PieChart>
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
 
-            <Pie data={chartData} nameKey='gender' dataKey='count' label>
+            <Pie data={genderCount} nameKey='gender' dataKey='count' label>
               <LabelList
                 dataKey='gender'
                 className='fill-background'
@@ -68,14 +59,6 @@ export function ChartPieLabel() {
           </PieChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className='flex-col gap-2 text-sm'>
-        <div className='flex items-center gap-2 leading-none font-medium'>
-          테스트
-        </div>
-        <div className='leading-none text-muted-foreground'>
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter>
     </Card>
   );
 }

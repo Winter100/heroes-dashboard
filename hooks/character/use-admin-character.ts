@@ -1,37 +1,85 @@
-import { API_KEY, characterApi } from '@/api/api';
+import { characterApi } from '@/api/api';
+import { characterKeys } from '@/queries/character-keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 // 관리자 전용 Query
-export const useAdminCharacter = (classId: string) => {
+export const useAdminCreateCharacter = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: characterApi.create,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: characterKeys.lists() });
+    },
+    onError: (error) => {
+      console.log(error.message);
+    },
+  });
+};
+
+export const useAdminUpdateCharacter = () => {
   const queryClient = useQueryClient();
 
-  const invalidateCharacterList = () => {
-    queryClient.invalidateQueries({
-      queryKey: [API_KEY.characterList],
-    });
-    queryClient.invalidateQueries({
-      queryKey: [classId, 'skill'],
-    });
-  };
-
-  const updateMutation = useMutation({
+  return useMutation({
     mutationFn: characterApi.update,
-    onSuccess: invalidateCharacterList,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: characterKeys.lists() });
+    },
     onError: (error) => {
       console.log(error.message);
     },
   });
+};
 
-  const deleteMutation = useMutation({
+export const useAdminDeleteCharacter = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
     mutationFn: characterApi.delete,
-    onSuccess: invalidateCharacterList,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: characterKeys.lists() });
+    },
     onError: (error) => {
       console.log(error.message);
     },
   });
+};
 
-  return {
-    updateMutation,
-    deleteMutation,
-  };
+export const useAdminCreateSkill = (classId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: characterApi.createSkill,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: characterKeys.skill(classId) });
+    },
+    onError: (error) => {
+      console.log(error.message);
+    },
+  });
+};
+export const useAdminUpdateSkill = (classId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: characterApi.updateSkill,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: characterKeys.skill(classId) });
+    },
+    onError: (error) => {
+      console.log(error.message);
+    },
+  });
+};
+export const useAdminDeleteSkill = (classId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: characterApi.deleteSkill,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: characterKeys.skill(classId) });
+    },
+    onError: (error) => {
+      console.log(error.message);
+    },
+  });
 };

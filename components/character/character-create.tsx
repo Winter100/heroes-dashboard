@@ -1,6 +1,5 @@
 'use client';
 
-import { useAdminCreateCharacter } from '@/hooks/character/use-admin-create-character';
 import { createCharacterFormData } from '@/lib/utils';
 import { CharacterFormValues } from '@/schema/character.schema';
 import { useState } from 'react';
@@ -15,6 +14,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '../ui/button';
 import CharacterEditForm from './character-edit-form';
+import { useAdminCreateCharacter } from '@/hooks/character/use-admin-character';
 
 const CharacterCreate = () => {
   const [createOpen, setCreateOpen] = useState(false);
