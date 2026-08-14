@@ -46,23 +46,18 @@ const data = {
     },
     {
       title: '레이드',
-      url: '#',
+      url: '/dashboard/raid',
       icon: <ListIcon />,
     },
     {
       title: '아이템',
-      url: '#',
+      url: '/dashboard/item',
       icon: <ChartBarIcon />,
     },
     {
       title: '인챈트',
-      url: '#',
+      url: '/dashboard/enchant',
       icon: <FolderIcon />,
-    },
-    {
-      title: 'Team',
-      url: '#',
-      icon: <UsersIcon />,
     },
   ],
   navClouds: [

@@ -3,6 +3,7 @@ import {
   CharacterDetailType,
   Statistics,
 } from '@/types/character-type';
+import { ItemStepType } from '@/types/item-type';
 import { apiClient } from '@/utils/api-client';
 
 // 추후 토큰이 들어가야함
@@ -74,5 +75,28 @@ export const characterApi = {
       },
       method: 'DELETE',
       body: JSON.stringify({ classId }),
+    }),
+};
+
+export const itemApi = {
+  get: async () => apiClient<ItemStepType[]>(`/items/all`),
+  findOne: async (itemId: string) =>
+    apiClient<ItemStepType>(`/items/step/${itemId}`),
+  create: async (formData: FormData) =>
+    apiClient(`/items-admin`, { method: 'POST', body: formData }),
+  update: async ({
+    itemId,
+    formData,
+  }: {
+    itemId: string;
+    formData: FormData;
+  }) =>
+    apiClient(`/items-admin/update/${itemId}`, {
+      method: 'POST',
+      body: formData,
+    }),
+  delete: async (itemId: string) =>
+    apiClient(`/items-admin/delete/${itemId}`, {
+      method: 'DELETE',
     }),
 };

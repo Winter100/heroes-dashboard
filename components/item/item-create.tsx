@@ -1,7 +1,6 @@
 'use client';
 
-import { createCharacterFormData } from '@/lib/utils';
-import { CharacterFormValues } from '@/schema/character.schema';
+import { createItemFormData } from '@/lib/utils';
 import { useState } from 'react';
 import {
   Dialog,
@@ -12,34 +11,32 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '../ui/button';
-import CharacterEditForm from './character-edit-form';
-import { useAdminCreateCharacter } from '@/hooks/character/use-admin-character';
+import ItemEditForm from './item-edit-form';
+import { ItemFormValues } from '@/schema/item.schema';
+import { useAdminCreateItem } from '@/hooks/item/use-admin-item';
 import { toast } from '../ui/toast';
 
-const CharacterCreate = () => {
+const ItemCreate = () => {
   const [createOpen, setCreateOpen] = useState(false);
-  const createMutation = useAdminCreateCharacter();
+  const createItemMutation = useAdminCreateItem();
 
-  const onCreate = (classData: CharacterFormValues) => {
-    const { name: className } = classData;
-    const formData = createCharacterFormData(classData);
-
-    const promise = createMutation.mutateAsync(formData);
-
+  const onCreate = (item: ItemFormValues) => {
+    const formData = createItemFormData(item);
+    const promise = createItemMutation.mutateAsync(formData);
     toast.promise(promise, {
-      loading: `${className} 생성중...`,
+      loading: `${item.name} 생성중...`,
       success: () => {
         setCreateOpen(false);
         return {
           type: 'success',
-          title: className,
-          description: '직업이 생성되었습니다.',
+          title: item.name,
+          description: `${item.name}가 생성되었습니다.`,
         };
       },
       error: (error) => {
         return {
           type: 'error',
-          title: className,
+          title: item.name,
           description:
             error instanceof Error
               ? error.message
@@ -51,16 +48,22 @@ const CharacterCreate = () => {
 
   return (
     <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-      <DialogTrigger render={<Button variant='secondary'>직업 생성</Button>} />
+      <DialogTrigger
+        render={<Button variant='secondary'>아이템 생성</Button>}
+      />
       <DialogContent>
         <DialogHeader>
           <DialogTitle></DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <CharacterEditForm mode='create' mutate={onCreate} />
+        <ItemEditForm
+          mode='create'
+          mutate={onCreate}
+          disabled={createItemMutation.isPending}
+        />
       </DialogContent>
     </Dialog>
   );
 };
 
-export default CharacterCreate;
+export default ItemCreate;
