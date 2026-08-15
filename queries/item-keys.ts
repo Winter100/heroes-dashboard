@@ -5,5 +5,6 @@ export const itemKeys = {
   list: (filters: string) => [...itemKeys.lists(), { filters }] as const,
   details: () => [...itemKeys.all, 'detail'] as const,
   detail: (classId: string) => [...itemKeys.details(), classId] as const,
+  stats: () => [...itemKeys.details(), 'stats'] as const,
   statistics: () => [...itemKeys.all, 'statistics'] as const,
 };

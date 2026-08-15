@@ -1,5 +1,5 @@
 'use client';
-import { useItemDetail } from '@/hooks/item/use-item';
+import { useItemDetail, useStats } from '@/hooks/item/use-item';
 import { Card, CardContent } from '../ui/card';
 import { Skeleton } from '../ui/skeleton';
 import QueryError from '../common/query-error';
@@ -18,13 +18,16 @@ import ItemEditForm from './item-edit-form';
 import { Button } from '../ui/button';
 import { useState } from 'react';
 import {
+  useAdminCreateStep,
   useAdminDeleteItem,
   useAdminUpdateItem,
 } from '@/hooks/item/use-admin-item';
-import { ItemFormValues } from '@/schema/item.schema';
+import { ItemFormValues, ItemStepFormValues } from '@/schema/item.schema';
 import { createItemFormData } from '@/lib/utils';
 import { toast } from '../ui/toast';
 import { useRouter } from 'next/navigation';
+import ItemStepEditForm from './item-step-edit-form';
+import ItemDetailEditContainer from './item-detail-edit-container';
 
 const ItemDetail = ({ itemId }: { itemId: string }) => {
   const router = useRouter();
@@ -33,8 +36,10 @@ const ItemDetail = ({ itemId }: { itemId: string }) => {
   const { isLoading, data, error } = useItemDetail(itemId);
   const updateItemMutation = useAdminUpdateItem(itemId);
   const deleteItemMutation = useAdminDeleteItem(itemId);
+  const createStepMutation = useAdminCreateStep(itemId);
+  const { isLoading: statsLoading, data: stats } = useStats();
 
-  if (isLoading)
+  if (isLoading || statsLoading)
     return (
       <div className='grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-2 w-full'>
         {Array.from({ length: 20 }).map((_, i) => (
@@ -90,6 +95,19 @@ const ItemDetail = ({ itemId }: { itemId: string }) => {
     });
   };
 
+  const onCreateStep = (stepData: ItemStepFormValues) => {
+    const promise = createStepMutation.mutateAsync({ steps: stepData, itemId });
+
+    toast.promise(promise, {
+      loading: `${data.name} ${stepData.stepName} 생성 중...`,
+      success: () => {
+        return `${data.name} ${stepData.stepName}가 생성되었습니다.`;
+      },
+      error: (error) =>
+        error instanceof Error ? error.message : '생성에 실패했습니다.',
+    });
+  };
+
   return (
     <div className='gap-2 flex-col mx-auto flex items-center'>
       <div className='mx-auto'>
@@ -129,14 +147,24 @@ const ItemDetail = ({ itemId }: { itemId: string }) => {
 
       <ItemCard item={data} />
 
-      <div>
-        {data.category.id === 1 &&
-          data.equipmentStep?.map((step) => (
-            <div key={step.id}>
-              {step.stepName} {data.name}
-            </div>
+      {data.category.id === 1 && (
+        <div className='grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-2 w-full'>
+          {data.steps?.map((step) => (
+            <ItemDetailEditContainer
+              key={step.id}
+              itemId={data.id.toString()}
+              stats={stats ?? []}
+              step={step}
+            />
           ))}
-      </div>
+          <ItemStepEditForm
+            stats={stats ?? []}
+            disabled={createStepMutation.isPending}
+            mode='create'
+            mutate={onCreateStep}
+          />
+        </div>
+      )}
     </div>
   );
 };

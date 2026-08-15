@@ -39,3 +39,39 @@ export const useAdminDeleteItem = (itemId: string) => {
     },
   });
 };
+export const useAdminCreateStep = (itemId: string) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: itemApi.createStep,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: itemKeys.detail(itemId) });
+    },
+    onError: (error) => {
+      console.log(error.message);
+    },
+  });
+};
+export const useAdminUpdateStep = (itemId: string) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: itemApi.updateStep,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: itemKeys.detail(itemId) });
+    },
+    onError: (error) => {
+      console.log(error.message);
+    },
+  });
+};
+export const useAdminDeleteStep = (itemId: string) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: itemApi.deleteStep,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: itemKeys.detail(itemId) });
+    },
+    onError: (error) => {
+      console.log(error.message);
+    },
+  });
+};

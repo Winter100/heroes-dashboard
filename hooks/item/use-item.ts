@@ -17,3 +17,11 @@ export const useItemDetail = (id: string) => {
     retry: 1,
   });
 };
+
+export const useStats = () => {
+  return useQuery({
+    queryKey: itemKeys.stats(),
+    queryFn: () => itemApi.getStats(),
+    retry: 1,
+  });
+};

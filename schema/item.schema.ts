@@ -18,10 +18,7 @@ export const itemSchema = z.object({
     .string('이름을 입력해주세요')
     .min(1, '이름을 입력해주세요')
     .max(20, '최대 20글자'),
-  description: z
-    .string('설명을 입력해주세요')
-    .min(1, '설명을 입력해주세요')
-    .optional(),
+  description: z.string('설명을 입력해주세요').optional(),
   categoryId: z
     .number('카테고리를 선택해주세요')
     .positive('카테고리를 선택해주세요'),
@@ -31,4 +28,15 @@ export const itemSchema = z.object({
   image: imageZ,
 });
 
+export const itemStepSchema = z.object({
+  stepName: z.string().min(1, '강화 수치를 입력해주세요'),
+  effects: z.array(
+    z.object({
+      stat_id: z.number().min(1, '스탯을 선택해주세요'),
+      stat_value: z.number().min(1, '값을 입력해주세요'),
+    }),
+  ),
+});
+
 export type ItemFormValues = z.infer<typeof itemSchema>;
+export type ItemStepFormValues = z.infer<typeof itemStepSchema>;

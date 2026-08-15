@@ -14,11 +14,11 @@ export type ItemType = {
 };
 
 export type ItemStepType = ItemType & {
-  equipmentStep?: EquipmentStep[];
+  steps?: EquipmentStep[];
 };
 
-type EquipmentStep = {
-  id: number;
-  itemId: number;
+export type EquipmentStep = {
+  id: string;
   stepName: string;
+  effects: { name: string; stat_id: number; stat_value: number }[];
 };

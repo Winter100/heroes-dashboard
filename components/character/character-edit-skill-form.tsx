@@ -1,7 +1,7 @@
 'use client';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '../ui/button';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field';
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from '../ui/input';
@@ -30,6 +30,7 @@ const CharacterEditSkillForm = ({
   onCancel,
   defaultValues,
 }: Props) => {
+  const formId = useId();
   const [preview, setPreview] = useState<string | null>(null);
 
   const form = useForm<CharacterSkillFormValues>({
@@ -67,13 +68,13 @@ const CharacterEditSkillForm = ({
           disabled={disabled}
           type='submit'
           variant='secondary'
-          form='form-skill'
+          form={formId}
         >
           등록
         </Button>
       </CardHeader>
       <CardContent>
-        <form id='form-skill' onSubmit={form.handleSubmit(onSubmtForm)}>
+        <form id={formId} onSubmit={form.handleSubmit(onSubmtForm)}>
           <FieldGroup>
             <div className='flex items-center gap-2'>
               <div className='w-40'>
