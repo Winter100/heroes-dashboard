@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/card';
 import { Character } from '@/types/character-type';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 type Props = {
   character: Character;
@@ -18,30 +19,37 @@ type Props = {
 const CharacterCard = ({ character, isDetailLink = false }: Props) => {
   const router = useRouter();
   return (
-    <Card key={character.id} className='relative mx-auto w-full max-w-sm pt-0'>
-      <div className='absolute inset-0 z-30 aspect-video bg-black/35' />
-      <img
-        src='https://avatar.vercel.sh/shadcn1'
-        alt='Event cover'
-        className='relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40'
-      />
+    <Card className='mx-auto w-full max-w-sm overflow-hidden pt-0'>
+      <div className='relative bg-black/35 aspect-video w-full'>
+        <Image
+          src={character.image}
+          alt={character.name}
+          fill
+          sizes='(max-width: 640px) 100vw, 384px'
+          className='object-cover '
+        />
+      </div>
       <CardHeader>
-        <CardAction></CardAction>
+        <CardAction />
         <CardTitle className='mb-1'>{character.name}</CardTitle>
+
         <CardDescription>
           <div className='flex flex-col gap-0.5'>
             <div className='flex items-center gap-2'>
               <div className='w-24'>성별</div>
               <div>{character.gender === 'male' ? '남성' : '여성'}</div>
             </div>
+
             <div className='flex items-center gap-2'>
               <div className='w-24'>스킬수</div>
               <div>{character.skillCount}</div>
             </div>
+
             <div className='flex items-center gap-2'>
               <div className='w-24'>출시일</div>
               <div>{formatDate(character.releaseDate)}</div>
             </div>
+
             <div className='flex items-center gap-2'>
               <div className='w-24'>출시후</div>
               <div>
@@ -51,11 +59,12 @@ const CharacterCard = ({ character, isDetailLink = false }: Props) => {
           </div>
         </CardDescription>
       </CardHeader>
+
       {isDetailLink && (
         <CardFooter>
           <Button
             className='w-full'
-            onClick={() => router.push(`character/${character.id}`)}
+            onClick={() => router.push(`/dashboard/character/${character.id}`)}
           >
             자세히
           </Button>

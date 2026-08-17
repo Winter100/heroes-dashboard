@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
 import { ItemStepType } from '@/types/item-type';
+import Image from 'next/image';
 
 type Props = {
   item: ItemStepType;
@@ -19,12 +20,16 @@ const ItemCard = ({ item, isDetailLink = false }: Props) => {
   const router = useRouter();
   return (
     <Card key={item.id} className='relative mx-auto w-full max-w-sm pt-0'>
-      <div className='absolute inset-0 z-30 aspect-video bg-black/35' />
-      <img
-        src='https://avatar.vercel.sh/shadcn1'
-        alt='Event cover'
-        className='relative z-20 aspect-video w-full object-cover brightness-60 grayscale dark:brightness-40'
-      />
+      <div className='relative bg-black/35 aspect-video flex items-center justify-center w-full'>
+        <Image
+          src={item?.image ?? ''}
+          alt={item.name}
+          width={50}
+          height={50}
+          sizes='(max-width: 640px) 100vw, 384px'
+          className='object-cover '
+        />
+      </div>
       <CardHeader>
         <CardAction></CardAction>
         <CardTitle className='mb-1'>{item.name}</CardTitle>

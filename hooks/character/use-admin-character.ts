@@ -16,13 +16,15 @@ export const useAdminCreateCharacter = () => {
   });
 };
 
-export const useAdminUpdateCharacter = () => {
+export const useAdminUpdateCharacter = (classId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: characterApi.update,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: characterKeys.lists() });
+      queryClient.invalidateQueries({
+        queryKey: characterKeys.skill(classId),
+      });
     },
     onError: (error) => {
       console.log(error.message);
