@@ -1,5 +1,9 @@
 'use client';
-import { useItemDetail, useStats } from '@/hooks/item/use-item';
+import {
+  useItemDetail,
+  useNeedItemBasicId,
+  useStats,
+} from '@/hooks/item/use-item';
 import { Card, CardContent } from '../ui/card';
 import { Skeleton } from '../ui/skeleton';
 import QueryError from '../common/query-error';
@@ -37,9 +41,10 @@ const ItemDetail = ({ itemId }: { itemId: string }) => {
   const updateItemMutation = useAdminUpdateItem(itemId);
   const deleteItemMutation = useAdminDeleteItem(itemId);
   const createStepMutation = useAdminCreateStep(itemId);
-  const { isLoading: statsLoading, data: stats } = useStats();
+  const stats = useStats();
+  const basicId = useNeedItemBasicId();
 
-  if (isLoading || statsLoading)
+  if (isLoading || stats.isLoading || basicId.isLoading)
     return (
       <div className='grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-2 w-full'>
         {Array.from({ length: 20 }).map((_, i) => (
@@ -54,7 +59,7 @@ const ItemDetail = ({ itemId }: { itemId: string }) => {
 
   if (error) return <QueryError error={error} />;
 
-  if (!data) {
+  if (!data || !basicId.data) {
     return (
       <Card className='w-full'>
         <CardContent className='flex items-center justify-center gap-2 h-72'>
@@ -119,6 +124,7 @@ const ItemDetail = ({ itemId }: { itemId: string }) => {
               <DialogDescription></DialogDescription>
             </DialogHeader>
             <ItemEditForm
+              basicId={basicId.data}
               defaultValues={data}
               mode='update'
               mutate={onEdit}
@@ -153,12 +159,12 @@ const ItemDetail = ({ itemId }: { itemId: string }) => {
             <ItemDetailEditContainer
               key={step.id}
               itemId={data.id.toString()}
-              stats={stats ?? []}
+              stats={stats.data ?? []}
               step={step}
             />
           ))}
           <ItemStepEditForm
-            stats={stats ?? []}
+            stats={stats.data ?? []}
             disabled={createStepMutation.isPending}
             mode='create'
             mutate={onCreateStep}

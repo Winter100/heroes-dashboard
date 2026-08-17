@@ -25,3 +25,10 @@ export const useStats = () => {
     retry: 1,
   });
 };
+
+export const useNeedItemBasicId = () => {
+  return useQuery({
+    queryKey: itemKeys.basicId(),
+    queryFn: () => itemApi.getBasicId(),
+  });
+};

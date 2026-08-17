@@ -83,6 +83,16 @@ export const itemApi = {
   get: async () => apiClient<ItemStepType[]>(`/items/all`),
   getStats: async () =>
     apiClient<{ id: string; name: string }[]>(`/items-admin/stats`),
+  getSlots: async () =>
+    apiClient<{ id: string; name: string; value: string }[]>(
+      `/items-admin/slots`,
+    ),
+  getBasicId: async () =>
+    apiClient<{
+      category: { id: string; name: string }[];
+      tier: { id: string; name: string }[];
+      slot: { id: string; name: string; value: string }[];
+    }>(`/items-admin/basic-id`),
   findOne: async (itemId: string) =>
     apiClient<ItemStepType>(`/items/step/${itemId}`),
   create: async (formData: FormData) =>

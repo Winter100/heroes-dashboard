@@ -15,10 +15,12 @@ import ItemEditForm from './item-edit-form';
 import { ItemFormValues } from '@/schema/item.schema';
 import { useAdminCreateItem } from '@/hooks/item/use-admin-item';
 import { toast } from '../ui/toast';
+import { useNeedItemBasicId } from '@/hooks/item/use-item';
 
 const ItemCreate = () => {
   const [createOpen, setCreateOpen] = useState(false);
   const createItemMutation = useAdminCreateItem();
+  const basicId = useNeedItemBasicId();
 
   const onCreate = (item: ItemFormValues) => {
     const formData = createItemFormData(item);
@@ -56,11 +58,16 @@ const ItemCreate = () => {
           <DialogTitle></DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <ItemEditForm
-          mode='create'
-          mutate={onCreate}
-          disabled={createItemMutation.isPending}
-        />
+        {basicId.data ? (
+          <ItemEditForm
+            basicId={basicId.data}
+            mode='create'
+            mutate={onCreate}
+            disabled={createItemMutation.isPending}
+          />
+        ) : (
+          <div>잠시 후 다시 시도해주세요</div>
+        )}
       </DialogContent>
     </Dialog>
   );

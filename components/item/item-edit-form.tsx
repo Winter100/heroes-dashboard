@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -27,44 +27,39 @@ import {
 import { ItemFormValues, itemSchema } from '@/schema/item.schema';
 import { ItemStepType } from '@/types/item-type';
 import { Textarea } from '../ui/textarea';
-
-const CATEGORY = {
-  1: '장비',
-  2: '소모품',
-  3: '재료',
-  4: '인챈트',
-  5: '기타',
-};
-
-const TIER = {
-  1: '일반',
-  2: '초급',
-  3: '중급',
-  4: '고급',
-  5: '레어',
-  6: '전설',
-  7: '미분류',
-};
+import z from 'zod';
 
 const ItemEditForm = ({
   mode,
   mutate,
   defaultValues,
   disabled = false,
+  basicId,
 }: {
   mode: 'create' | 'update';
   mutate: (data: ItemFormValues) => void;
-  defaultValues?: ItemStepType;
   disabled: boolean;
+  basicId: {
+    category: { id: string; name: string }[];
+    tier: { id: string; name: string }[];
+    slot: { id: string; name: string; value: string }[];
+  };
+  defaultValues?: ItemStepType;
 }) => {
-  const form = useForm<ItemFormValues>({
+  const form = useForm<z.infer<typeof itemSchema>>({
     resolver: zodResolver(itemSchema),
     defaultValues: {
       name: defaultValues?.name || '',
       description: defaultValues?.description || '',
-      categoryId: defaultValues?.category.id || 0,
-      tierId: defaultValues?.tier.id || 0,
+      categoryId: defaultValues?.category?.id || undefined,
+      tierId: defaultValues?.tier?.id || undefined,
+      slotId: defaultValues?.slot?.id || undefined,
     },
+  });
+
+  const categoryId = useWatch({
+    control: form.control,
+    name: 'categoryId',
   });
 
   return (
@@ -110,7 +105,7 @@ const ItemEditForm = ({
                   <Select
                     disabled={disabled}
                     name={field.name}
-                    value={field.value ? String(field.value) : undefined}
+                    value={field.value?.toString() ?? ''}
                     onValueChange={(val) => field.onChange(Number(val))}
                   >
                     <SelectTrigger
@@ -120,14 +115,16 @@ const ItemEditForm = ({
                     >
                       <SelectValue placeholder='카테고리'>
                         {field.value
-                          ? CATEGORY[field.value as keyof typeof CATEGORY]
+                          ? basicId.category.find(
+                              (c) => Number(c.id) === Number(field.value),
+                            )?.name
                           : '카테고리'}
                       </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.entries(CATEGORY).map(([key, value]) => (
-                        <SelectItem key={key} value={key}>
-                          {value}
+                      {basicId.category.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -138,6 +135,47 @@ const ItemEditForm = ({
                 </Field>
               )}
             />
+            {categoryId === 1 && (
+              <Controller
+                name='slotId'
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor='slotId'>슬롯</FieldLabel>
+                    <Select
+                      disabled={disabled}
+                      name={field.name}
+                      value={field.value?.toString() ?? ''}
+                      onValueChange={(val) => field.onChange(Number(val))}
+                    >
+                      <SelectTrigger
+                        id='slotId'
+                        aria-invalid={fieldState.invalid}
+                        className=''
+                      >
+                        <SelectValue placeholder='슬롯'>
+                          {field.value
+                            ? basicId.slot.find(
+                                (c) => Number(c.id) === Number(field.value),
+                              )?.name
+                            : '슬롯'}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        {basicId.slot.map((slot) => (
+                          <SelectItem key={slot.id} value={slot.id}>
+                            {slot.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            )}
             <Controller
               name='tierId'
               control={form.control}
@@ -147,7 +185,7 @@ const ItemEditForm = ({
                   <Select
                     disabled={disabled}
                     name={field.name}
-                    value={field.value ? String(field.value) : undefined}
+                    value={field.value?.toString() ?? ''}
                     onValueChange={(val) => field.onChange(Number(val))}
                   >
                     <SelectTrigger
@@ -157,14 +195,16 @@ const ItemEditForm = ({
                     >
                       <SelectValue placeholder='티어'>
                         {field.value
-                          ? TIER[field.value as keyof typeof TIER]
+                          ? basicId.tier.find(
+                              (t) => Number(t.id) === field.value,
+                            )?.name
                           : '티어'}
                       </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.entries(TIER).map(([key, value]) => (
-                        <SelectItem key={key} value={key}>
-                          {value}
+                      {basicId.tier.map((t) => (
+                        <SelectItem key={t.id} value={t.id}>
+                          {t.name}
                         </SelectItem>
                       ))}
                     </SelectContent>

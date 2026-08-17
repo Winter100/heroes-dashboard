@@ -10,6 +10,11 @@ export type ItemType = {
     name: string;
     id: number;
   };
+  slot: {
+    name: string;
+    value: string;
+    id: number;
+  };
   id: number;
 };
 
