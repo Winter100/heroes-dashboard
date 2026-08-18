@@ -2,6 +2,7 @@ import {
   CharacterFormValues,
   CharacterSkillFormValues,
 } from '@/schema/character.schema';
+import { ItemFormValues } from '@/schema/item.schema';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -29,6 +30,21 @@ export const createCharacterFormData = (characterData: CharacterFormValues) => {
 
   if (characterData.image instanceof File) {
     formData.append('image', characterData.image);
+  }
+
+  return formData;
+};
+export const createItemFormData = (itemData: ItemFormValues) => {
+  const formData = new FormData();
+  formData.append('name', itemData.name);
+  formData.append('categoryId', itemData.categoryId.toString());
+  formData.append('tierId', itemData.tierId.toString());
+
+  if (itemData.description) {
+    formData.append('description', itemData.description);
+  }
+  if (itemData.image instanceof File) {
+    formData.append('image', itemData.image);
   }
 
   return formData;

@@ -3,7 +3,6 @@
 import { createCharacterFormData } from '@/lib/utils';
 import { CharacterFormValues } from '@/schema/character.schema';
 import { useState } from 'react';
-import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -15,6 +14,7 @@ import {
 import { Button } from '../ui/button';
 import CharacterEditForm from './character-edit-form';
 import { useAdminCreateCharacter } from '@/hooks/character/use-admin-character';
+import { toast } from '../ui/toast';
 
 const CharacterCreate = () => {
   const [createOpen, setCreateOpen] = useState(false);
@@ -30,10 +30,22 @@ const CharacterCreate = () => {
       loading: `${className} 생성중...`,
       success: () => {
         setCreateOpen(false);
-        return `${className}가 생성되었습니다.`;
+        return {
+          type: 'success',
+          title: className,
+          description: '직업이 생성되었습니다.',
+        };
       },
-      error: (error) =>
-        error instanceof Error ? error.message : '등록에 실패했습니다.',
+      error: (error) => {
+        return {
+          type: 'error',
+          title: className,
+          description:
+            error instanceof Error
+              ? error.message
+              : '처리 중 오류가 발생했습니다.',
+        };
+      },
     });
   };
 

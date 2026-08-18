@@ -42,7 +42,7 @@ const CharacterDetail = ({ classId }: { classId: string }) => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const { isLoading, data, error } = useCharacterSkillList(classId);
   const createSkillMutation = useAdminCreateSkill(classId);
-  const updateMutation = useAdminUpdateCharacter();
+  const updateMutation = useAdminUpdateCharacter(classId);
   const deleteMutation = useAdminDeleteCharacter();
 
   if (isLoading)
