@@ -42,7 +42,7 @@ const ItemEditForm = ({
   basicId: {
     category: { id: string; name: string }[];
     tier: { id: string; name: string }[];
-    slot: { id: string; name: string; value: string }[];
+    slot: { id: number; name: string; value: string }[];
   };
   defaultValues?: ItemStepType;
 }) => {

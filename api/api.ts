@@ -1,9 +1,14 @@
+import {
+  EnchantDetailFormValues,
+  EnchantFormValues,
+} from '@/schema/enchant-schema';
 import { ItemStepFormValues } from '@/schema/item.schema';
 import {
   Character,
   CharacterDetailType,
   Statistics,
 } from '@/types/character-type';
+import { EnchantType } from '@/types/enchant-type';
 import { ItemStepType } from '@/types/item-type';
 import { apiClient } from '@/utils/api-client';
 
@@ -84,14 +89,14 @@ export const itemApi = {
   getStats: async () =>
     apiClient<{ id: string; name: string }[]>(`/items-admin/stats`),
   getSlots: async () =>
-    apiClient<{ id: string; name: string; value: string }[]>(
+    apiClient<{ id: number; name: string; value: string }[]>(
       `/items-admin/slots`,
     ),
   getBasicId: async () =>
     apiClient<{
       category: { id: string; name: string }[];
       tier: { id: string; name: string }[];
-      slot: { id: string; name: string; value: string }[];
+      slot: { id: number; name: string; value: string }[];
     }>(`/items-admin/basic-id`),
   findOne: async (itemId: string) =>
     apiClient<ItemStepType>(`/items/step/${itemId}`),
@@ -144,6 +149,52 @@ export const itemApi = {
     }),
   delete: async (itemId: string) =>
     apiClient(`/items-admin/delete/${itemId}`, {
+      method: 'DELETE',
+    }),
+};
+
+export const enchantApi = {
+  get: async (enchantId: string) =>
+    apiClient<EnchantType>(`/enchants/${enchantId}`),
+  getAll: async () => apiClient<EnchantType[]>(`/enchants`),
+  create: async (enchantValues: EnchantFormValues) =>
+    apiClient(`/enchants-admin/create`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(enchantValues),
+    }),
+  update: async ({
+    enchantId,
+    enchantValues,
+  }: {
+    enchantId: string;
+    enchantValues: EnchantFormValues;
+  }) =>
+    apiClient(`/enchants-admin/update/${enchantId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(enchantValues),
+    }),
+  upsert: async ({
+    enchantId,
+    enchantValues,
+  }: {
+    enchantId: string;
+    enchantValues: EnchantDetailFormValues;
+  }) =>
+    apiClient(`/enchants-admin/upsert/${enchantId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify(enchantValues),
+    }),
+  delete: async (enchantId: string) =>
+    apiClient(`/enchants-admin/delete/${enchantId}`, {
       method: 'DELETE',
     }),
 };
