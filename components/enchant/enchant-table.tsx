@@ -1,12 +1,11 @@
 'use client';
-
-import { useCharacter } from '@/hooks/character/use-character';
 import QueryError from '../common/query-error';
-import CharacterCard from './character-card';
+import EnchantCard from './enchant-card';
 import LoadingSkeleton from '../loading-skeleton';
+import { useEnchant } from '@/hooks/enchant/use-enchant';
 
-const CharacterTable = () => {
-  const { data, isLoading, error } = useCharacter();
+const EnchantTable = () => {
+  const { isLoading, error, data } = useEnchant();
 
   if (isLoading) return <LoadingSkeleton />;
 
@@ -14,11 +13,11 @@ const CharacterTable = () => {
 
   return (
     <div className='grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-2 w-full'>
-      {data?.map((character) => (
-        <CharacterCard key={character.id} character={character} isDetailLink />
+      {data?.map((enchant) => (
+        <EnchantCard key={enchant.id} enchant={enchant} isDetailLink />
       ))}
     </div>
   );
 };
 
-export default CharacterTable;
+export default EnchantTable;

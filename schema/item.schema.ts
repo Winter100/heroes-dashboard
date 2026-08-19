@@ -23,10 +23,10 @@ export const itemSchema = z.object({
     .number('카테고리를 선택해주세요')
     .positive('카테고리를 선택해주세요'),
 
-  tierId: z.number('등급을 선택해주세요').positive('카테고리를 선택해주세요'),
+  tierId: z.number('등급을 선택해주세요').positive('등급을 선택해주세요'),
   slotId: z
-    .number('등급을 선택해주세요')
-    .positive('카테고리를 선택해주세요')
+    .number('슬롯을 선택해주세요')
+    .positive('슬롯을 선택해주세요')
     .optional(),
   image: imageZ,
 });
