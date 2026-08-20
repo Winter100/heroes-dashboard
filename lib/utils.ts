@@ -3,6 +3,7 @@ import {
   CharacterSkillFormValues,
 } from '@/schema/character.schema';
 import { ItemFormValues } from '@/schema/item.schema';
+import { RaidFormValues } from '@/schema/raid-schema';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -30,6 +31,19 @@ export const createCharacterFormData = (characterData: CharacterFormValues) => {
 
   if (characterData.image instanceof File) {
     formData.append('image', characterData.image);
+  }
+
+  return formData;
+};
+export const createRaidFormData = (raidData: RaidFormValues) => {
+  const formData = new FormData();
+  formData.append('raidId', raidData.raidId.toString());
+  formData.append('battle', raidData.battle);
+  formData.append('boss', raidData.boss);
+  formData.append('level', raidData.level.toString());
+
+  if (raidData.image instanceof File) {
+    formData.append('image', raidData.image);
   }
 
   return formData;
