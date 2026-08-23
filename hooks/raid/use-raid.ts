@@ -18,3 +18,10 @@ export const useRaidDetail = (raidId: string) => {
     retry: 1,
   });
 };
+
+export const useRaidStatistics = () => {
+  return useQuery({
+    queryKey: raidKeys.statistics(),
+    queryFn: raidApi.getStatistics,
+  });
+};

@@ -17,3 +17,11 @@ export type RaidType = {
   // bonus: BonusTargetsDto[];
   // clear: BasicClearRewardDto[];
 };
+
+export type RaidStatistics = {
+  count: number;
+  raids: {
+    name: string;
+    count: number;
+  }[];
+};

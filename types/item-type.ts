@@ -27,3 +27,15 @@ export type EquipmentStep = {
   stepName: string;
   effects: { name: string; stat_id: number; stat_value: number }[];
 };
+
+export type ItemStatistics = {
+  total: number;
+  tiers: {
+    name: string;
+    count: number;
+  }[];
+  categories: {
+    name: string;
+    count: number;
+  }[];
+};

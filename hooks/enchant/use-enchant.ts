@@ -16,3 +16,10 @@ export const useEnchantDetail = (enchantId: string) => {
     queryFn: () => enchantApi.get(enchantId),
   });
 };
+
+export const useEnchantStatistics = () => {
+  return useQuery({
+    queryKey: enchantKeys.statistics(),
+    queryFn: enchantApi.getStatistics,
+  });
+};

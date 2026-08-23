@@ -1,21 +1,21 @@
 'use client';
 import { ChartBar } from '../chart-bar';
 import { ChartPieLabel } from '../chart-pie-label';
-import { useCharacterStatistics } from '@/hooks/character/use-character';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import QueryError from '../common/query-error';
+import { useRaidStatistics } from '@/hooks/raid/use-raid';
 import { ChartConfig } from '../ui/chart';
 
 const chartConfig = {
   count: {
-    label: '출시',
+    label: '레이드',
     color: 'var(--chart-1)',
   },
 } satisfies ChartConfig;
 
-const CharacterStatistics = () => {
-  const { isLoading, error, data } = useCharacterStatistics();
+const RaidStatistics = () => {
+  const { isLoading, error, data } = useRaidStatistics();
   if (isLoading)
     return (
       <Card className='w-full'>
@@ -29,21 +29,18 @@ const CharacterStatistics = () => {
   if (error) return <QueryError error={error} />;
 
   return (
-    <div className='items-center gap-2 w-full flex flex-col'>
+    <div className='flex items-center gap-2 w-full flex-col'>
       <div className='flex gap-2 text-sm mr-auto text-blue-300'>
-        <span>등록된 캐릭터: {data?.total}</span>
+        <span>등록된 레이드: {data?.count}</span>
       </div>
-      <div className='w-full flex flex-row gap-2 items-center'>
-        <ChartPieLabel genderCount={data?.genderCount ?? []} />
-        <ChartBar
-          title='연도별 캐릭터 출시'
-          dataKey='year'
-          data={data?.year ?? []}
-          config={chartConfig}
-        />
-      </div>
+      <ChartBar
+        title='레이드 수'
+        dataKey='name'
+        data={data?.raids ?? []}
+        config={chartConfig}
+      />
     </div>
   );
 };
 
-export default CharacterStatistics;
+export default RaidStatistics;

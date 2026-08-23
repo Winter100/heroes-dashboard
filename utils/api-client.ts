@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/store/useAuthStore';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL!;
+export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL!;
 
 type RefreshResponse = {
   accessToken: string;

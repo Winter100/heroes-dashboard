@@ -12,33 +12,31 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  type ChartConfig,
 } from '@/components/ui/chart';
-import { YearStatistics } from '@/types/character-type';
 
-const chartConfig = {
-  count: {
-    label: '출시',
-    color: 'var(--chart-1)',
-  },
-} satisfies ChartConfig;
+type ChartBarType = {
+  title: string;
+  dataKey: string;
+  config: { count: { label: string; color: string } };
+  data: Record<string, string | number>[];
+};
 
-export function ChartBar({ year }: { year: YearStatistics[] }) {
+export function ChartBar({ title, config, dataKey, data }: ChartBarType) {
   return (
     <Card className='w-full'>
       <CardHeader className='pb-0 flex-1'>
-        <CardTitle>연도별 캐릭터 출시</CardTitle>
+        <CardTitle>{title}</CardTitle>
         <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer
-          config={chartConfig}
+          config={config}
           className='mx-auto max-h-64 w-full aspect-square pb-0 [&_.recharts-pie-label-text]:fill-foreground'
         >
-          <BarChart accessibilityLayer data={year}>
+          <BarChart accessibilityLayer data={data}>
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey='year'
+              dataKey={dataKey}
               tickLine={false}
               tickMargin={5}
               axisLine={false}
