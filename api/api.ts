@@ -11,7 +11,7 @@ import {
 import { EnchantType } from '@/types/enchant-type';
 import { ItemStepType } from '@/types/item-type';
 import { RaidType } from '@/types/raid-type';
-import { apiClient } from '@/utils/api-client';
+import { apiClient, loginApiClient } from '@/utils/api-client';
 
 // 추후 토큰이 들어가야함
 export const characterApi = {
@@ -239,5 +239,16 @@ export const raidApi = {
       },
       method: 'POST',
       body: JSON.stringify(data),
+    }),
+};
+
+export const signApi = {
+  login: async ({ email, password }: { email: string; password: string }) =>
+    loginApiClient<{ accessToken: string }>(`/auth/signin`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
     }),
 };
