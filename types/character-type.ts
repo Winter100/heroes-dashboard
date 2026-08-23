@@ -14,8 +14,9 @@ export type CharacterDetailType = Character & {
 };
 
 export type GenderCount = { count: number; gender: string; fill: string };
-export type YearStatistics = { year: number; count: number };
+export type YearStatistics = { year: string; count: number };
 export type Statistics = {
+  total: number;
   genderCount: GenderCount[];
   year: YearStatistics[];
 };

@@ -32,3 +32,10 @@ export const useNeedItemBasicId = () => {
     queryFn: () => itemApi.getBasicId(),
   });
 };
+
+export const useItemStatistics = () => {
+  return useQuery({
+    queryKey: itemKeys.statistics(),
+    queryFn: itemApi.getStatistics,
+  });
+};

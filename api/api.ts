@@ -8,15 +8,15 @@ import {
   CharacterDetailType,
   Statistics,
 } from '@/types/character-type';
-import { EnchantType } from '@/types/enchant-type';
-import { ItemStepType } from '@/types/item-type';
-import { RaidType } from '@/types/raid-type';
+import { EnchantStatistics, EnchantType } from '@/types/enchant-type';
+import { ItemStatistics, ItemStepType } from '@/types/item-type';
+import { RaidStatistics, RaidType } from '@/types/raid-type';
 import { apiClient, loginApiClient } from '@/utils/api-client';
 
 // 추후 토큰이 들어가야함
 export const characterApi = {
   get: async () => apiClient<Character[]>(`/characters`),
-  getStatistics: async () => apiClient<Statistics>(`/characters/statistics`),
+  getStatistics: async () => apiClient<Statistics>(`/statistics/character`),
   findOne: async (classId: string) =>
     apiClient<CharacterDetailType>(`/characters/${classId}`),
 
@@ -86,6 +86,7 @@ export const characterApi = {
 };
 
 export const itemApi = {
+  getStatistics: () => apiClient<ItemStatistics>(`/statistics/item`),
   get: async () => apiClient<ItemStepType[]>(`/items/all`),
   getStats: async () =>
     apiClient<{ id: string; name: string }[]>(`/items-admin/stats`),
@@ -155,6 +156,7 @@ export const itemApi = {
 };
 
 export const enchantApi = {
+  getStatistics: () => apiClient<EnchantStatistics>(`/statistics/enchant`),
   get: async (enchantId: string) =>
     apiClient<EnchantType>(`/enchants/${enchantId}`),
   getAll: async () => apiClient<EnchantType[]>(`/enchants`),
@@ -201,6 +203,7 @@ export const enchantApi = {
 };
 
 export const raidApi = {
+  getStatistics: () => apiClient<RaidStatistics>(`/statistics/raid`),
   get: async (raidId: string) => apiClient<RaidType>(`/raids/${raidId}`),
   getAll: async () => apiClient<RaidType[]>(`/raids`),
   create: async (formData: FormData) =>
