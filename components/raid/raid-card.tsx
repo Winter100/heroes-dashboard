@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
 import { RaidType } from '@/types/raid-type';
+import { FallbackImage } from '../fallback-image';
 
 type Props = {
   raid: RaidType;
@@ -18,7 +19,16 @@ const RaidCard = ({ raid, isDetailLink = false }: Props) => {
   const router = useRouter();
   return (
     <Card className='mx-auto w-full max-w-sm overflow-hidden pt-0'>
-      <div className='relative bg-black/35 aspect-video w-full'></div>
+      <div className='relative aspect-video flex items-center justify-center w-full'>
+        <FallbackImage
+          className='w-20 h-auto'
+          src={raid.image ?? ''}
+          alt={raid.boss}
+          fill={!!!raid.image}
+          width={raid.image ? 70 : undefined}
+          height={raid.image ? 70 : undefined}
+        />
+      </div>
       <CardHeader>
         <CardAction />
         <CardTitle className='mb-1'>{raid.battle}</CardTitle>

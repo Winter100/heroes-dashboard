@@ -20,6 +20,7 @@ import {
   CommandIcon,
 } from 'lucide-react';
 import Link from 'next/link';
+import { NavUser } from './nav-user';
 
 const data = {
   navMain: [
@@ -64,7 +65,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
       </SidebarContent>
-      <SidebarFooter>{/* <NavUser user={data.user} /> */}</SidebarFooter>
+      <SidebarFooter>
+        <NavUser />
+      </SidebarFooter>
     </Sidebar>
   );
 }

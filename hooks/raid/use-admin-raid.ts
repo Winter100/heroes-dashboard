@@ -8,6 +8,7 @@ export const useAdminCreateRaid = () => {
     mutationFn: raidApi.create,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: raidKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: raidKeys.statistics() });
     },
     onError: (error) => {
       console.log(error.message);
@@ -21,6 +22,7 @@ export const useAdminUpdateRaid = (raidId: string) => {
     mutationFn: (formData: FormData) => raidApi.update({ formData, raidId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: raidKeys.detail(raidId) });
+      queryClient.invalidateQueries({ queryKey: raidKeys.statistics() });
     },
     onError: (error) => {
       console.log(error.message);
@@ -53,6 +55,7 @@ export const useAdminDeleteRaid = (raidId: string) => {
     mutationFn: () => raidApi.delete(raidId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: raidKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: raidKeys.statistics() });
     },
     onError: (error) => {
       console.log(error.message);

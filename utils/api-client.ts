@@ -18,6 +18,12 @@ const refreshAccessToken = async (): Promise<string> => {
     });
 
     if (!res.ok) {
+      await fetch(`${BACKEND_URL}/auth/signout`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+      clearAuth();
+      window.location.replace('/');
       throw new Error('토큰 재발급에 실패했습니다.');
     }
 

@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { formatDate, getDaysSince } from '@/lib/utils';
 import {
   Card,
   CardAction,
@@ -10,7 +9,7 @@ import {
 } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
 import { ItemStepType } from '@/types/item-type';
-import Image from 'next/image';
+import { FallbackImage } from '../fallback-image';
 
 type Props = {
   item: ItemStepType;
@@ -20,14 +19,14 @@ const ItemCard = ({ item, isDetailLink = false }: Props) => {
   const router = useRouter();
   return (
     <Card key={item.id} className='relative mx-auto w-full max-w-sm pt-0'>
-      <div className='relative bg-black/35 aspect-video flex items-center justify-center w-full'>
-        <Image
-          src={item?.image ?? ''}
+      <div className='relative aspect-video flex items-center justify-center w-full'>
+        <FallbackImage
+          className='w-10 h-auto'
+          src={item.image ?? ''}
           alt={item.name}
-          width={50}
-          height={50}
-          sizes='(max-width: 640px) 100vw, 384px'
-          className='object-cover '
+          fill={!!!item.image}
+          width={item.image ? 20 : undefined}
+          height={item.image ? 20 : undefined}
         />
       </div>
       <CardHeader>

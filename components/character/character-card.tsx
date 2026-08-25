@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/card';
 import { Character } from '@/types/character-type';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import { FallbackImage } from '../fallback-image';
 
 type Props = {
   character: Character;
@@ -20,13 +20,13 @@ const CharacterCard = ({ character, isDetailLink = false }: Props) => {
   const router = useRouter();
   return (
     <Card className='mx-auto w-full max-w-sm overflow-hidden pt-0'>
-      <div className='relative bg-black/35 aspect-video w-full'>
-        <Image
+      <div className='relative aspect-video w-full flex items-center justify-center'>
+        <FallbackImage
           src={character.image}
           alt={character.name}
-          fill
-          sizes='(max-width: 640px) 100vw, 384px'
-          className='object-cover '
+          fill={!!!character.image}
+          width={character.image ? 70 : undefined}
+          height={character.image ? 70 : undefined}
         />
       </div>
       <CardHeader>

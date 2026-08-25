@@ -8,6 +8,7 @@ export const useAdminCreateItem = () => {
     mutationFn: itemApi.create,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: itemKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: itemKeys.statistics() });
     },
     onError: (error) => {
       console.log(error.message);
@@ -21,6 +22,7 @@ export const useAdminUpdateItem = (itemId: string) => {
     mutationFn: itemApi.update,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: itemKeys.detail(itemId) });
+      queryClient.invalidateQueries({ queryKey: itemKeys.statistics() });
     },
     onError: (error) => {
       console.log(error.message);
@@ -33,6 +35,7 @@ export const useAdminDeleteItem = (itemId: string) => {
     mutationFn: () => itemApi.delete(itemId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: itemKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: itemKeys.statistics() });
     },
     onError: (error) => {
       console.log(error.message);

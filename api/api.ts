@@ -254,4 +254,11 @@ export const signApi = {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     }),
+  logout: async () =>
+    loginApiClient(`/auth/signout`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    }),
 };

@@ -9,6 +9,7 @@ export const useAdminCreateCharacter = () => {
     mutationFn: characterApi.create,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: characterKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: characterKeys.statistics() });
     },
     onError: (error) => {
       console.log(error.message);
@@ -22,9 +23,8 @@ export const useAdminUpdateCharacter = (classId: string) => {
   return useMutation({
     mutationFn: characterApi.update,
     onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: characterKeys.skill(classId),
-      });
+      queryClient.invalidateQueries({ queryKey: characterKeys.skill(classId) });
+      queryClient.invalidateQueries({ queryKey: characterKeys.statistics() });
     },
     onError: (error) => {
       console.log(error.message);
@@ -39,6 +39,7 @@ export const useAdminDeleteCharacter = () => {
     mutationFn: characterApi.delete,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: characterKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: characterKeys.statistics() });
     },
     onError: (error) => {
       console.log(error.message);

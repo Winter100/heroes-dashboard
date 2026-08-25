@@ -11,11 +11,27 @@ export const useLoginMutation = () => {
     mutationFn: signApi.login,
     onSuccess: (data) => {
       setAccessToken(data.accessToken);
-      router.push('/dashboard');
+      router.replace('/dashboard');
     },
     onError: (error) => {
       console.error('로그인 에러:', error);
     },
-    retry: 1,
+    retry: 0,
+  });
+};
+
+export const useLogoutMutaion = () => {
+  const router = useRouter();
+  const clearAuth = useAuthStore((state) => state.clearAuth);
+
+  return useMutation({
+    mutationFn: signApi.logout,
+    onSuccess: () => {
+      clearAuth();
+      router.replace('/');
+    },
+    onError: (error) => {
+      console.error('로그아웃 에러:', error);
+    },
   });
 };

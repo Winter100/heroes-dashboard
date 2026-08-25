@@ -9,6 +9,7 @@ export const useAdminCreateEnchant = () => {
     mutationFn: enchantApi.create,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: enchantKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: enchantKeys.statistics() });
     },
     onError: (error) => {
       console.log(error.message);
@@ -22,6 +23,7 @@ export const useAdminUpdateEnchant = () => {
     mutationFn: enchantApi.update,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: enchantKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: enchantKeys.statistics() });
     },
     onError: (error) => {
       console.log(error.message);
@@ -49,6 +51,7 @@ export const useAdminDeleteEnchant = (enchantId: string) => {
     mutationFn: () => enchantApi.delete(enchantId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: enchantKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: enchantKeys.statistics() });
     },
     onError: (error) => {
       console.log(error.message);

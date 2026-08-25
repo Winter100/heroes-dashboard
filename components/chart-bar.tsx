@@ -19,9 +19,16 @@ type ChartBarType = {
   dataKey: string;
   config: { count: { label: string; color: string } };
   data: Record<string, string | number>[];
+  onSearch?: (key: string, query: string) => void;
 };
 
-export function ChartBar({ title, config, dataKey, data }: ChartBarType) {
+export function ChartBar({
+  title,
+  config,
+  dataKey,
+  data,
+  onSearch,
+}: ChartBarType) {
   return (
     <Card className='w-full'>
       <CardHeader className='pb-0 flex-1'>
@@ -43,10 +50,20 @@ export function ChartBar({ title, config, dataKey, data }: ChartBarType) {
               tickFormatter={(value) => value}
             />
             <ChartTooltip
-              cursor={false}
+              cursor={true}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey='count' fill='var(--color-count)' radius={5} />
+            <Bar
+              onClick={(data) => {
+                const value = data.payload[dataKey];
+                if (dataKey && value && onSearch) {
+                  onSearch(dataKey, value);
+                }
+              }}
+              dataKey='count'
+              fill='var(--color-count)'
+              radius={5}
+            />
           </BarChart>
         </ChartContainer>
       </CardContent>
