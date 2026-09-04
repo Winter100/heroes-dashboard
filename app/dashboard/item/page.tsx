@@ -1,4 +1,5 @@
 import ItemCreate from '@/components/item/item-create';
+import ItemStatistics from '@/components/item/item-statistics';
 import ItemTable from '@/components/item/item-table';
 
 const Page = () => {
@@ -8,10 +9,9 @@ const Page = () => {
         <ItemCreate />
       </div>
       <div className='flex items-center gap-2'>
-        {/* <CharacterStatistics /> */}
+        <ItemStatistics />
       </div>
       <div>
-        {/* <CharacterTable /> */}
         <ItemTable />
       </div>
     </div>

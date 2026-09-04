@@ -19,10 +19,11 @@ type Props = {
 const CharacterCard = ({ character, isDetailLink = false }: Props) => {
   const router = useRouter();
   return (
-    <Card className='mx-auto w-full max-w-sm overflow-hidden pt-0'>
-      <div className='relative aspect-video w-full flex items-center justify-center'>
+    <Card className='relative mx-auto w-full max-w-sm pt-0'>
+      <div className='relative aspect-video flex items-center justify-center w-full'>
         <FallbackImage
-          src={character.image}
+          className='w-20 h-auto'
+          src={character.image ?? ''}
           alt={character.name}
           fill={!!!character.image}
           width={character.image ? 70 : undefined}

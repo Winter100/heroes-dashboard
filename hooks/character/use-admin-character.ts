@@ -23,6 +23,7 @@ export const useAdminUpdateCharacter = (classId: string) => {
   return useMutation({
     mutationFn: characterApi.update,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: characterKeys.lists() });
       queryClient.invalidateQueries({ queryKey: characterKeys.skill(classId) });
       queryClient.invalidateQueries({ queryKey: characterKeys.statistics() });
     },

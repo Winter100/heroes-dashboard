@@ -18,7 +18,7 @@ type Props = {
 const ItemCard = ({ item, isDetailLink = false }: Props) => {
   const router = useRouter();
   return (
-    <Card key={item.id} className='relative mx-auto w-full max-w-sm pt-0'>
+    <Card className='relative mx-auto w-full max-w-sm pt-0'>
       <div className='relative aspect-video flex items-center justify-center w-full'>
         <FallbackImage
           className='w-10 h-auto'

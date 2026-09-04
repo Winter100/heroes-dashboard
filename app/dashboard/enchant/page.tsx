@@ -1,4 +1,5 @@
 import EnchantCreate from '@/components/enchant/enchant-create';
+import EnchantStatistics from '@/components/enchant/enchant-statistics';
 import EnchantTable from '@/components/enchant/enchant-table';
 
 const Page = () => {
@@ -8,7 +9,7 @@ const Page = () => {
         <EnchantCreate />
       </div>
       <div className='flex items-center gap-2'>
-        {/* <CharacterStatistics /> */}
+        <EnchantStatistics />
       </div>
       <div>
         <EnchantTable />

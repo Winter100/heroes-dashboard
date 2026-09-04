@@ -13,7 +13,7 @@ export const FallbackImage = ({
 }: FallbackImageProps) => {
   const [imgError, setImgError] = useState<boolean>(false);
 
-  if (!src || src === '') {
+  if (!src || src === '' || !src.toString().startsWith('http')) {
     return (
       <div
         className='flex items-center justify-center bg-black/35 text-gray-500 rounded-md'

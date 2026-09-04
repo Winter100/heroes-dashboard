@@ -13,7 +13,6 @@ import { ItemStatistics, ItemStepType } from '@/types/item-type';
 import { RaidStatistics, RaidType } from '@/types/raid-type';
 import { apiClient, loginApiClient } from '@/utils/api-client';
 
-// 추후 토큰이 들어가야함
 export const characterApi = {
   get: async () => apiClient<Character[]>(`/characters`),
   getStatistics: async () => apiClient<Statistics>(`/statistics/character`),
@@ -158,7 +157,7 @@ export const itemApi = {
 export const enchantApi = {
   getStatistics: () => apiClient<EnchantStatistics>(`/statistics/enchant`),
   get: async (enchantId: string) =>
-    apiClient<EnchantType>(`/enchants/${enchantId}`),
+    apiClient<EnchantType>(`/enchants/id/${enchantId}`),
   getAll: async () => apiClient<EnchantType[]>(`/enchants`),
   create: async (enchantValues: EnchantFormValues) =>
     apiClient(`/enchants-admin/create`, {
@@ -204,7 +203,7 @@ export const enchantApi = {
 
 export const raidApi = {
   getStatistics: () => apiClient<RaidStatistics>(`/statistics/raid`),
-  get: async (raidId: string) => apiClient<RaidType>(`/raids/${raidId}`),
+  get: async (raidId: string) => apiClient<RaidType>(`/raids/id/${raidId}`),
   getAll: async () => apiClient<RaidType[]>(`/raids`),
   create: async (formData: FormData) =>
     apiClient(`/raids-admin/create`, {

@@ -1,4 +1,5 @@
 import RaidCreate from '@/components/raid/raid-create';
+import RaidStatistics from '@/components/raid/raid-statistics';
 import RaidTable from '@/components/raid/raid-table';
 
 const Page = () => {
@@ -8,7 +9,7 @@ const Page = () => {
         <RaidCreate />
       </div>
       <div className='flex items-center gap-2'>
-        {/* <CharacterStatistics /> */}
+        <RaidStatistics />
       </div>
       <div>
         <RaidTable />
