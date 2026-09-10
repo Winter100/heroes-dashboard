@@ -1,6 +1,8 @@
 import { useAuthStore } from '@/store/useAuthStore';
 
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL!;
+export const FRONT_URL = process.env.NEXT_PUBLIC_FRONT_URL!;
+export const REVALIDATE = process.env.NEXT_PUBLIC_REVALIDATE!;
 
 type RefreshResponse = {
   accessToken: string;
@@ -113,6 +115,39 @@ export const loginApiClient = async <T>(
 ): Promise<T> => {
   const url = `${BACKEND_URL}${endpoint}`;
   const res = await fetch(url, { credentials: 'include', ...options });
+
+  if (res.status === 204) {
+    return undefined as T;
+  }
+
+  const text = await res.text();
+
+  let data;
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = { message: text };
+    }
+  }
+
+  if (!res.ok) {
+    throw new Error(data?.message ?? '요청 처리 중 오류가 발생했습니다.');
+  }
+
+  return data as T;
+};
+
+export const revalidateClient = async <T>(
+  tag: string,
+  options?: RequestInit,
+): Promise<T> => {
+  const url = `${FRONT_URL}/api/revalidate?tag=${tag}`;
+  const res = await fetch(url, {
+    credentials: 'include',
+    headers: { 'revalidate-secret': REVALIDATE },
+    ...options,
+  });
 
   if (res.status === 204) {
     return undefined as T;

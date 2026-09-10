@@ -26,8 +26,9 @@ export const useStats = () => {
   });
 };
 
-export const useNeedItemBasicId = () => {
+export const useNeedItemBasicId = (isOpen: boolean) => {
   return useQuery({
+    enabled: isOpen,
     queryKey: itemKeys.basicId(),
     queryFn: () => itemApi.getBasicId(),
   });

@@ -16,11 +16,12 @@ import { ItemFormValues } from '@/schema/item.schema';
 import { useAdminCreateItem } from '@/hooks/item/use-admin-item';
 import { toast } from '../ui/toast';
 import { useNeedItemBasicId } from '@/hooks/item/use-item';
+import { Skeleton } from '../ui/skeleton';
 
 const ItemCreate = () => {
   const [createOpen, setCreateOpen] = useState(false);
   const createItemMutation = useAdminCreateItem();
-  const basicId = useNeedItemBasicId();
+  const { isLoading, data } = useNeedItemBasicId(createOpen);
 
   const onCreate = (item: ItemFormValues) => {
     const formData = createItemFormData(item);
@@ -48,19 +49,30 @@ const ItemCreate = () => {
     });
   };
 
+  if (isLoading)
+    return (
+      <Skeleton className='w-24 flex items-center justify-center h-10 bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground'>
+        ...
+      </Skeleton>
+    );
+
   return (
     <Dialog open={createOpen} onOpenChange={setCreateOpen}>
       <DialogTrigger
-        render={<Button variant='secondary'>아이템 생성</Button>}
+        render={
+          <Button className='w-24 h-10' variant='secondary'>
+            아이템 생성
+          </Button>
+        }
       />
       <DialogContent>
         <DialogHeader>
           <DialogTitle></DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        {basicId.data ? (
+        {!isLoading && data ? (
           <ItemEditForm
-            basicId={basicId.data}
+            basicId={data}
             mode='create'
             mutate={onCreate}
             disabled={createItemMutation.isPending}

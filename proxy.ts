@@ -14,8 +14,6 @@ export function proxy(request: NextRequest) {
   if (isPrivateRoute && !hasToken) {
     const loginUrl = new URL('/', request.url);
 
-    // loginUrl.searchParams.set('from', pathname);
-
     return NextResponse.redirect(loginUrl);
   }
 

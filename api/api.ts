@@ -1,3 +1,4 @@
+import { revalidate_tags } from '@/constant/constant';
 import {
   EnchantDetailFormValues,
   EnchantFormValues,
@@ -11,7 +12,7 @@ import {
 import { EnchantStatistics, EnchantType } from '@/types/enchant-type';
 import { ItemStatistics, ItemStepType } from '@/types/item-type';
 import { RaidStatistics, RaidType } from '@/types/raid-type';
-import { apiClient, loginApiClient } from '@/utils/api-client';
+import { apiClient, loginApiClient, REVALIDATE } from '@/utils/api-client';
 
 export const characterApi = {
   get: async () => apiClient<Character[]>(`/characters`),
@@ -259,5 +260,55 @@ export const signApi = {
         'Content-Type': 'application/json',
       },
       method: 'POST',
+    }),
+};
+
+export const revalidateApi = {
+  enchant: async <T>() =>
+    apiClient<T>(`/revalidate/${revalidate_tags.enchant}`, {
+      headers: { 'revalidate-secret': REVALIDATE },
+    }),
+  enchantDetail: async (enchantName: string) =>
+    apiClient(
+      `/revalidate/${revalidate_tags.enchantDetailByName}/${enchantName}`,
+      {
+        headers: { 'revalidate-secret': REVALIDATE },
+      },
+    ),
+  infusion: async () =>
+    apiClient(`/revalidate/${revalidate_tags.infusion}`, {
+      headers: { 'revalidate-secret': REVALIDATE },
+    }),
+  itemSetOption: async () =>
+    apiClient(`/revalidate/${revalidate_tags.itemSetOption}`, {
+      headers: { 'revalidate-secret': REVALIDATE },
+    }),
+  grind: async () =>
+    apiClient(`/revalidate/${revalidate_tags.grind}`, {
+      headers: { 'revalidate-secret': REVALIDATE },
+    }),
+  characterImage: async <T>() =>
+    apiClient<T>(`/revalidate/${revalidate_tags.characterImage}`, {
+      headers: { 'revalidate-secret': REVALIDATE },
+    }),
+  recipes: async () =>
+    apiClient(`/revalidate/${revalidate_tags.recipes}`, {
+      headers: { 'revalidate-secret': REVALIDATE },
+    }),
+  recipeSSG: async () =>
+    apiClient(`/revalidate/${revalidate_tags.recipeSSG}`, {
+      headers: { 'revalidate-secret': REVALIDATE },
+    }),
+  recipeDetail: async (stepId: string) =>
+    apiClient(`/revalidate/${revalidate_tags.recipes}/${stepId}`, {
+      headers: { 'revalidate-secret': REVALIDATE },
+    }),
+  raid: async () =>
+    apiClient(`/revalidate/${revalidate_tags.raid}`, {
+      headers: { 'revalidate-secret': REVALIDATE },
+    }),
+  raidDetail: async (battleName: string) =>
+    apiClient(`/revalidate/${revalidate_tags.raidDetailName}/${battleName}`, {
+      headers: { 'revalidate-secret': REVALIDATE },
     }),
 };

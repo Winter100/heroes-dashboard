@@ -1,6 +1,7 @@
 'use client';
 
 import CharacterCreate from '@/components/character/character-create';
+import CharacterRevalidate from '@/components/character/character-revalidate';
 import CharacterStatistics from '@/components/character/character-statistics';
 import CharacterTable from '@/components/character/character-table';
 
@@ -9,6 +10,7 @@ const Page = () => {
     <div className='max-w-6xl mx-auto w-full space-y-2'>
       <div className='flex items-center justify-end'>
         <CharacterCreate />
+        <CharacterRevalidate />
       </div>
       <div className='flex items-center gap-2'>
         <CharacterStatistics />

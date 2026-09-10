@@ -1,28 +1,8 @@
 'use client';
 
-import {
-  createCharacterFormData,
-  createCharacterSkillFormData,
-} from '@/lib/utils';
 import { Button } from '../ui/button';
-import {
-  CharacterFormValues,
-  CharacterSkillFormValues,
-} from '@/schema/character.schema';
-import { toast } from '../ui/toast';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { DialogClose, DialogFooter } from '@/components/ui/dialog';
 import CharacterEditForm from './character-edit-form';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import {
   useAdminCreateSkill,
   useAdminDeleteCharacter,
@@ -35,15 +15,22 @@ import { Card, CardContent } from '../ui/card';
 import { Skeleton } from '../ui/skeleton';
 import CharacterSkillCard from './character-skill-card';
 import CharacterEditSkillForm from './character-edit-skill-form';
+import ActionDialog from '../common/action-dialog';
 
 const CharacterDetail = ({ classId }: { classId: string }) => {
-  const router = useRouter();
-  const [editOpen, setEditOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
   const { isLoading, data, error } = useCharacterSkillList(classId);
-  const createSkillMutation = useAdminCreateSkill(classId);
-  const updateMutation = useAdminUpdateCharacter(classId);
-  const deleteMutation = useAdminDeleteCharacter();
+
+  const { isPending: createSkillPending, onCreate } =
+    useAdminCreateSkill(classId);
+
+  const { onEdit, editOpen, setEditOpen } = useAdminUpdateCharacter(classId);
+
+  const {
+    isPending: deleteCharacterPending,
+    onDelete,
+    deleteOpen,
+    setDeleteOpen,
+  } = useAdminDeleteCharacter(classId);
 
   if (isLoading)
     return (
@@ -77,104 +64,47 @@ const CharacterDetail = ({ classId }: { classId: string }) => {
     );
   }
 
-  const onCreate = async (
-    skill: CharacterSkillFormValues,
-    optional?: () => void,
-  ) => {
-    const { name: skillName } = skill;
-    const formData = createCharacterSkillFormData(skill, [classId]);
-    const promise = createSkillMutation.mutateAsync(formData);
-
-    toast.promise(promise, {
-      loading: `${skillName} 등록 중...`,
-      success: () => {
-        optional?.();
-        return {
-          type: 'success',
-          title: skillName,
-          description: '스킬이 등록되었습니다.',
-        };
-      },
-      error: (error) => {
-        return {
-          type: 'error',
-          title: skillName,
-          description:
-            error instanceof Error
-              ? error.message
-              : '처리 중 오류가 발생했습니다.',
-        };
-      },
-    });
-  };
-
-  const onEdit = (classData: CharacterFormValues) => {
-    const formData = createCharacterFormData(classData);
-
-    const promise = updateMutation.mutateAsync({ formData, classId });
-
-    toast.promise(promise, {
-      loading: `${classData.name} 수정 중...`,
-      success: () => {
-        setEditOpen(false);
-        return `${classData.name}가 수정되었습니다.`;
-      },
-      error: (error) =>
-        error instanceof Error ? error.message : '수정에 실패했습니다.',
-    });
-  };
-
-  const onDelete = () => {
-    const className = data.name;
-    const promise = deleteMutation.mutateAsync({ classId, className });
-
-    toast.promise(promise, {
-      loading: `${className} 삭제 중...`,
-      success: () => {
-        setDeleteOpen(false);
-        router.push('/dashboard/character');
-        return `${className}가 삭제되었습니다.`;
-      },
-      error: (error) =>
-        error instanceof Error ? error.message : '삭제에 실패했습니다.',
-    });
-  };
-
   return (
     <div className='gap-2 flex-col mx-auto flex items-center'>
       <div className='mx-auto'>
-        <Dialog open={editOpen} onOpenChange={setEditOpen}>
-          <DialogTrigger render={<Button variant='secondary'>수정</Button>} />
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle></DialogTitle>
-              <DialogDescription></DialogDescription>
-            </DialogHeader>
-            <CharacterEditForm
-              defaultValues={data}
-              mode='update'
-              mutate={onEdit}
-            />
-          </DialogContent>
-        </Dialog>
-        <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-          <DialogTrigger render={<Button variant='destructive'>삭제</Button>} />
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{data.name}</DialogTitle>
-              <DialogDescription className='text-red-300'>
-                해당 직업을 삭제 하겠습니까?
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <DialogClose render={<Button variant='outline'>취소</Button>} />
-              <Button variant='destructive' onClick={onDelete}>
-                네
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        {/* 직업 정보 수정 Dialog */}
+        <ActionDialog
+          title='직업 정보 수정'
+          open={editOpen}
+          setOpen={setEditOpen}
+          trigger={<Button variant='secondary'>수정</Button>}
+        >
+          <CharacterEditForm
+            defaultValues={data}
+            mode='update'
+            mutate={onEdit}
+          />
+        </ActionDialog>
+
+        {/* 직업 삭제 Dialog */}
+        <ActionDialog
+          title={data.name}
+          open={deleteOpen}
+          setOpen={setDeleteOpen}
+          trigger={<Button variant='destructive'>삭제</Button>}
+          description='해당 직업을 삭제 하겠습니까?'
+        >
+          <DialogFooter>
+            <DialogClose render={<Button variant='outline'>취소</Button>} />
+            <Button
+              variant='destructive'
+              onClick={() => {
+                onDelete(data.name);
+              }}
+              disabled={deleteCharacterPending}
+            >
+              네
+            </Button>
+          </DialogFooter>
+        </ActionDialog>
       </div>
+
+      {/* 직업 카드 */}
       <CharacterCard character={data} />
       <div className='grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-2 w-full'>
         {data?.skills.map((skill) => (
@@ -184,7 +114,7 @@ const CharacterDetail = ({ classId }: { classId: string }) => {
           onSubmit={onCreate}
           mode='create'
           onCancel={() => {}}
-          disabled={createSkillMutation.isPending}
+          disabled={createSkillPending}
         />
       </div>
     </div>
