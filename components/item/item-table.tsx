@@ -1,7 +1,7 @@
 'use client';
 
 import { useItem } from '@/hooks/item/use-item';
-import QueryError from '../common/query-error';
+import QueryError from '../common/query-error-boundary';
 import ItemCard from './item-card';
 import LoadingSkeleton from '../loading-skeleton';
 

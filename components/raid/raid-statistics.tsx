@@ -3,7 +3,7 @@ import { ChartBar } from '../chart-bar';
 import { ChartPieLabel } from '../chart-pie-label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import QueryError from '../common/query-error';
+import QueryError from '../common/query-error-boundary';
 import { useRaidStatistics } from '@/hooks/raid/use-raid';
 import { ChartConfig } from '../ui/chart';
 

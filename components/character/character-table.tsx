@@ -1,16 +1,10 @@
 'use client';
 
 import { useCharacter } from '@/hooks/character/use-character';
-import QueryError from '../common/query-error';
 import CharacterCard from './character-card';
-import LoadingSkeleton from '../loading-skeleton';
 
 const CharacterTable = () => {
-  const { data, isLoading, error } = useCharacter();
-
-  if (isLoading) return <LoadingSkeleton />;
-
-  if (error) return <QueryError error={error} />;
+  const { data } = useCharacter();
 
   return (
     <div className='grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-2 w-full'>

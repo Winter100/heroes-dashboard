@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/dialog';
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import QueryError from '../common/query-error';
+import QueryError from '../common/query-error-boundary';
 import { Card, CardContent } from '../ui/card';
 import { Skeleton } from '../ui/skeleton';
 import RaidCard from './raid-card';

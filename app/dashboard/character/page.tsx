@@ -4,6 +4,9 @@ import CharacterCreate from '@/components/character/character-create';
 import CharacterRevalidate from '@/components/character/character-revalidate';
 import CharacterStatistics from '@/components/character/character-statistics';
 import CharacterTable from '@/components/character/character-table';
+import QueryErrorBoundary from '@/components/common/query-error-boundary';
+import StatisticsLoading from '@/components/common/statistics-loading';
+import LoadingSkeleton from '@/components/loading-skeleton';
 
 const Page = () => {
   return (
@@ -13,10 +16,14 @@ const Page = () => {
         <CharacterRevalidate />
       </div>
       <div className='flex items-center gap-2'>
-        <CharacterStatistics />
+        <QueryErrorBoundary fallback={<StatisticsLoading />}>
+          <CharacterStatistics />
+        </QueryErrorBoundary>
       </div>
       <div>
-        <CharacterTable />
+        <QueryErrorBoundary fallback={<LoadingSkeleton />}>
+          <CharacterTable />
+        </QueryErrorBoundary>
       </div>
     </div>
   );

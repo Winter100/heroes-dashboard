@@ -2,7 +2,7 @@
 import { ChartBar } from '../chart-bar';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import QueryError from '../common/query-error';
+import QueryError from '../common/query-error-boundary';
 import { ChartConfig } from '../ui/chart';
 import { useItemStatistics } from '@/hooks/item/use-item';
 

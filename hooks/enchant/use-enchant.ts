@@ -1,24 +1,23 @@
 import { enchantApi } from '@/api/api';
 import { enchantKeys } from '@/queries/enchant-keys';
-import { EnchantType } from '@/types/enchant-type';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 export const useEnchant = () => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: enchantKeys.lists(),
     queryFn: enchantApi.getAll,
   });
 };
 
 export const useEnchantDetail = (enchantId: string) => {
-  return useQuery<EnchantType>({
+  return useSuspenseQuery({
     queryKey: enchantKeys.detail(enchantId),
     queryFn: () => enchantApi.get(enchantId),
   });
 };
 
 export const useEnchantStatistics = () => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: enchantKeys.statistics(),
     queryFn: enchantApi.getStatistics,
   });

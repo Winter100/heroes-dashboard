@@ -6,7 +6,7 @@ import {
 } from '@/hooks/item/use-item';
 import { Card, CardContent } from '../ui/card';
 import { Skeleton } from '../ui/skeleton';
-import QueryError from '../common/query-error';
+import QueryError from '../common/query-error-boundary';
 import ItemCard from './item-card';
 import {
   Dialog,

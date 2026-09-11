@@ -9,50 +9,29 @@ import {
   useAdminUpdateCharacter,
 } from '@/hooks/character/use-admin-character';
 import { useCharacterSkillList } from '@/hooks/character/use-character';
-import QueryError from '../common/query-error';
 import CharacterCard from './character-card';
 import { Card, CardContent } from '../ui/card';
-import { Skeleton } from '../ui/skeleton';
 import CharacterSkillCard from './character-skill-card';
 import CharacterEditSkillForm from './character-edit-skill-form';
 import ActionDialog from '../common/action-dialog';
 
 const CharacterDetail = ({ classId }: { classId: string }) => {
-  const { isLoading, data, error } = useCharacterSkillList(classId);
+  const { data } = useCharacterSkillList(classId);
 
   const { isPending: createSkillPending, onCreate } =
     useAdminCreateSkill(classId);
-
-  const { onEdit, editOpen, setEditOpen } = useAdminUpdateCharacter(classId);
-
+  const {
+    isPending: updateCharacterPending,
+    onEdit,
+    editOpen,
+    setEditOpen,
+  } = useAdminUpdateCharacter(classId);
   const {
     isPending: deleteCharacterPending,
     onDelete,
     deleteOpen,
     setDeleteOpen,
   } = useAdminDeleteCharacter(classId);
-
-  if (isLoading)
-    return (
-      <div className='space-y-2'>
-        <Card className='w-full max-w-sm mx-auto'>
-          <CardContent>
-            <Skeleton className='h-72 w-full' />
-          </CardContent>
-        </Card>
-        <div className='grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-2 w-full'>
-          {Array.from({ length: 10 }).map((_, i) => (
-            <Card key={i} className='w-full max-w-sm'>
-              <CardContent>
-                <Skeleton className='h-96 w-full' />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    );
-
-  if (error) return <QueryError error={error} />;
 
   if (!data) {
     return (
@@ -75,6 +54,7 @@ const CharacterDetail = ({ classId }: { classId: string }) => {
           trigger={<Button variant='secondary'>수정</Button>}
         >
           <CharacterEditForm
+            disabled={updateCharacterPending}
             defaultValues={data}
             mode='update'
             mutate={onEdit}
@@ -86,11 +66,21 @@ const CharacterDetail = ({ classId }: { classId: string }) => {
           title={data.name}
           open={deleteOpen}
           setOpen={setDeleteOpen}
-          trigger={<Button variant='destructive'>삭제</Button>}
+          trigger={
+            <Button variant='destructive' disabled={deleteCharacterPending}>
+              삭제
+            </Button>
+          }
           description='해당 직업을 삭제 하겠습니까?'
         >
           <DialogFooter>
-            <DialogClose render={<Button variant='outline'>취소</Button>} />
+            <DialogClose
+              render={
+                <Button variant='outline' disabled={deleteCharacterPending}>
+                  취소
+                </Button>
+              }
+            />
             <Button
               variant='destructive'
               onClick={() => {

@@ -5,7 +5,12 @@ import { useAdminCreateCharacter } from '@/hooks/character/use-admin-character';
 import ActionDialog from '../common/action-dialog';
 
 const CharacterCreate = () => {
-  const { onCreate, createOpen, setCreateOpen } = useAdminCreateCharacter();
+  const {
+    onCreate,
+    createOpen,
+    setCreateOpen,
+    isPending: createCharacterPending,
+  } = useAdminCreateCharacter();
 
   return (
     <ActionDialog
@@ -14,7 +19,11 @@ const CharacterCreate = () => {
       setOpen={setCreateOpen}
       trigger={<Button variant='secondary'>직업 생성</Button>}
     >
-      <CharacterEditForm mode='create' mutate={onCreate} />
+      <CharacterEditForm
+        mode='create'
+        mutate={onCreate}
+        disabled={createCharacterPending}
+      />
     </ActionDialog>
   );
 };

@@ -11,8 +11,8 @@ import {
 interface ActionDialogProps {
   trigger: ReactElement;
   title: string;
-  open: boolean;
-  setOpen: (open: boolean) => void;
+  open?: boolean;
+  setOpen?: (open: boolean) => void;
   description?: string;
   children: ReactNode;
 }

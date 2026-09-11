@@ -1,7 +1,7 @@
 'use client';
 import { useRaid } from '@/hooks/raid/use-raid';
 import LoadingSkeleton from '../loading-skeleton';
-import QueryError from '../common/query-error';
+import QueryError from '../common/query-error-boundary';
 import RaidCard from './raid-card';
 
 const RaidTable = () => {

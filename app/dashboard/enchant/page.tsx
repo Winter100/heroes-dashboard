@@ -1,6 +1,9 @@
+import QueryErrorBoundary from '@/components/common/query-error-boundary';
+import StatisticsLoading from '@/components/common/statistics-loading';
 import EnchantCreate from '@/components/enchant/enchant-create';
 import EnchantStatistics from '@/components/enchant/enchant-statistics';
 import EnchantTable from '@/components/enchant/enchant-table';
+import LoadingSkeleton from '@/components/loading-skeleton';
 
 const Page = () => {
   return (
@@ -9,10 +12,14 @@ const Page = () => {
         <EnchantCreate />
       </div>
       <div className='flex items-center gap-2'>
-        <EnchantStatistics />
+        <QueryErrorBoundary fallback={<StatisticsLoading />}>
+          <EnchantStatistics />
+        </QueryErrorBoundary>
       </div>
       <div>
-        <EnchantTable />
+        <QueryErrorBoundary fallback={<LoadingSkeleton />}>
+          <EnchantTable />
+        </QueryErrorBoundary>
       </div>
     </div>
   );

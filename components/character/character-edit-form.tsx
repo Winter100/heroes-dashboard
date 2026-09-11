@@ -35,9 +35,11 @@ const CharacterEditForm = ({
   mode,
   mutate,
   defaultValues,
+  disabled,
 }: {
   mode: 'create' | 'update';
   mutate: (data: CharacterFormValues) => void;
+  disabled: boolean;
   defaultValues?: Character;
 }) => {
   const form = useForm<CharacterFormValues>({
@@ -75,6 +77,7 @@ const CharacterEditForm = ({
                     aria-invalid={fieldState.invalid}
                     placeholder='캐릭터 이름'
                     autoComplete='off'
+                    disabled={disabled}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -92,8 +95,10 @@ const CharacterEditForm = ({
                     name={field.name}
                     value={field.value}
                     onValueChange={field.onChange}
+                    disabled={disabled}
                   >
                     <SelectTrigger
+                      disabled={disabled}
                       id='gender'
                       aria-invalid={fieldState.invalid}
                       className=''
@@ -127,6 +132,7 @@ const CharacterEditForm = ({
                     aria-invalid={fieldState.invalid}
                     placeholder='yyyy-mm-dd'
                     autoComplete='off'
+                    disabled={disabled}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -146,6 +152,7 @@ const CharacterEditForm = ({
                     id='image'
                     accept='image/*'
                     multiple={false}
+                    disabled={disabled}
                     aria-invalid={fieldState.invalid}
                     onChange={(e) => {
                       const file = e.target.files?.[0];
@@ -172,7 +179,7 @@ const CharacterEditForm = ({
       </CardContent>
       <CardFooter>
         <Field orientation='horizontal'>
-          <Button type='submit' form='form-character'>
+          <Button type='submit' disabled={disabled} form='form-character'>
             {mode === 'create' ? '생성' : '수정'}
           </Button>
         </Field>
