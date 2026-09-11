@@ -1,16 +1,10 @@
 'use client';
 
 import { useItem } from '@/hooks/item/use-item';
-import QueryError from '../common/query-error-boundary';
 import ItemCard from './item-card';
-import LoadingSkeleton from '../loading-skeleton';
 
 const ItemTable = () => {
-  const { isLoading, data, error } = useItem();
-
-  if (isLoading) return <LoadingSkeleton />;
-
-  if (error) return <QueryError error={error} />;
+  const { data } = useItem();
 
   return (
     <div>

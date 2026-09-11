@@ -1,9 +1,9 @@
 import { itemApi } from '@/api/api';
 import { itemKeys } from '@/queries/item-keys';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 export const useItem = () => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: itemKeys.lists(),
     queryFn: itemApi.get,
     retry: 1,
@@ -11,7 +11,7 @@ export const useItem = () => {
 };
 
 export const useItemDetail = (id: string) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: itemKeys.detail(id),
     queryFn: () => itemApi.findOne(id),
     retry: 1,
@@ -26,16 +26,15 @@ export const useStats = () => {
   });
 };
 
-export const useNeedItemBasicId = (isOpen: boolean) => {
-  return useQuery({
-    enabled: isOpen,
+export const useNeedItemBasicId = () => {
+  return useSuspenseQuery({
     queryKey: itemKeys.basicId(),
     queryFn: () => itemApi.getBasicId(),
   });
 };
 
 export const useItemStatistics = () => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: itemKeys.statistics(),
     queryFn: itemApi.getStatistics,
   });

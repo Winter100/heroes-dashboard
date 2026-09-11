@@ -1,6 +1,9 @@
+import QueryErrorBoundary from '@/components/common/query-error-boundary';
+import StatisticsLoading from '@/components/common/statistics-loading';
 import ItemCreate from '@/components/item/item-create';
 import ItemStatistics from '@/components/item/item-statistics';
 import ItemTable from '@/components/item/item-table';
+import LoadingSkeleton from '@/components/loading-skeleton';
 
 const Page = () => {
   return (
@@ -9,10 +12,14 @@ const Page = () => {
         <ItemCreate />
       </div>
       <div className='flex items-center gap-2'>
-        <ItemStatistics />
+        <QueryErrorBoundary fallback={<StatisticsLoading />}>
+          <ItemStatistics />
+        </QueryErrorBoundary>
       </div>
       <div>
-        <ItemTable />
+        <QueryErrorBoundary fallback={<LoadingSkeleton />}>
+          <ItemTable />
+        </QueryErrorBoundary>
       </div>
     </div>
   );

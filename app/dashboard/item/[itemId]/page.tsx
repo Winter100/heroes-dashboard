@@ -1,11 +1,17 @@
+'use client';
+import DetailLoading from '@/components/common/detail-loading';
+import QueryErrorBoundary from '@/components/common/query-error-boundary';
 import ItemDetail from '@/components/item/item-detail';
+import { useParams } from 'next/navigation';
 
-const Page = async ({ params }: { params: Promise<{ itemId: string }> }) => {
-  const { itemId } = await params;
+const Page = () => {
+  const { itemId } = useParams<{ itemId: string }>();
 
   return (
     <div className='max-w-6xl mx-auto w-full'>
-      <ItemDetail itemId={itemId} />
+      <QueryErrorBoundary fallback={<DetailLoading />}>
+        <ItemDetail itemId={itemId} />
+      </QueryErrorBoundary>
     </div>
   );
 };
