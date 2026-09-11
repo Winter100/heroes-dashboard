@@ -47,8 +47,8 @@ const EnchantEditForm = ({
       name: defaultValues?.name || '',
       category: 'ENCHANT',
       tierId: 2,
-      affixId: defaultValues?.affixId || undefined,
-      rankId: defaultValues?.rankId || undefined,
+      affixId: defaultValues?.affix.id || undefined,
+      rankId: Number(defaultValues?.rank.id) || undefined,
     },
   });
 

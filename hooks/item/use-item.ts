@@ -1,6 +1,6 @@
 import { itemApi } from '@/api/api';
 import { itemKeys } from '@/queries/item-keys';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
 
 export const useItem = () => {
   return useSuspenseQuery({
@@ -19,7 +19,7 @@ export const useItemDetail = (id: string) => {
 };
 
 export const useStats = () => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: itemKeys.stats(),
     queryFn: () => itemApi.getStats(),
     retry: 1,
@@ -30,7 +30,26 @@ export const useNeedItemBasicId = () => {
   return useSuspenseQuery({
     queryKey: itemKeys.basicId(),
     queryFn: () => itemApi.getBasicId(),
+    retry: 1,
   });
+};
+
+export const useItemPageData = () => {
+  const [{ data: stats }, { data: basicId }] = useSuspenseQueries({
+    queries: [
+      {
+        queryKey: itemKeys.stats(),
+        queryFn: () => itemApi.getStats(),
+        retry: 1,
+      },
+      {
+        queryKey: itemKeys.basicId(),
+        queryFn: () => itemApi.getBasicId(),
+        retry: 1,
+      },
+    ],
+  });
+  return { stats, basicId };
 };
 
 export const useItemStatistics = () => {

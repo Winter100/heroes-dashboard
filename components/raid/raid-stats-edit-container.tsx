@@ -1,28 +1,23 @@
-import { useState } from 'react';
 import { Button } from '../ui/button';
 import RaidDetailEditForm from './raid-detail-edit-form';
 import { BossStat } from '@/types/raid-type';
-import { RaidEffectsFormValues } from '@/schema/raid-schema';
+import { useAdminUpsertRaidDetail } from '@/hooks/raid/use-admin-raid';
+import { useStats } from '@/hooks/item/use-item';
 
 type Props = {
   mode: 'ENTRY' | 'LIMIT';
   effects: BossStat[];
   raidId: string;
-  stats: {
-    id: string;
-    name: string;
-  }[];
-  onEdit: (mode: string, effects: RaidEffectsFormValues) => void;
-  disabled: boolean;
 };
-const RaidStatsEditContainer = ({
-  effects,
-  mode,
-  stats,
-  onEdit,
-  disabled,
-}: Props) => {
-  const [stepEditOpen, setStepEditOpen] = useState(false);
+const RaidStatsEditContainer = ({ effects, mode, raidId }: Props) => {
+  const {
+    onUpsert,
+    isPending: upsertRaidPending,
+    stepEditOpen,
+    setStepEditOpen,
+  } = useAdminUpsertRaidDetail(raidId);
+
+  const { data: statsFormData } = useStats();
 
   return (
     <div className='relative'>
@@ -36,11 +31,11 @@ const RaidStatsEditContainer = ({
 
       <div className='w-full max-w-lg'>
         <RaidDetailEditForm
-          stats={stats}
+          stats={statsFormData}
           defaultValues={{ effects }}
-          disabled={disabled}
+          disabled={upsertRaidPending}
           mode={mode}
-          mutate={onEdit}
+          mutate={onUpsert}
         />
       </div>
     </div>

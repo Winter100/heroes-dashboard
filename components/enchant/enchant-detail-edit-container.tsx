@@ -1,9 +1,8 @@
 import { Button } from '../ui/button';
 import EnchantDetailEditForm from './enchant-detail-edit-form';
-import { useNeedItemBasicId, useStats } from '@/hooks/item/use-item';
+import { useItemPageData } from '@/hooks/item/use-item';
 import { EnchantType } from '@/types/enchant-type';
 import { useAdminUpsertEnchant } from '@/hooks/enchant/use-admin-enchant';
-import LoadingSkeleton from '../loading-skeleton';
 
 type Props = {
   enchantId: string;
@@ -12,11 +11,8 @@ type Props = {
 const EnchantDetailEditContainer = ({ enchantId, data }: Props) => {
   const { onEdit, stepEditOpen, setStepEditOpen, isPending } =
     useAdminUpsertEnchant(enchantId);
-  const { isLoading, data: stats } = useStats();
-  const { isLoading: isBasicLoading, data: basic } =
-    useNeedItemBasicId(stepEditOpen);
 
-  if (isBasicLoading || isLoading) return <LoadingSkeleton />;
+  const { stats, basicId } = useItemPageData();
 
   return (
     <div className='relative max-w-sm w-full'>
@@ -31,10 +27,13 @@ const EnchantDetailEditContainer = ({ enchantId, data }: Props) => {
       <div className='w-full'>
         <EnchantDetailEditForm
           stats={stats ?? []}
-          slots={basic?.slot ?? []}
+          slots={basicId?.slot ?? []}
           defaultValues={{
-            slotsId: data.enchantSlot,
-            effects: data.effects,
+            slotsId: data.slot.map((s) => ({ slotId: s.id })),
+            effects: data.effects.map((e) => ({
+              statId: e.id,
+              value: e.stat_value,
+            })),
           }}
           disabled={isPending}
           mode='update'

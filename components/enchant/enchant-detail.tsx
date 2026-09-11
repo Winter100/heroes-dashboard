@@ -4,6 +4,8 @@ import EnchantCard from './enchant-card';
 import EnchantDetailEditContainer from './enchant-detail-edit-container';
 import EnchantEditDialog from './enchant-edit-dialog';
 import EnchantDeleteDialog from './enchant-delete-dialog';
+import QueryErrorBoundary from '../common/query-error-boundary';
+import LoadingSkeleton from '../loading-skeleton';
 
 const EnchantDetail = ({ enchantId }: { enchantId: string }) => {
   const { data } = useEnchantDetail(enchantId);
@@ -15,7 +17,9 @@ const EnchantDetail = ({ enchantId }: { enchantId: string }) => {
         <EnchantDeleteDialog enchantId={enchantId} />
       </div>
       <EnchantCard enchant={data} />
-      <EnchantDetailEditContainer enchantId={enchantId} data={data} />
+      <QueryErrorBoundary fallback={<LoadingSkeleton />}>
+        <EnchantDetailEditContainer enchantId={enchantId} data={data} />
+      </QueryErrorBoundary>
     </div>
   );
 };

@@ -1,3 +1,6 @@
+import QueryErrorBoundary from '@/components/common/query-error-boundary';
+import StatisticsLoading from '@/components/common/statistics-loading';
+import LoadingSkeleton from '@/components/loading-skeleton';
 import RaidCreate from '@/components/raid/raid-create';
 import RaidStatistics from '@/components/raid/raid-statistics';
 import RaidTable from '@/components/raid/raid-table';
@@ -9,10 +12,14 @@ const Page = () => {
         <RaidCreate />
       </div>
       <div className='flex items-center gap-2'>
-        <RaidStatistics />
+        <QueryErrorBoundary fallback={<StatisticsLoading />}>
+          <RaidStatistics />
+        </QueryErrorBoundary>
       </div>
       <div>
-        <RaidTable />
+        <QueryErrorBoundary fallback={<LoadingSkeleton />}>
+          <RaidTable />
+        </QueryErrorBoundary>
       </div>
     </div>
   );

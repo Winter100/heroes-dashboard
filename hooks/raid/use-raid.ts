@@ -1,9 +1,9 @@
 import { raidApi } from '@/api/api';
 import { raidKeys } from '@/queries/raid-keys';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 export const useRaid = () => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: raidKeys.lists(),
     queryFn: raidApi.getAll,
     retry: 1,
@@ -11,8 +11,7 @@ export const useRaid = () => {
 };
 
 export const useRaidDetail = (raidId: string) => {
-  return useQuery({
-    enabled: !!raidId,
+  return useSuspenseQuery({
     queryKey: raidKeys.detail(raidId),
     queryFn: () => raidApi.get(raidId),
     retry: 1,

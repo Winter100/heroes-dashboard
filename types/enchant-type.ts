@@ -1,12 +1,11 @@
 export type EnchantType = {
   id: number;
-  affixId: number;
+  affix: { id: number; value: string };
   name: string;
-  rankId: number;
-  tierId: number;
-  // category: string;
-  effects: { statId: number; value: string }[];
-  enchantSlot: { slotId: number }[];
+  rank: { id: number; name: string };
+  tier: { id: number; value: string };
+  effects: { id: number; stat_name: string; stat_value: string }[];
+  slot: { id: number; name: string; value: string }[];
 };
 
 export type EnchantStatistics = {

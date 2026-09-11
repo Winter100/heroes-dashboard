@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -14,8 +14,6 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
-  FieldLegend,
-  FieldSet,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import {
@@ -25,26 +23,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import z from 'zod';
 import { RaidFormValues, raidSchema } from '@/schema/raid-schema';
 import { RaidType } from '@/types/raid-type';
-import { Plus } from 'lucide-react';
 
-const RAID = {
-  7: '아르드리',
-  8: '오르나',
-  9: '와드네',
-  10: '에리우',
-  11: '스페셜 전투',
-  12: '시공간 왜곡',
-  13: '결사대',
-  14: '결사대 [헬]',
-  15: '시즌3',
-  16: '미분류',
-};
-// 레이드는 상수로 처리하기
-
-// 기본 레이드 데이터 입력
 const RaidEditForm = ({
   mode,
   mutate,
@@ -65,11 +46,6 @@ const RaidEditForm = ({
       level: defaultValues?.level || 0,
     },
   });
-
-  // const { fields, append, remove } = useFieldArray({
-  //   control: form.control,
-  //   name: 'effects',
-  // });
 
   return (
     <Card className='w-full sm:max-w-md'>
@@ -245,3 +221,16 @@ const RaidEditForm = ({
 };
 
 export default RaidEditForm;
+
+const RAID = {
+  7: '아르드리',
+  8: '오르나',
+  9: '와드네',
+  10: '에리우',
+  11: '스페셜 전투',
+  12: '시공간 왜곡',
+  13: '결사대',
+  14: '결사대 [헬]',
+  15: '시즌3',
+  16: '미분류',
+};
