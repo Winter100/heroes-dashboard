@@ -1,11 +1,11 @@
 'use client';
 import { useItemDetail, useStats } from '@/hooks/item/use-item';
-import ItemCard from './item-card';
 import { useAdminCreateStep } from '@/hooks/item/use-admin-item';
-import ItemStepEditForm from './item-step-edit-form';
+import ItemStepEditForm from '../forms/item-step-edit-form';
 import ItemDetailEditContainer from './item-detail-edit-container';
-import ItemBaseUpdateDialog from './item-base-update-dialog';
-import ItemBaseDeleteDialog from './item-base-delete-dialog';
+import ItemBaseUpdateDialog from '../dialogs/item-base-update-dialog';
+import ItemBaseDeleteDialog from '../dialogs/item-base-delete-dialog';
+import ItemCard from '../card/item-card';
 
 const ItemDetail = ({ itemId }: { itemId: string }) => {
   const { data } = useItemDetail(itemId);

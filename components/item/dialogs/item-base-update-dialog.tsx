@@ -1,11 +1,11 @@
 import { useAdminUpdateItem } from '@/hooks/item/use-admin-item';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import { ItemStepType } from '@/types/item-type';
-import ItemEditContent from './item-edit-content';
-import QueryErrorBoundary from '../common/query-error-boundary';
-import { Skeleton } from '../ui/skeleton';
+import ItemEditContent from '../forms/item-edit-content';
+import QueryErrorBoundary from '../../common/query-error-boundary';
+import { Skeleton } from '../../ui/skeleton';
 import { useState } from 'react';
-import ConfirmDialog from '../common/confirm-dialog';
+import ConfirmDialog from '../../common/confirm-dialog';
 import { ItemFormValues } from '@/schema/item.schema';
 
 type Props = {

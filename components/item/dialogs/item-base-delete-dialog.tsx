@@ -1,6 +1,6 @@
-import ConfirmDialog from '../common/confirm-dialog';
+import ConfirmDialog from '../../common/confirm-dialog';
 import { useAdminDeleteItem } from '@/hooks/item/use-admin-item';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import { useState } from 'react';
 
 const ItemBaseDeleteDialog = ({ itemId }: { itemId: string }) => {

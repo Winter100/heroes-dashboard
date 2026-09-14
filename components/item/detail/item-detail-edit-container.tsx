@@ -1,8 +1,8 @@
 import { EquipmentStep } from '@/types/item-type';
-import ItemStepEditForm from './item-step-edit-form';
-import { Button } from '../ui/button';
+import ItemStepEditForm from '../forms/item-step-edit-form';
+import { Button } from '../../ui/button';
 import { useAdminUpdateStep } from '@/hooks/item/use-admin-item';
-import ItemDetailStepDeleteDialog from './item-detail-step-delete-dialog';
+import ItemDetailStepDeleteDialog from '../dialogs/item-detail-step-delete-dialog';
 import { useState } from 'react';
 import { ItemStepFormValues } from '@/schema/item.schema';
 

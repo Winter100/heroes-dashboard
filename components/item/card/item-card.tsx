@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
 import { ItemStepType } from '@/types/item-type';
-import { FallbackImage } from '../fallback-image';
+import { FallbackImage } from '@/components/fallback-image';
 
 type Props = {
   item: ItemStepType;

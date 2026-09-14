@@ -21,10 +21,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
+} from '../../ui/select';
 import { ItemFormValues, itemSchema } from '@/schema/item.schema';
 import { ItemStepType } from '@/types/item-type';
-import { Textarea } from '../ui/textarea';
+import { Textarea } from '../../ui/textarea';
 import z from 'zod';
 
 const ItemEditForm = ({

@@ -1,6 +1,6 @@
 import { useAdminDeleteStep } from '@/hooks/item/use-admin-item';
-import { Button } from '../ui/button';
-import ConfirmDialog from '../common/confirm-dialog';
+import { Button } from '../../ui/button';
+import ConfirmDialog from '../../common/confirm-dialog';
 import { useState } from 'react';
 type Props = {
   itemId: string;

@@ -1,9 +1,9 @@
 'use client';
 
 import { useItem } from '@/hooks/item/use-item';
-import ItemCard from './item-card';
+import ItemCard from '../card/item-card';
 
-const ItemTable = () => {
+const ItemList = () => {
   const { data } = useItem();
 
   return (
@@ -17,4 +17,4 @@ const ItemTable = () => {
   );
 };
 
-export default ItemTable;
+export default ItemList;

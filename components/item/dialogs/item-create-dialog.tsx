@@ -1,15 +1,15 @@
 'use client';
 
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import { useAdminCreateItem } from '@/hooks/item/use-admin-item';
-import { Skeleton } from '../ui/skeleton';
-import ItemEditContent from './item-edit-content';
-import QueryErrorBoundary from '../common/query-error-boundary';
+import { Skeleton } from '../../ui/skeleton';
+import ItemEditContent from '../forms/item-edit-content';
+import QueryErrorBoundary from '../../common/query-error-boundary';
 import { useState } from 'react';
-import ConfirmDialog from '../common/confirm-dialog';
+import ConfirmDialog from '../../common/confirm-dialog';
 import { ItemFormValues } from '@/schema/item.schema';
 
-const ItemCreate = () => {
+const ItemCreateDialog = () => {
   const [open, setOpen] = useState(false);
 
   const { isPending, onCreate } = useAdminCreateItem();
@@ -44,6 +44,6 @@ const ItemCreate = () => {
   );
 };
 
-export default ItemCreate;
+export default ItemCreateDialog;
 
 const formId = 'create-item';

@@ -1,7 +1,7 @@
 'use client';
 import DetailLoading from '@/components/common/detail-loading';
 import QueryErrorBoundary from '@/components/common/query-error-boundary';
-import ItemDetail from '@/components/item/item-detail';
+import ItemDetail from '@/components/item/detail/item-detail';
 import { useParams } from 'next/navigation';
 
 const Page = () => {
