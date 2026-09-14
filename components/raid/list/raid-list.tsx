@@ -1,8 +1,8 @@
 'use client';
 import { useRaid } from '@/hooks/raid/use-raid';
-import RaidCard from './raid-card';
+import RaidCard from '../card/raid-card';
 
-const RaidTable = () => {
+const RaidList = () => {
   const { data } = useRaid();
 
   return (
@@ -14,4 +14,4 @@ const RaidTable = () => {
   );
 };
 
-export default RaidTable;
+export default RaidList;

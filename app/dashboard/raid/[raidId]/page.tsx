@@ -1,7 +1,7 @@
 'use client';
 import DetailLoading from '@/components/common/detail-loading';
 import QueryErrorBoundary from '@/components/common/query-error-boundary';
-import RaidDetail from '@/components/raid/raid-detail';
+import RaidDetail from '@/components/raid/detail/raid-detail';
 import { useParams } from 'next/navigation';
 
 const Page = () => {

@@ -1,8 +1,8 @@
 'use client';
 
 import { useAdminDeleteRaid } from '@/hooks/raid/use-admin-raid';
-import ConfirmDialog from '../common/confirm-dialog';
-import { Button } from '../ui/button';
+import ConfirmDialog from '../../common/confirm-dialog';
+import { Button } from '../../ui/button';
 import { useState } from 'react';
 
 type Props = {

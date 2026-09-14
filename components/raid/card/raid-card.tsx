@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
 import { RaidType } from '@/types/raid-type';
-import { FallbackImage } from '../fallback-image';
+import { FallbackImage } from '../../fallback-image';
 
 type Props = {
   raid: RaidType;

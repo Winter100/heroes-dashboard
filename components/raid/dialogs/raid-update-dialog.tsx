@@ -1,9 +1,9 @@
 import { useAdminUpdateRaid } from '@/hooks/raid/use-admin-raid';
-import RaidEditForm from './raid-edit-form';
+import RaidEditForm from '../forms/raid-edit-form';
 import { RaidType } from '@/types/raid-type';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import { useState } from 'react';
-import ConfirmDialog from '../common/confirm-dialog';
+import ConfirmDialog from '../../common/confirm-dialog';
 import { RaidFormValues } from '@/schema/raid-schema';
 
 type Props = {

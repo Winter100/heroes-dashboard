@@ -20,7 +20,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
+} from '../../ui/select';
 import { RaidFormValues, raidSchema } from '@/schema/raid-schema';
 import { RaidType } from '@/types/raid-type';
 

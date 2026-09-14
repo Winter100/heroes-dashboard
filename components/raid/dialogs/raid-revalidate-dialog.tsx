@@ -1,11 +1,11 @@
 'use client';
 
 import { revalidateApi } from '@/api/api';
-import { ActionButton } from '../common/action-button';
-import ActionDialog from '../common/action-dialog';
-import { Button } from '../ui/button';
+import { ActionButton } from '../../common/action-button';
+import ActionDialog from '../../common/action-dialog';
+import { Button } from '../../ui/button';
 
-const RaidRevalidate = () => {
+const RaidRevalidateDialog = () => {
   return (
     <ActionDialog
       trigger={<Button variant='secondary'>갱신</Button>}
@@ -16,4 +16,4 @@ const RaidRevalidate = () => {
   );
 };
 
-export default RaidRevalidate;
+export default RaidRevalidateDialog;

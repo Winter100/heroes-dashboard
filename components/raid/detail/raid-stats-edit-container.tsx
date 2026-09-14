@@ -1,10 +1,10 @@
-import { Button } from '../ui/button';
-import RaidDetailEditForm from './raid-detail-edit-form';
 import { BossStat } from '@/types/raid-type';
 import { useAdminUpsertRaidDetail } from '@/hooks/raid/use-admin-raid';
 import { useStats } from '@/hooks/item/use-item';
 import { useState } from 'react';
 import { RaidEffectsFormValues } from '@/schema/raid-schema';
+import { Button } from '@/components/ui/button';
+import RaidDetailEditForm from '../forms/raid-detail-edit-form';
 
 type Props = {
   mode: 'ENTRY' | 'LIMIT';

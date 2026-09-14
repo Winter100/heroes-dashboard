@@ -1,13 +1,13 @@
 'use client';
 
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import { useAdminCreateRaid } from '@/hooks/raid/use-admin-raid';
-import RaidEditForm from './raid-edit-form';
+import RaidEditForm from '../forms/raid-edit-form';
 import { useState } from 'react';
-import ConfirmDialog from '../common/confirm-dialog';
+import ConfirmDialog from '../../common/confirm-dialog';
 import { RaidFormValues } from '@/schema/raid-schema';
 
-const RaidCreate = () => {
+const RaidCreateDialog = () => {
   const [open, setOpen] = useState(false);
 
   const { onCreate, isPending } = useAdminCreateRaid();
@@ -35,6 +35,6 @@ const RaidCreate = () => {
   );
 };
 
-export default RaidCreate;
+export default RaidCreateDialog;
 
 const formId = 'create-raid';
