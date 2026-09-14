@@ -25,7 +25,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
+} from '../../ui/select';
 import { Character } from '@/types/character-type';
 import { formatDate } from '@/lib/utils';
 

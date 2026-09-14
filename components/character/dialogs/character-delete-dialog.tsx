@@ -1,6 +1,6 @@
 import { useAdminDeleteCharacter } from '@/hooks/character/use-admin-character';
-import ConfirmDialog from '../common/confirm-dialog';
-import { Button } from '../ui/button';
+import ConfirmDialog from '../../common/confirm-dialog';
+import { Button } from '../../ui/button';
 import { useState } from 'react';
 
 type Props = {

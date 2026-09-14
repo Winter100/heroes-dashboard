@@ -1,16 +1,16 @@
 'use client';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import { useId, useState } from 'react';
-import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field';
+import { Field, FieldError, FieldGroup, FieldLabel } from '../../ui/field';
 import { Controller, useForm } from 'react-hook-form';
-import { Input } from '../ui/input';
+import { Input } from '../../ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   CharacterSkillFormValues,
   characterSkillSchema,
 } from '@/schema/character.schema';
-import { Textarea } from '../ui/textarea';
+import { Textarea } from '../../ui/textarea';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 

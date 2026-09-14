@@ -2,11 +2,11 @@
 
 import { useAdminCreateSkill } from '@/hooks/character/use-admin-character';
 import { useCharacterSkillList } from '@/hooks/character/use-character';
-import CharacterCard from './character-card';
-import CharacterSkillCard from './character-skill-card';
-import CharacterEditSkillForm from './character-edit-skill-form';
-import CharacterUpdateDialog from './character-update-dialog';
-import CharacterDeleteDialog from './character-delete-dialog';
+import CharacterCard from '../card/character-card';
+import CharacterSkillCard from '../card/character-skill-card';
+import CharacterEditSkillForm from '../forms/character-edit-skill-form';
+import CharacterUpdateDialog from '../dialogs/character-update-dialog';
+import CharacterDeleteDialog from '../dialogs/character-delete-dialog';
 
 const CharacterDetail = ({ classId }: { classId: string }) => {
   const { data } = useCharacterSkillList(classId);

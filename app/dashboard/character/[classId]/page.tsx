@@ -1,5 +1,5 @@
 'use client';
-import CharacterDetail from '@/components/character/character-detail';
+import CharacterDetail from '@/components/character/detail/character-detail';
 import DetailLoading from '@/components/common/detail-loading';
 import QueryErrorBoundary from '@/components/common/query-error-boundary';
 import { useParams } from 'next/navigation';

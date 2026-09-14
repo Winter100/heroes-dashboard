@@ -1,8 +1,8 @@
 import { useAdminUpdateCharacter } from '@/hooks/character/use-admin-character';
-import { Button } from '../ui/button';
-import CharacterEditForm from './character-edit-form';
+import { Button } from '../../ui/button';
+import CharacterEditForm from '../forms/character-edit-form';
 import { Character } from '@/types/character-type';
-import ConfirmDialog from '../common/confirm-dialog';
+import ConfirmDialog from '../../common/confirm-dialog';
 import { useState } from 'react';
 import { CharacterFormValues } from '@/schema/character.schema';
 

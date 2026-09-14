@@ -1,9 +1,9 @@
 'use client';
 
 import { useCharacter } from '@/hooks/character/use-character';
-import CharacterCard from './character-card';
+import CharacterCard from '../card/character-card';
 
-const CharacterTable = () => {
+const CharacterList = () => {
   const { data } = useCharacter();
 
   return (
@@ -15,4 +15,4 @@ const CharacterTable = () => {
   );
 };
 
-export default CharacterTable;
+export default CharacterList;

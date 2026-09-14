@@ -6,10 +6,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '../ui/button';
-import ChracterEditSkill from './character-edit-skill-form';
+import { Button } from '../../ui/button';
+import ChracterEditSkill from '../forms/character-edit-skill-form';
 import { useAdminUpdateSkill } from '@/hooks/character/use-admin-character';
-import CharacterSkillDeleteDialog from './character-skill-delete-dialog';
+import CharacterSkillDeleteDialog from '../dialogs/character-skill-delete-dialog';
 import { useState } from 'react';
 import { CharacterSkillFormValues } from '@/schema/character.schema';
 

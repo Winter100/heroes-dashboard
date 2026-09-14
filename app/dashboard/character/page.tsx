@@ -1,9 +1,9 @@
 'use client';
 
-import CharacterCreate from '@/components/character/character-create';
-import CharacterRevalidate from '@/components/character/character-revalidate';
+import CharacterCreateDialog from '@/components/character/dialogs/character-create-dialog';
+import CharacterRevalidateDialog from '@/components/character/dialogs/character-revalidate-dialog';
 import CharacterStatistics from '@/components/character/character-statistics';
-import CharacterTable from '@/components/character/character-table';
+import CharacterList from '@/components/character/list/character-list';
 import QueryErrorBoundary from '@/components/common/query-error-boundary';
 import StatisticsLoading from '@/components/common/statistics-loading';
 import LoadingSkeleton from '@/components/loading-skeleton';
@@ -12,8 +12,8 @@ const Page = () => {
   return (
     <div className='max-w-6xl mx-auto w-full space-y-2'>
       <div className='flex items-center justify-end'>
-        <CharacterCreate />
-        <CharacterRevalidate />
+        <CharacterCreateDialog />
+        <CharacterRevalidateDialog />
       </div>
       <div className='flex items-center gap-2'>
         <QueryErrorBoundary fallback={<StatisticsLoading />}>
@@ -22,7 +22,7 @@ const Page = () => {
       </div>
       <div>
         <QueryErrorBoundary fallback={<LoadingSkeleton />}>
-          <CharacterTable />
+          <CharacterList />
         </QueryErrorBoundary>
       </div>
     </div>

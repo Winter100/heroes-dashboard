@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/card';
 import { Character } from '@/types/character-type';
 import { useRouter } from 'next/navigation';
-import { FallbackImage } from '../fallback-image';
+import { FallbackImage } from '../../fallback-image';
 
 type Props = {
   character: Character;

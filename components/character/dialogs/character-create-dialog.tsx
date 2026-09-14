@@ -1,12 +1,12 @@
 'use client';
-import { Button } from '../ui/button';
-import CharacterEditForm from './character-edit-form';
+import { Button } from '../../ui/button';
+import CharacterEditForm from '../forms/character-edit-form';
 import { useAdminCreateCharacter } from '@/hooks/character/use-admin-character';
 import { useState } from 'react';
 import { CharacterFormValues } from '@/schema/character.schema';
-import ConfirmDialog from '../common/confirm-dialog';
+import ConfirmDialog from '../../common/confirm-dialog';
 
-const CharacterCreate = () => {
+const CharacterCreateDialog = () => {
   const [open, setOpen] = useState(false);
 
   const { onCreate, isPending } = useAdminCreateCharacter();
@@ -35,6 +35,6 @@ const CharacterCreate = () => {
   );
 };
 
-export default CharacterCreate;
+export default CharacterCreateDialog;
 
 const formId = 'create-character';
