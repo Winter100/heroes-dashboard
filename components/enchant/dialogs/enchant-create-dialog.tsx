@@ -1,12 +1,12 @@
 'use client';
-import { Button } from '../ui/button';
-import EnchantEditForm from './enchant-edit-form';
+import { Button } from '../../ui/button';
+import EnchantEditForm from '../forms/enchant-edit-form';
 import { useAdminCreateEnchant } from '@/hooks/enchant/use-admin-enchant';
 import { useState } from 'react';
-import ConfirmDialog from '../common/confirm-dialog';
+import ConfirmDialog from '../../common/confirm-dialog';
 import { EnchantFormValues } from '@/schema/enchant-schema';
 
-const EnchantCreate = () => {
+const EnchantCreateDialog = () => {
   const [open, setOpen] = useState(false);
 
   const { onCreate, isPending } = useAdminCreateEnchant();
@@ -35,6 +35,6 @@ const EnchantCreate = () => {
   );
 };
 
-export default EnchantCreate;
+export default EnchantCreateDialog;
 
 const formId = 'create-enchant';

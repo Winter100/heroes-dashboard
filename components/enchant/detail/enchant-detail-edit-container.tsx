@@ -1,5 +1,5 @@
-import { Button } from '../ui/button';
-import EnchantDetailEditForm from './enchant-detail-edit-form';
+import { Button } from '../../ui/button';
+import EnchantDetailEditForm from '../forms/enchant-detail-edit-form';
 import { useItemPageData } from '@/hooks/item/use-item';
 import { EnchantType } from '@/types/enchant-type';
 import { useAdminUpsertEnchant } from '@/hooks/enchant/use-admin-enchant';

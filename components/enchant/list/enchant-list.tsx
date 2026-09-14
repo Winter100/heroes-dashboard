@@ -1,8 +1,8 @@
 'use client';
-import EnchantCard from './enchant-card';
+import EnchantCard from '../card/enchant-card';
 import { useEnchant } from '@/hooks/enchant/use-enchant';
 
-const EnchantTable = () => {
+const EnchantList = () => {
   const { data } = useEnchant();
 
   return (
@@ -14,4 +14,4 @@ const EnchantTable = () => {
   );
 };
 
-export default EnchantTable;
+export default EnchantList;

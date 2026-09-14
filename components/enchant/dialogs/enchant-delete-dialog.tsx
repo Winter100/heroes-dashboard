@@ -1,6 +1,6 @@
 import { useAdminDeleteEnchant } from '@/hooks/enchant/use-admin-enchant';
-import ConfirmDialog from '../common/confirm-dialog';
-import { Button } from '../ui/button';
+import ConfirmDialog from '../../common/confirm-dialog';
+import { Button } from '../../ui/button';
 import { useState } from 'react';
 
 type Props = {

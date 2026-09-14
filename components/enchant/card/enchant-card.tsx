@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
 import { EnchantType } from '@/types/enchant-type';
-import { FallbackImage } from '../fallback-image';
+import { FallbackImage } from '../../fallback-image';
 
 type Props = {
   enchant: EnchantType;

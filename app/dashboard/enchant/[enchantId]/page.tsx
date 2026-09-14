@@ -2,7 +2,7 @@
 
 import DetailLoading from '@/components/common/detail-loading';
 import QueryErrorBoundary from '@/components/common/query-error-boundary';
-import EnchantDetail from '@/components/enchant/enchant-detail';
+import EnchantDetail from '@/components/enchant/detail/enchant-detail';
 import { useParams } from 'next/navigation';
 
 const Page = () => {

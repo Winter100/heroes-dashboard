@@ -1,10 +1,10 @@
 import { useAdminUpdateEnchant } from '@/hooks/enchant/use-admin-enchant';
-import { Button } from '../ui/button';
-import EnchantEditForm from './enchant-edit-form';
+import { Button } from '../../ui/button';
+import EnchantEditForm from '../forms/enchant-edit-form';
 import { EnchantType } from '@/types/enchant-type';
 import { useState } from 'react';
 import { EnchantFormValues } from '@/schema/enchant-schema';
-import ConfirmDialog from '../common/confirm-dialog';
+import ConfirmDialog from '../../common/confirm-dialog';
 
 type Props = {
   enchantId: string;

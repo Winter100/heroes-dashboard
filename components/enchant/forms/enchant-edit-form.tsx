@@ -20,7 +20,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
+} from '../../ui/select';
 import z from 'zod';
 import { EnchantFormValues, enchantSchema } from '@/schema/enchant-schema';
 import { EnchantType } from '@/types/enchant-type';
