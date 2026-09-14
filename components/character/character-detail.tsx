@@ -11,8 +11,7 @@ import CharacterDeleteDialog from './character-delete-dialog';
 const CharacterDetail = ({ classId }: { classId: string }) => {
   const { data } = useCharacterSkillList(classId);
 
-  const { isPending: createSkillPending, onCreate } =
-    useAdminCreateSkill(classId);
+  const { isPending, onCreate } = useAdminCreateSkill(classId);
 
   return (
     <div className='gap-2 flex-col mx-auto flex items-center'>
@@ -36,7 +35,7 @@ const CharacterDetail = ({ classId }: { classId: string }) => {
           onSubmit={onCreate}
           mode='create'
           onCancel={() => {}}
-          disabled={createSkillPending}
+          disabled={isPending}
         />
       </div>
     </div>

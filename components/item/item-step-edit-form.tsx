@@ -36,7 +36,7 @@ interface Stat {
 
 interface ItemStepEditFormProps {
   mode: 'create' | 'update';
-  mutate: (data: ItemStepFormValues) => void;
+  onSubmit: (data: ItemStepFormValues) => void;
   defaultValues?: ItemStepFormValues;
   disabled?: boolean;
   stats: Stat[];
@@ -44,7 +44,7 @@ interface ItemStepEditFormProps {
 
 const ItemStepEditForm = ({
   mode,
-  mutate,
+  onSubmit,
   defaultValues,
   disabled = false,
   stats,
@@ -77,7 +77,7 @@ const ItemStepEditForm = ({
       <CardContent>
         <form
           id={formId}
-          onSubmit={form.handleSubmit(mutate, (errors) =>
+          onSubmit={form.handleSubmit(onSubmit, (errors) =>
             console.error('유효성 검사 실패 목록:', errors),
           )}
           className='space-y-6'

@@ -1,10 +1,12 @@
-import ActionDialog from '../common/action-dialog';
 import { useAdminUpdateItem } from '@/hooks/item/use-admin-item';
 import { Button } from '../ui/button';
 import { ItemStepType } from '@/types/item-type';
 import ItemEditContent from './item-edit-content';
 import QueryErrorBoundary from '../common/query-error-boundary';
 import { Skeleton } from '../ui/skeleton';
+import { useState } from 'react';
+import ConfirmDialog from '../common/confirm-dialog';
+import { ItemFormValues } from '@/schema/item.schema';
 
 type Props = {
   itemId: string;
@@ -12,19 +14,22 @@ type Props = {
 };
 
 const ItemBaseUpdateDialog = ({ itemId, data }: Props) => {
-  const {
-    onEdit,
-    editOpen,
-    setEditOpen,
-    isPending: updateItemPending,
-  } = useAdminUpdateItem(itemId);
+  const [open, setOpen] = useState(false);
+
+  const { onEdit, isPending } = useAdminUpdateItem(itemId);
+
+  const handleUpdate = (data: ItemFormValues) => {
+    void onEdit(data).then(() => setOpen(false));
+  };
 
   return (
-    <ActionDialog
-      open={editOpen}
-      setOpen={setEditOpen}
+    <ConfirmDialog
+      open={open}
+      onOpenChange={setOpen}
       title='아이템 기본 정보 수정'
       trigger={<Button variant='secondary'>수정</Button>}
+      formId={formId}
+      confirmLabel='수정'
     >
       <QueryErrorBoundary
         fallback={
@@ -36,12 +41,15 @@ const ItemBaseUpdateDialog = ({ itemId, data }: Props) => {
         <ItemEditContent
           mode='update'
           data={data}
-          isPending={updateItemPending}
-          mutate={onEdit}
+          disabled={isPending}
+          onSubmit={handleUpdate}
+          formId={formId}
         />
       </QueryErrorBoundary>
-    </ActionDialog>
+    </ConfirmDialog>
   );
 };
 
 export default ItemBaseUpdateDialog;
+
+const formId = 'update-item';

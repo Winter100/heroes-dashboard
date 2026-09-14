@@ -38,7 +38,7 @@ interface Stat {
 
 interface ItemStepEditFormProps {
   mode: 'create' | 'update';
-  mutate: (data: EnchantDetailFormValues) => void;
+  onSubmit: (data: EnchantDetailFormValues) => void;
   defaultValues?: EnchantDetailFormValues;
   disabled?: boolean;
   stats: Stat[];
@@ -47,7 +47,7 @@ interface ItemStepEditFormProps {
 
 const EnchantDetailEditForm = ({
   mode,
-  mutate,
+  onSubmit,
   defaultValues,
   disabled = false,
   stats,
@@ -88,7 +88,7 @@ const EnchantDetailEditForm = ({
       <CardContent>
         <form
           id={formId}
-          onSubmit={form.handleSubmit(mutate, (errors) =>
+          onSubmit={form.handleSubmit(onSubmit, (errors) =>
             console.error('유효성 검사 실패 목록:', errors),
           )}
           className='space-y-6'
@@ -250,7 +250,7 @@ const EnchantDetailEditForm = ({
                             placeholder='수치 (예: 10)'
                             disabled={disabled}
                             onChange={(e) =>
-                              inputField.onChange(Number(e.target.value))
+                              inputField.onChange(e.target.value)
                             }
                           />
                           {fieldState.invalid && (

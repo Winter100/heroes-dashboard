@@ -9,8 +9,9 @@ import ItemBaseDeleteDialog from './item-base-delete-dialog';
 
 const ItemDetail = ({ itemId }: { itemId: string }) => {
   const { data } = useItemDetail(itemId);
-  const { onCreateStep, isPending: createStepPending } =
-    useAdminCreateStep(itemId);
+
+  const { onCreateStep, isPending } = useAdminCreateStep(itemId);
+
   const stats = useStats();
 
   return (
@@ -41,9 +42,9 @@ const ItemDetail = ({ itemId }: { itemId: string }) => {
           {/* 장비 아이템 강화별 수치 등록 폼 */}
           <ItemStepEditForm
             stats={stats?.data ?? []}
-            disabled={createStepPending}
+            disabled={isPending}
             mode='create'
-            mutate={onCreateStep}
+            onSubmit={onCreateStep}
           />
         </div>
       )}

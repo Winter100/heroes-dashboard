@@ -5,11 +5,9 @@ import { itemKeys } from '@/queries/item-keys';
 import { ItemFormValues, ItemStepFormValues } from '@/schema/item.schema';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 
 export const useAdminCreateItem = () => {
   const queryClient = useQueryClient();
-  const [createOpen, setCreateOpen] = useState(false);
 
   const mutation = useMutation({
     mutationFn: itemApi.create,
@@ -28,7 +26,6 @@ export const useAdminCreateItem = () => {
     toast.promise(promise, {
       loading: `${item.name} 생성중...`,
       success: () => {
-        setCreateOpen(false);
         return {
           type: 'success',
           title: item.name,
@@ -46,14 +43,15 @@ export const useAdminCreateItem = () => {
         };
       },
     });
+
+    return promise;
   };
 
-  return { onCreate, createOpen, setCreateOpen, ...mutation };
+  return { onCreate, ...mutation };
 };
 
 export const useAdminUpdateItem = (itemId: string) => {
   const queryClient = useQueryClient();
-  const [editOpen, setEditOpen] = useState(false);
 
   const mutation = useMutation({
     mutationFn: itemApi.update,
@@ -74,15 +72,16 @@ export const useAdminUpdateItem = (itemId: string) => {
     toast.promise(promise, {
       loading: `${itemData.name} 수정 중...`,
       success: () => {
-        setEditOpen(false);
         return `${itemData.name}가 수정되었습니다.`;
       },
       error: (error) =>
         error instanceof Error ? error.message : '수정에 실패했습니다.',
     });
+
+    return promise;
   };
 
-  return { onEdit, editOpen, setEditOpen, ...mutation };
+  return { onEdit, ...mutation };
 };
 export const useAdminDeleteItem = (itemId: string) => {
   const queryClient = useQueryClient();
@@ -146,7 +145,6 @@ export const useAdminCreateStep = (itemId: string) => {
 };
 export const useAdminUpdateStep = (itemId: string, stepId: string) => {
   const queryClient = useQueryClient();
-  const [stepEditOpen, setStepEditOpen] = useState(false);
 
   const mutation = useMutation({
     mutationFn: itemApi.updateStep,
@@ -168,15 +166,16 @@ export const useAdminUpdateStep = (itemId: string, stepId: string) => {
     toast.promise(promise, {
       loading: `수정 중...`,
       success: () => {
-        setStepEditOpen(false);
         return `수정 되었습니다.`;
       },
       error: (error) =>
         error instanceof Error ? error.message : '변경에 실패했습니다.',
     });
+
+    return promise;
   };
 
-  return { onEdit, stepEditOpen, setStepEditOpen, ...mutation };
+  return { onEdit, ...mutation };
 };
 export const useAdminDeleteStep = (itemId: string, stepId: string) => {
   const queryClient = useQueryClient();

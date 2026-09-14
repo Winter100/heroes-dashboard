@@ -1,11 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -32,14 +30,16 @@ const RANK = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 'A' };
 
 const EnchantEditForm = ({
   mode,
-  mutate,
+  onSubmit,
   defaultValues,
   disabled = false,
+  formId,
 }: {
   mode: 'create' | 'update';
-  mutate: (data: EnchantFormValues) => void;
+  onSubmit: (data: EnchantFormValues) => void;
   disabled: boolean;
   defaultValues?: EnchantType;
+  formId?: string;
 }) => {
   const form = useForm<z.infer<typeof enchantSchema>>({
     resolver: zodResolver(enchantSchema),
@@ -60,8 +60,8 @@ const EnchantEditForm = ({
       </CardHeader>
       <CardContent>
         <form
-          id='form-enchant'
-          onSubmit={form.handleSubmit(mutate, (errors) =>
+          id={formId}
+          onSubmit={form.handleSubmit(onSubmit, (errors) =>
             console.log('유효성 검사 실패 목록:', errors),
           )}
         >
@@ -161,18 +161,6 @@ const EnchantEditForm = ({
           </FieldGroup>
         </form>
       </CardContent>
-      <CardFooter>
-        <Field orientation='horizontal'>
-          <Button
-            disabled={disabled}
-            type='submit'
-            form='form-enchant'
-            className='mx-auto'
-          >
-            {mode === 'create' ? '생성' : '수정'}
-          </Button>
-        </Field>
-      </CardFooter>
     </Card>
   );
 };

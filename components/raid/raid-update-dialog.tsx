@@ -1,8 +1,10 @@
 import { useAdminUpdateRaid } from '@/hooks/raid/use-admin-raid';
-import ActionDialog from '../common/action-dialog';
 import RaidEditForm from './raid-edit-form';
 import { RaidType } from '@/types/raid-type';
 import { Button } from '../ui/button';
+import { useState } from 'react';
+import ConfirmDialog from '../common/confirm-dialog';
+import { RaidFormValues } from '@/schema/raid-schema';
 
 type Props = {
   raidId: string;
@@ -10,28 +12,34 @@ type Props = {
 };
 
 const RaidUpdateDialog = ({ raidId, data }: Props) => {
-  const {
-    editOpen,
-    setEditOpen,
-    onEdit,
-    isPending: updateRaidPending,
-  } = useAdminUpdateRaid(raidId);
+  const [open, setOpen] = useState(false);
+
+  const { onEdit, isPending } = useAdminUpdateRaid(raidId);
+
+  const handleUpdate = (data: RaidFormValues) => {
+    void onEdit(data).then(() => setOpen(false));
+  };
 
   return (
-    <ActionDialog
-      open={editOpen}
-      setOpen={setEditOpen}
+    <ConfirmDialog
+      open={open}
+      onOpenChange={setOpen}
       title='레이드 기본 정보 수정'
       trigger={<Button variant='secondary'>수정</Button>}
+      formId={formId}
+      confirmLabel='수정'
     >
       <RaidEditForm
         defaultValues={data}
         mode='update'
-        mutate={onEdit}
-        disabled={updateRaidPending}
+        onSubmit={handleUpdate}
+        disabled={isPending}
+        formId={formId}
       />
-    </ActionDialog>
+    </ConfirmDialog>
   );
 };
 
 export default RaidUpdateDialog;
+
+const formId = 'update-raid';

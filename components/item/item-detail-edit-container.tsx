@@ -3,6 +3,8 @@ import ItemStepEditForm from './item-step-edit-form';
 import { Button } from '../ui/button';
 import { useAdminUpdateStep } from '@/hooks/item/use-admin-item';
 import ItemDetailStepDeleteDialog from './item-detail-step-delete-dialog';
+import { useState } from 'react';
+import { ItemStepFormValues } from '@/schema/item.schema';
 
 type Props = {
   stats: { id: string; name: string }[];
@@ -10,18 +12,19 @@ type Props = {
   step: EquipmentStep;
 };
 const ItemDetailEditContainer = ({ stats, itemId, step }: Props) => {
-  const {
-    stepEditOpen,
-    setStepEditOpen,
-    onEdit,
-    isPending: updateStepPending,
-  } = useAdminUpdateStep(itemId, step.id);
+  const [open, setOpen] = useState(false);
+
+  const { onEdit, isPending } = useAdminUpdateStep(itemId, step.id);
+
+  const handleUpdate = (data: ItemStepFormValues) => {
+    void onEdit(data).then(() => setOpen(false));
+  };
 
   return (
     <div className='relative'>
-      {!stepEditOpen && (
+      {!open && (
         <div className='absolute inset-0 flex justify-end bg-card/60'>
-          <Button onClick={() => setStepEditOpen(true)} className='mr-2 mt-2'>
+          <Button onClick={() => setOpen(true)} className='mr-2 mt-2'>
             수정
           </Button>
 
@@ -39,9 +42,9 @@ const ItemDetailEditContainer = ({ stats, itemId, step }: Props) => {
         <ItemStepEditForm
           stats={stats}
           defaultValues={step}
-          disabled={updateStepPending}
+          disabled={isPending}
           mode='update'
-          mutate={onEdit}
+          onSubmit={handleUpdate}
         />
       </div>
     </div>

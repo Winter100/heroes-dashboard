@@ -35,7 +35,7 @@ interface Stat {
 
 interface RaidDetailEditFormProps {
   mode: 'ENTRY' | 'LIMIT';
-  mutate: (mode: string, data: RaidEffectsFormValues) => void;
+  onSubmit: (data: RaidEffectsFormValues) => void;
   defaultValues?: RaidEffectsFormValues;
   disabled?: boolean;
   stats: Stat[];
@@ -43,7 +43,7 @@ interface RaidDetailEditFormProps {
 
 const RaidDetailEditForm = ({
   mode,
-  mutate,
+  onSubmit,
   defaultValues,
   disabled = false,
   stats,
@@ -71,9 +71,8 @@ const RaidDetailEditForm = ({
       <CardContent>
         <form
           id={formId}
-          onSubmit={form.handleSubmit(
-            (raidData) => mutate(mode, raidData),
-            (errors) => console.error('유효성 검사 실패 목록:', errors),
+          onSubmit={form.handleSubmit(onSubmit, (errors) =>
+            console.error('유효성 검사 실패 목록:', errors),
           )}
           className='space-y-6'
         >

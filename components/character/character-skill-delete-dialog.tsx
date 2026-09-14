@@ -9,17 +9,11 @@ type Props = {
   skillId: string;
 };
 const CharacterSkillDeleteDialog = ({ classId, skillId }: Props) => {
-  const { onDelete, isPending: deleteSkillPending } = useAdminDeleteSkill(
-    classId,
-    skillId,
-  );
   const [open, setOpen] = useState(false);
+  const { onDelete, isPending } = useAdminDeleteSkill(classId, skillId);
 
   const handleDelete = () => {
-    void onDelete().then(
-      () => setOpen(false),
-      () => undefined,
-    );
+    void onDelete().then(() => setOpen(false));
   };
 
   return (
@@ -29,12 +23,13 @@ const CharacterSkillDeleteDialog = ({ classId, skillId }: Props) => {
       open={open}
       onOpenChange={setOpen}
       trigger={
-        <Button disabled={deleteSkillPending} variant='secondary'>
+        <Button disabled={isPending} variant='secondary'>
           삭제
         </Button>
       }
-      pending={deleteSkillPending}
-      onConfirm={handleDelete}
+      disabled={isPending}
+      onSubmit={handleDelete}
+      confirmLabel='네'
     />
   );
 };

@@ -10,14 +10,11 @@ type Props = {
   battle: string;
 };
 const RaidDeleteDialog = ({ raidId, battle }: Props) => {
-  const { onDelete, isPending: deleteRaidPending } = useAdminDeleteRaid(raidId);
   const [open, setOpen] = useState(false);
+  const { onDelete, isPending } = useAdminDeleteRaid(raidId);
 
   const handleDelete = () => {
-    void onDelete().then(
-      () => setOpen(false),
-      () => undefined,
-    );
+    void onDelete().then(() => setOpen(false));
   };
 
   return (
@@ -27,8 +24,8 @@ const RaidDeleteDialog = ({ raidId, battle }: Props) => {
       title={battle}
       trigger={<Button variant='destructive'>삭제</Button>}
       description='해당 전투를 삭제 하겠습니까?'
-      pending={deleteRaidPending}
-      onConfirm={handleDelete}
+      disabled={isPending}
+      onSubmit={handleDelete}
       confirmLabel='네'
     />
   );

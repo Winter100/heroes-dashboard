@@ -8,15 +8,11 @@ type Props = {
 };
 
 const EnchantDeleteDialog = ({ enchantId }: Props) => {
-  const { onDelete, isPending: deletePending } =
-    useAdminDeleteEnchant(enchantId);
   const [open, setOpen] = useState(false);
+  const { onDelete, isPending } = useAdminDeleteEnchant(enchantId);
 
   const handleDelete = () => {
-    void onDelete().then(
-      () => setOpen(false),
-      () => undefined,
-    );
+    void onDelete().then(() => setOpen(false));
   };
 
   return (
@@ -25,9 +21,9 @@ const EnchantDeleteDialog = ({ enchantId }: Props) => {
       onOpenChange={setOpen}
       trigger={<Button variant='destructive'>삭제</Button>}
       title='인챈트 삭제'
-      description='해당 아이템을 삭제 하겠습니까?'
-      pending={deletePending}
-      onConfirm={handleDelete}
+      description='해당 인챈트를 삭제 하겠습니까?'
+      disabled={isPending}
+      onSubmit={handleDelete}
       confirmLabel='네'
     />
   );

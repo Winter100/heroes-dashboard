@@ -6,7 +6,6 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field';
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from '../ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
-import z from 'zod';
 import {
   CharacterSkillFormValues,
   characterSkillSchema,
@@ -18,7 +17,7 @@ import { cn } from '@/lib/utils';
 type Props = {
   mode: 'create' | 'update';
   disabled: boolean;
-  onSubmit: (data: CharacterSkillFormValues, optional?: () => void) => void;
+  onSubmit: (data: CharacterSkillFormValues) => void;
   onCancel: () => void;
   defaultValues?: CharacterSkillFormValues;
 };
@@ -49,10 +48,6 @@ const CharacterEditSkillForm = ({
     }
   };
 
-  const onSubmtForm = (data: z.infer<typeof characterSkillSchema>) => {
-    onSubmit(data, onClickCancel);
-  };
-
   return (
     <Card className='w-full sm:max-w-md'>
       <CardHeader className='flex items-center justify-end gap-0'>
@@ -74,7 +69,7 @@ const CharacterEditSkillForm = ({
         </Button>
       </CardHeader>
       <CardContent>
-        <form id={formId} onSubmit={form.handleSubmit(onSubmtForm)}>
+        <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <div className='flex items-center gap-2'>
               <div className='w-40'>

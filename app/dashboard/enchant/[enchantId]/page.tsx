@@ -9,7 +9,7 @@ const Page = () => {
   const { enchantId } = useParams<{ enchantId: string }>();
   return (
     <QueryErrorBoundary fallback={<DetailLoading />}>
-      <EnchantDetail enchantId={enchantId} />;
+      <EnchantDetail enchantId={enchantId} />
     </QueryErrorBoundary>
   );
 };

@@ -3,30 +3,38 @@
 import { Button } from '../ui/button';
 import { useAdminCreateRaid } from '@/hooks/raid/use-admin-raid';
 import RaidEditForm from './raid-edit-form';
-import ActionDialog from '../common/action-dialog';
+import { useState } from 'react';
+import ConfirmDialog from '../common/confirm-dialog';
+import { RaidFormValues } from '@/schema/raid-schema';
 
 const RaidCreate = () => {
-  const {
-    createOpen,
-    setCreateOpen,
-    onCreate,
-    isPending: createRaidPending,
-  } = useAdminCreateRaid();
+  const [open, setOpen] = useState(false);
+
+  const { onCreate, isPending } = useAdminCreateRaid();
+
+  const handleCreate = (data: RaidFormValues) => {
+    void onCreate(data).then(() => setOpen(false));
+  };
 
   return (
-    <ActionDialog
-      open={createOpen}
-      setOpen={setCreateOpen}
+    <ConfirmDialog
+      open={open}
+      onOpenChange={setOpen}
       title='레이드 생성'
       trigger={<Button variant='secondary'>레이드 생성</Button>}
+      confirmLabel='생성'
+      formId={formId}
     >
       <RaidEditForm
         mode='create'
-        mutate={onCreate}
-        disabled={createRaidPending}
+        onSubmit={handleCreate}
+        disabled={isPending}
+        formId={formId}
       />
-    </ActionDialog>
+    </ConfirmDialog>
   );
 };
 
 export default RaidCreate;
+
+const formId = 'create-raid';

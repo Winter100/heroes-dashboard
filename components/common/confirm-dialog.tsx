@@ -17,9 +17,10 @@ interface ConfirmDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   confirmLabel?: string;
-  pending?: boolean;
+  disabled?: boolean;
+  formId?: string;
   children?: React.ReactNode;
-  onConfirm: () => void;
+  onSubmit?: () => void;
 }
 
 const ConfirmDialog = ({
@@ -28,10 +29,11 @@ const ConfirmDialog = ({
   description,
   open,
   onOpenChange,
-  confirmLabel = '삭제',
-  pending = false,
+  confirmLabel,
+  disabled = false,
   children,
-  onConfirm,
+  onSubmit,
+  formId,
 }: ConfirmDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -46,18 +48,19 @@ const ConfirmDialog = ({
           <Button
             type='button'
             variant='outline'
-            disabled={pending}
+            disabled={disabled}
             onClick={() => onOpenChange(false)}
           >
             취소
           </Button>
           <Button
-            type='button'
-            variant='destructive'
-            disabled={pending}
-            onClick={onConfirm}
+            type={formId ? 'submit' : 'button'}
+            form={formId}
+            variant='outline'
+            disabled={disabled}
+            onClick={formId ? undefined : onSubmit}
           >
-            {pending ? '처리 중...' : confirmLabel}
+            {disabled ? '...' : confirmLabel}
           </Button>
         </DialogFooter>
       </DialogContent>

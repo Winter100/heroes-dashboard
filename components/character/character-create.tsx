@@ -2,34 +2,39 @@
 import { Button } from '../ui/button';
 import CharacterEditForm from './character-edit-form';
 import { useAdminCreateCharacter } from '@/hooks/character/use-admin-character';
-import ActionDialog from '../common/action-dialog';
 import { useState } from 'react';
 import { CharacterFormValues } from '@/schema/character.schema';
+import ConfirmDialog from '../common/confirm-dialog';
 
 const CharacterCreate = () => {
-  const [createOpen, setCreateOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  const { onCreate, isPending: createCharacterPending } =
-    useAdminCreateCharacter();
+  const { onCreate, isPending } = useAdminCreateCharacter();
 
   const handleCreate = (data: CharacterFormValues) => {
-    void onCreate(data).then(() => setCreateOpen(false));
+    void onCreate(data).then(() => setOpen(false));
   };
 
   return (
-    <ActionDialog
+    <ConfirmDialog
       title='직업 생성'
-      open={createOpen}
-      setOpen={setCreateOpen}
+      open={open}
+      onOpenChange={setOpen}
       trigger={<Button variant='secondary'>직업 생성</Button>}
+      formId={formId}
+      disabled={isPending}
+      confirmLabel='생성'
     >
       <CharacterEditForm
+        formId={formId}
         mode='create'
-        mutate={handleCreate}
-        disabled={createCharacterPending}
+        onSubmit={handleCreate}
+        disabled={isPending}
       />
-    </ActionDialog>
+    </ConfirmDialog>
   );
 };
 
 export default CharacterCreate;
+
+const formId = 'create-character';

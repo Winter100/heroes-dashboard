@@ -8,14 +8,11 @@ type Props = {
   stepName: string;
 };
 const ItemDetailStepDeleteDialog = ({ itemId, stepId, stepName }: Props) => {
-  const { onDelete, isPending } = useAdminDeleteStep(itemId, stepId);
   const [open, setOpen] = useState(false);
+  const { onDelete, isPending } = useAdminDeleteStep(itemId, stepId);
 
   const handleDelete = () => {
-    void onDelete().then(
-      () => setOpen(false),
-      () => undefined,
-    );
+    void onDelete().then(() => setOpen(false));
   };
 
   return (
@@ -29,8 +26,8 @@ const ItemDetailStepDeleteDialog = ({ itemId, stepId, stepName }: Props) => {
       }
       title={`강화 단계 ${stepName}`}
       description='해당 강화 수치를 삭제 하겠습니까?'
-      pending={isPending}
-      onConfirm={handleDelete}
+      disabled={isPending}
+      onSubmit={handleDelete}
       confirmLabel='네'
     />
   );

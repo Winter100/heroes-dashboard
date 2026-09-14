@@ -3,23 +3,28 @@
 import { Button } from '../ui/button';
 import { useAdminCreateItem } from '@/hooks/item/use-admin-item';
 import { Skeleton } from '../ui/skeleton';
-import ActionDialog from '../common/action-dialog';
 import ItemEditContent from './item-edit-content';
 import QueryErrorBoundary from '../common/query-error-boundary';
+import { useState } from 'react';
+import ConfirmDialog from '../common/confirm-dialog';
+import { ItemFormValues } from '@/schema/item.schema';
 
 const ItemCreate = () => {
-  const {
-    createOpen,
-    isPending: createItemPending,
-    setCreateOpen,
-    onCreate,
-  } = useAdminCreateItem();
+  const [open, setOpen] = useState(false);
+
+  const { isPending, onCreate } = useAdminCreateItem();
+
+  const handleCreate = (item: ItemFormValues) => {
+    void onCreate(item).then(() => setOpen(false));
+  };
   return (
-    <ActionDialog
-      open={createOpen}
-      setOpen={setCreateOpen}
+    <ConfirmDialog
+      open={open}
+      onOpenChange={setOpen}
       title='아이템 생성'
       trigger={<Button variant='secondary'>아이템 생성</Button>}
+      formId={formId}
+      confirmLabel='생성'
     >
       <QueryErrorBoundary
         fallback={
@@ -30,12 +35,15 @@ const ItemCreate = () => {
       >
         <ItemEditContent
           mode='create'
-          mutate={onCreate}
-          isPending={createItemPending}
+          onSubmit={handleCreate}
+          disabled={isPending}
+          formId={formId}
         />
       </QueryErrorBoundary>
-    </ActionDialog>
+    </ConfirmDialog>
   );
 };
 
 export default ItemCreate;
+
+const formId = 'create-item';

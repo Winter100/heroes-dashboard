@@ -1,11 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -28,14 +26,16 @@ import { RaidType } from '@/types/raid-type';
 
 const RaidEditForm = ({
   mode,
-  mutate,
+  onSubmit,
   defaultValues,
   disabled = false,
+  formId,
 }: {
   mode: 'create' | 'update';
-  mutate: (data: RaidFormValues) => void;
+  onSubmit: (data: RaidFormValues) => void;
   disabled: boolean;
   defaultValues?: RaidType;
+  formId: string;
 }) => {
   const form = useForm<RaidFormValues>({
     resolver: zodResolver(raidSchema),
@@ -55,8 +55,8 @@ const RaidEditForm = ({
       </CardHeader>
       <CardContent>
         <form
-          id='form-enchant'
-          onSubmit={form.handleSubmit(mutate, (errors) =>
+          id={formId}
+          onSubmit={form.handleSubmit(onSubmit, (errors) =>
             console.log('유효성 검사 실패 목록:', errors),
           )}
         >
@@ -204,18 +204,6 @@ const RaidEditForm = ({
           </FieldGroup>
         </form>
       </CardContent>
-      <CardFooter>
-        <Field orientation='horizontal'>
-          <Button
-            disabled={disabled}
-            type='submit'
-            form='form-enchant'
-            className='mx-auto'
-          >
-            {mode === 'create' ? '생성' : '수정'}
-          </Button>
-        </Field>
-      </CardFooter>
     </Card>
   );
 };

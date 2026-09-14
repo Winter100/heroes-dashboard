@@ -5,11 +5,9 @@ import { raidKeys } from '@/queries/raid-keys';
 import { RaidEffectsFormValues, RaidFormValues } from '@/schema/raid-schema';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 
 export const useAdminCreateRaid = () => {
   const queryClient = useQueryClient();
-  const [createOpen, setCreateOpen] = useState(false);
   const mutation = useMutation({
     mutationFn: raidApi.create,
     onSuccess: () => {
@@ -27,7 +25,6 @@ export const useAdminCreateRaid = () => {
     toast.promise(promise, {
       loading: `${raidData.battle} 생성중...`,
       success: () => {
-        setCreateOpen(false);
         return {
           type: 'success',
           title: raidData.battle,
@@ -45,14 +42,14 @@ export const useAdminCreateRaid = () => {
         };
       },
     });
+    return promise;
   };
 
-  return { onCreate, createOpen, setCreateOpen, ...mutation };
+  return { onCreate, ...mutation };
 };
 
 export const useAdminUpdateRaid = (raidId: string) => {
   const queryClient = useQueryClient();
-  const [editOpen, setEditOpen] = useState(false);
   const mutation = useMutation({
     mutationFn: (formData: FormData) => raidApi.update({ formData, raidId }),
     onSuccess: () => {
@@ -66,26 +63,25 @@ export const useAdminUpdateRaid = (raidId: string) => {
 
   const onEdit = (raidData: RaidFormValues) => {
     const formData = createRaidFormData(raidData);
-
     const promise = mutation.mutateAsync(formData);
 
     toast.promise(promise, {
       loading: `${raidData.battle} 수정 중...`,
       success: () => {
-        setEditOpen(false);
         return `${raidData.battle}가 수정되었습니다.`;
       },
       error: (error) =>
         error instanceof Error ? error.message : '수정에 실패했습니다.',
     });
+
+    return promise;
   };
 
-  return { onEdit, editOpen, setEditOpen, ...mutation };
+  return { onEdit, ...mutation };
 };
 
 export const useAdminUpsertRaidDetail = (raidId: string) => {
   const queryClient = useQueryClient();
-  const [stepEditOpen, setStepEditOpen] = useState(false);
   const mutation = useMutation({
     mutationFn: (data: {
       mode: string;
@@ -103,7 +99,6 @@ export const useAdminUpsertRaidDetail = (raidId: string) => {
   });
 
   const onUpsert = (mode: string, boss: RaidEffectsFormValues) => {
-    if (boss.effects.length === 0) return;
     const upsertData = {
       mode,
       effects: boss.effects,
@@ -118,9 +113,11 @@ export const useAdminUpsertRaidDetail = (raidId: string) => {
       error: (error) =>
         error instanceof Error ? error.message : '변경에 실패했습니다.',
     });
+
+    return promise;
   };
 
-  return { onUpsert, stepEditOpen, setStepEditOpen, ...mutation };
+  return { onUpsert, ...mutation };
 };
 
 export const useAdminDeleteRaid = (raidId: string) => {

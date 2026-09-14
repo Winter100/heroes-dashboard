@@ -1,11 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -33,14 +31,16 @@ import { formatDate } from '@/lib/utils';
 
 const CharacterEditForm = ({
   mode,
-  mutate,
+  onSubmit,
   defaultValues,
   disabled,
+  formId,
 }: {
   mode: 'create' | 'update';
-  mutate: (data: CharacterFormValues) => void;
+  onSubmit: (data: CharacterFormValues) => void;
   disabled: boolean;
   defaultValues?: Character;
+  formId: string;
 }) => {
   const form = useForm<CharacterFormValues>({
     resolver: zodResolver(characterSchema),
@@ -59,8 +59,8 @@ const CharacterEditForm = ({
       </CardHeader>
       <CardContent>
         <form
-          id='form-character'
-          onSubmit={form.handleSubmit(mutate, (errors) =>
+          id={formId}
+          onSubmit={form.handleSubmit(onSubmit, (errors) =>
             console.log('유효성 검사 실패 목록:', errors),
           )}
         >
@@ -177,13 +177,6 @@ const CharacterEditForm = ({
           </FieldGroup>
         </form>
       </CardContent>
-      <CardFooter>
-        <Field orientation='horizontal'>
-          <Button type='submit' disabled={disabled} form='form-character'>
-            {mode === 'create' ? '생성' : '수정'}
-          </Button>
-        </Field>
-      </CardFooter>
     </Card>
   );
 };

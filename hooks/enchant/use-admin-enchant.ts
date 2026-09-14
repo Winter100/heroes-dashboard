@@ -7,11 +7,9 @@ import {
 } from '@/schema/enchant-schema';
 import { toast } from '@/components/ui/toast';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 
 export const useAdminCreateEnchant = () => {
   const queryClient = useQueryClient();
-  const [createOpen, setCreateOpen] = useState(false);
 
   const mutation = useMutation({
     mutationFn: enchantApi.create,
@@ -30,7 +28,6 @@ export const useAdminCreateEnchant = () => {
     toast.promise(promise, {
       loading: `${enchantData.name} 생성중...`,
       success: () => {
-        setCreateOpen(false);
         return {
           type: 'success',
           title: enchantData.name,
@@ -48,14 +45,14 @@ export const useAdminCreateEnchant = () => {
         };
       },
     });
+    return promise;
   };
 
-  return { onCreate, createOpen, setCreateOpen, ...mutation };
+  return { onCreate, ...mutation };
 };
 
 export const useAdminUpdateEnchant = (enchantId: string) => {
   const queryClient = useQueryClient();
-  const [editOpen, setEditOpen] = useState(false);
 
   const mutation = useMutation({
     mutationFn: enchantApi.update,
@@ -80,20 +77,19 @@ export const useAdminUpdateEnchant = (enchantId: string) => {
     toast.promise(promise, {
       loading: `${enchantData.name} 수정 중...`,
       success: () => {
-        setEditOpen(false);
         return `${enchantData.name}가 수정되었습니다.`;
       },
       error: (error) =>
         error instanceof Error ? error.message : '수정에 실패했습니다.',
     });
+    return promise;
   };
 
-  return { onEdit, editOpen, setEditOpen, ...mutation };
+  return { onEdit, ...mutation };
 };
 
 export const useAdminUpsertEnchant = (enchantId: string) => {
   const queryClient = useQueryClient();
-  const [stepEditOpen, setStepEditOpen] = useState(false);
 
   const mutation = useMutation({
     mutationFn: (enchantValues: EnchantDetailFormValues) =>
@@ -110,20 +106,21 @@ export const useAdminUpsertEnchant = (enchantId: string) => {
   });
 
   const onEdit = (enchantData: EnchantDetailFormValues) => {
-    if (!enchantData.effects.length && !enchantData.slotsId.length) return;
     const promise = mutation.mutateAsync(enchantData);
 
     toast.promise(promise, {
       loading: `변경 중...`,
       success: () => {
-        setStepEditOpen(false);
         return `변경 되었습니다.`;
       },
       error: (error) =>
         error instanceof Error ? error.message : '변경에 실패했습니다.',
     });
+
+    return promise;
   };
-  return { onEdit, stepEditOpen, setStepEditOpen, ...mutation };
+
+  return { onEdit, ...mutation };
 };
 
 export const useAdminDeleteEnchant = (enchantId: string) => {

@@ -10,6 +10,8 @@ import { Button } from '../ui/button';
 import ChracterEditSkill from './character-edit-skill-form';
 import { useAdminUpdateSkill } from '@/hooks/character/use-admin-character';
 import CharacterSkillDeleteDialog from './character-skill-delete-dialog';
+import { useState } from 'react';
+import { CharacterSkillFormValues } from '@/schema/character.schema';
 
 type Props = {
   name: string;
@@ -23,21 +25,22 @@ const CharacterSkillCard = ({
   description,
   classId,
 }: Props) => {
-  const {
-    onEdit,
-    updateOpen,
-    setUpdateOpen,
-    isPending: updateSkillPending,
-  } = useAdminUpdateSkill(classId, skillId);
+  const [open, setOpen] = useState(false);
 
-  if (updateOpen) {
+  const { onEdit, isPending } = useAdminUpdateSkill(classId, skillId);
+
+  const handleSubmit = (data: CharacterSkillFormValues) => {
+    void onEdit(data).then(() => setOpen(false));
+  };
+
+  if (open) {
     return (
       <ChracterEditSkill
         defaultValues={{ name, description }}
-        onSubmit={onEdit}
-        onCancel={() => setUpdateOpen(false)}
+        onSubmit={handleSubmit}
+        onCancel={() => setOpen(false)}
         mode='update'
-        disabled={updateSkillPending}
+        disabled={isPending}
       />
     );
   }
@@ -51,7 +54,7 @@ const CharacterSkillCard = ({
         </CardTitle>
         <CardDescription></CardDescription>
         <CardAction>
-          <Button variant='secondary' onClick={() => setUpdateOpen(true)}>
+          <Button variant='secondary' onClick={() => setOpen(true)}>
             수정
           </Button>
           <CharacterSkillDeleteDialog classId={classId} skillId={skillId} />

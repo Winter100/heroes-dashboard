@@ -54,6 +54,9 @@ export const createItemFormData = (itemData: ItemFormValues) => {
   formData.append('categoryId', itemData.categoryId.toString());
   formData.append('tierId', itemData.tierId.toString());
 
+  if (itemData.slotId) {
+    formData.append('slotId', itemData.slotId.toString());
+  }
   if (itemData.description) {
     formData.append('description', itemData.description);
   }

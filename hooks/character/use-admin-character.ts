@@ -11,7 +11,6 @@ import {
 } from '@/schema/character.schema';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 
 // 관리자 전용 Query
 export const useAdminCreateCharacter = () => {
@@ -62,7 +61,6 @@ export const useAdminCreateCharacter = () => {
 
 export const useAdminUpdateCharacter = (classId: string) => {
   const queryClient = useQueryClient();
-  const [editOpen, setEditOpen] = useState(false);
 
   const mutation = useMutation({
     mutationFn: characterApi.update,
@@ -84,15 +82,16 @@ export const useAdminUpdateCharacter = (classId: string) => {
     toast.promise(promise, {
       loading: `${classData.name} 수정 중...`,
       success: () => {
-        setEditOpen(false);
         return `${classData.name}가 수정되었습니다.`;
       },
       error: (error) =>
         error instanceof Error ? error.message : '수정에 실패했습니다.',
     });
+
+    return promise;
   };
 
-  return { onEdit, editOpen, setEditOpen, ...mutation };
+  return { onEdit, ...mutation };
 };
 
 export const useAdminDeleteCharacter = (classId: string) => {
@@ -174,7 +173,6 @@ export const useAdminCreateSkill = (classId: string) => {
 
 export const useAdminUpdateSkill = (classId: string, skillId: string) => {
   const queryClient = useQueryClient();
-  const [updateOpen, setUpdateOpen] = useState(false);
 
   const mutation = useMutation({
     mutationFn: characterApi.updateSkill,
@@ -193,7 +191,6 @@ export const useAdminUpdateSkill = (classId: string, skillId: string) => {
     toast.promise(promise, {
       loading: `수정 중...`,
       success: () => {
-        setUpdateOpen(false);
         return {
           type: 'success',
           title: '수정 완료',
@@ -211,9 +208,11 @@ export const useAdminUpdateSkill = (classId: string, skillId: string) => {
         };
       },
     });
+
+    return promise;
   };
 
-  return { onEdit, updateOpen, setUpdateOpen, ...mutation };
+  return { onEdit, ...mutation };
 };
 export const useAdminDeleteSkill = (classId: string, skillId: string) => {
   const queryClient = useQueryClient();

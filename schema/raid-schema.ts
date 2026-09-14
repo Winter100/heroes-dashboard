@@ -28,7 +28,7 @@ export const raidEffectsSchema = z.object({
   effects: z
     .array(
       z.object({
-        id: z.number(),
+        id: z.number().min(1, '선택해주세요'),
         stat_value: z.string().min(1, '수치를 입력해주세요'),
       }),
     )

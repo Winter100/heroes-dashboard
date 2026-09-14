@@ -3,6 +3,8 @@ import RaidDetailEditForm from './raid-detail-edit-form';
 import { BossStat } from '@/types/raid-type';
 import { useAdminUpsertRaidDetail } from '@/hooks/raid/use-admin-raid';
 import { useStats } from '@/hooks/item/use-item';
+import { useState } from 'react';
+import { RaidEffectsFormValues } from '@/schema/raid-schema';
 
 type Props = {
   mode: 'ENTRY' | 'LIMIT';
@@ -10,20 +12,21 @@ type Props = {
   raidId: string;
 };
 const RaidStatsEditContainer = ({ effects, mode, raidId }: Props) => {
-  const {
-    onUpsert,
-    isPending: upsertRaidPending,
-    stepEditOpen,
-    setStepEditOpen,
-  } = useAdminUpsertRaidDetail(raidId);
+  const [open, setOpen] = useState(false);
+
+  const { onUpsert, isPending } = useAdminUpsertRaidDetail(raidId);
 
   const { data: statsFormData } = useStats();
 
+  const handleUpdate = (boss: RaidEffectsFormValues) => {
+    void onUpsert(mode, boss).then(() => setOpen(false));
+  };
+
   return (
     <div className='relative'>
-      {!stepEditOpen && (
+      {!open && (
         <div className='absolute inset-0 flex justify-end bg-card/60'>
-          <Button onClick={() => setStepEditOpen(true)} className='mr-2 mt-2'>
+          <Button onClick={() => setOpen(true)} className='mr-2 mt-2'>
             수정
           </Button>
         </div>
@@ -33,9 +36,9 @@ const RaidStatsEditContainer = ({ effects, mode, raidId }: Props) => {
         <RaidDetailEditForm
           stats={statsFormData}
           defaultValues={{ effects }}
-          disabled={upsertRaidPending}
+          disabled={isPending}
           mode={mode}
-          mutate={onUpsert}
+          onSubmit={handleUpdate}
         />
       </div>
     </div>
