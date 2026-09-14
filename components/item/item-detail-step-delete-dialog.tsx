@@ -1,21 +1,27 @@
 import { useAdminDeleteStep } from '@/hooks/item/use-admin-item';
-import { DialogClose, DialogFooter } from '../ui/dialog';
 import { Button } from '../ui/button';
-import ActionDialog from '../common/action-dialog';
+import ConfirmDialog from '../common/confirm-dialog';
+import { useState } from 'react';
 type Props = {
   itemId: string;
   stepId: string;
   stepName: string;
 };
 const ItemDetailStepDeleteDialog = ({ itemId, stepId, stepName }: Props) => {
-  const { stepDeleteOpen, setStepDeleteOpen, onDelete } = useAdminDeleteStep(
-    itemId,
-    stepId,
-  );
+  const { onDelete, isPending } = useAdminDeleteStep(itemId, stepId);
+  const [open, setOpen] = useState(false);
+
+  const handleDelete = () => {
+    void onDelete().then(
+      () => setOpen(false),
+      () => undefined,
+    );
+  };
+
   return (
-    <ActionDialog
-      open={stepDeleteOpen}
-      setOpen={setStepDeleteOpen}
+    <ConfirmDialog
+      open={open}
+      onOpenChange={setOpen}
       trigger={
         <Button variant='destructive' className='mr-2 mt-2'>
           삭제
@@ -23,14 +29,10 @@ const ItemDetailStepDeleteDialog = ({ itemId, stepId, stepName }: Props) => {
       }
       title={`강화 단계 ${stepName}`}
       description='해당 강화 수치를 삭제 하겠습니까?'
-    >
-      <DialogFooter>
-        <DialogClose render={<Button variant='outline'>취소</Button>} />
-        <Button variant='destructive' onClick={onDelete}>
-          네
-        </Button>
-      </DialogFooter>
-    </ActionDialog>
+      pending={isPending}
+      onConfirm={handleDelete}
+      confirmLabel='네'
+    />
   );
 };
 

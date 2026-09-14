@@ -24,14 +24,13 @@ export const useAdminCreateEnchant = () => {
     },
   });
 
-  const onCreate = (enchantData: EnchantFormValues, onSuccess?: () => void) => {
+  const onCreate = (enchantData: EnchantFormValues) => {
     const promise = mutation.mutateAsync(enchantData);
 
     toast.promise(promise, {
       loading: `${enchantData.name} 생성중...`,
       success: () => {
         setCreateOpen(false);
-        onSuccess?.();
         return {
           type: 'success',
           title: enchantData.name,
@@ -62,6 +61,9 @@ export const useAdminUpdateEnchant = (enchantId: string) => {
     mutationFn: enchantApi.update,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: enchantKeys.lists() });
+      queryClient.invalidateQueries({
+        queryKey: enchantKeys.detail(enchantId),
+      });
       queryClient.invalidateQueries({ queryKey: enchantKeys.statistics() });
     },
     onError: (error) => {
@@ -69,7 +71,7 @@ export const useAdminUpdateEnchant = (enchantId: string) => {
     },
   });
 
-  const onEdit = (enchantData: EnchantFormValues, onSuccess?: () => void) => {
+  const onEdit = (enchantData: EnchantFormValues) => {
     const promise = mutation.mutateAsync({
       enchantId,
       enchantValues: enchantData,
@@ -79,7 +81,6 @@ export const useAdminUpdateEnchant = (enchantId: string) => {
       loading: `${enchantData.name} 수정 중...`,
       success: () => {
         setEditOpen(false);
-        onSuccess?.();
         return `${enchantData.name}가 수정되었습니다.`;
       },
       error: (error) =>
@@ -98,6 +99,9 @@ export const useAdminUpsertEnchant = (enchantId: string) => {
     mutationFn: (enchantValues: EnchantDetailFormValues) =>
       enchantApi.upsert({ enchantId, enchantValues }),
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: enchantKeys.detail(enchantId),
+      });
       queryClient.invalidateQueries({ queryKey: enchantKeys.lists() });
     },
     onError: (error) => {
@@ -123,7 +127,6 @@ export const useAdminUpsertEnchant = (enchantId: string) => {
 };
 
 export const useAdminDeleteEnchant = (enchantId: string) => {
-  const [deleteOpen, setDeleteOpen] = useState(false);
   const queryClient = useQueryClient();
   const router = useRouter();
   const mutation = useMutation({
@@ -137,21 +140,21 @@ export const useAdminDeleteEnchant = (enchantId: string) => {
     },
   });
 
-  const onDelete = (onSuccess?: () => void) => {
+  const onDelete = () => {
     const promise = mutation.mutateAsync();
 
     toast.promise(promise, {
       loading: `삭제 중...`,
       success: () => {
-        setDeleteOpen(false);
-        onSuccess?.();
         router.back();
         return `삭제 되었습니다.`;
       },
       error: (error) =>
         error instanceof Error ? error.message : '삭제에 실패했습니다.',
     });
+
+    return promise;
   };
 
-  return { onDelete, deleteOpen, setDeleteOpen, ...mutation };
+  return { onDelete, ...mutation };
 };

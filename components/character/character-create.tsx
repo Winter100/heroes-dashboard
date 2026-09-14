@@ -3,14 +3,18 @@ import { Button } from '../ui/button';
 import CharacterEditForm from './character-edit-form';
 import { useAdminCreateCharacter } from '@/hooks/character/use-admin-character';
 import ActionDialog from '../common/action-dialog';
+import { useState } from 'react';
+import { CharacterFormValues } from '@/schema/character.schema';
 
 const CharacterCreate = () => {
-  const {
-    onCreate,
-    createOpen,
-    setCreateOpen,
-    isPending: createCharacterPending,
-  } = useAdminCreateCharacter();
+  const [createOpen, setCreateOpen] = useState(false);
+
+  const { onCreate, isPending: createCharacterPending } =
+    useAdminCreateCharacter();
+
+  const handleCreate = (data: CharacterFormValues) => {
+    void onCreate(data).then(() => setCreateOpen(false));
+  };
 
   return (
     <ActionDialog
@@ -21,7 +25,7 @@ const CharacterCreate = () => {
     >
       <CharacterEditForm
         mode='create'
-        mutate={onCreate}
+        mutate={handleCreate}
         disabled={createCharacterPending}
       />
     </ActionDialog>

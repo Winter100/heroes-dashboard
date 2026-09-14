@@ -16,7 +16,6 @@ import { useState } from 'react';
 // 관리자 전용 Query
 export const useAdminCreateCharacter = () => {
   const queryClient = useQueryClient();
-  const [createOpen, setCreateOpen] = useState(false);
 
   const mutation = useMutation({
     mutationFn: characterApi.create,
@@ -29,7 +28,7 @@ export const useAdminCreateCharacter = () => {
     },
   });
 
-  const onCreate = (classData: CharacterFormValues, onSuccess?: () => void) => {
+  const onCreate = (classData: CharacterFormValues) => {
     const { name: className } = classData;
     const formData = createCharacterFormData(classData);
 
@@ -38,8 +37,6 @@ export const useAdminCreateCharacter = () => {
     toast.promise(promise, {
       loading: `${className} 생성중...`,
       success: () => {
-        setCreateOpen(false);
-        onSuccess?.();
         return {
           type: 'success',
           title: className,
@@ -57,9 +54,10 @@ export const useAdminCreateCharacter = () => {
         };
       },
     });
+    return promise;
   };
 
-  return { onCreate, createOpen, setCreateOpen, ...mutation };
+  return { onCreate, ...mutation };
 };
 
 export const useAdminUpdateCharacter = (classId: string) => {
@@ -78,7 +76,7 @@ export const useAdminUpdateCharacter = (classId: string) => {
     },
   });
 
-  const onEdit = (classData: CharacterFormValues, onSuccess?: () => void) => {
+  const onEdit = (classData: CharacterFormValues) => {
     const formData = createCharacterFormData(classData);
 
     const promise = mutation.mutateAsync({ formData, classId });
@@ -87,7 +85,6 @@ export const useAdminUpdateCharacter = (classId: string) => {
       loading: `${classData.name} 수정 중...`,
       success: () => {
         setEditOpen(false);
-        onSuccess?.();
         return `${classData.name}가 수정되었습니다.`;
       },
       error: (error) =>
@@ -100,7 +97,6 @@ export const useAdminUpdateCharacter = (classId: string) => {
 
 export const useAdminDeleteCharacter = (classId: string) => {
   const queryClient = useQueryClient();
-  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const router = useRouter();
   const mutation = useMutation({
@@ -114,23 +110,23 @@ export const useAdminDeleteCharacter = (classId: string) => {
     },
   });
 
-  const onDelete = (className: string, onSuccess?: () => void) => {
+  const onDelete = (className: string) => {
     const promise = mutation.mutateAsync({ classId, className });
 
     toast.promise(promise, {
       loading: `${className} 삭제 중...`,
       success: () => {
-        setDeleteOpen(false);
-        onSuccess?.();
         router.push('/dashboard/character');
         return `${className}가 삭제되었습니다.`;
       },
       error: (error) =>
         error instanceof Error ? error.message : '삭제에 실패했습니다.',
     });
+
+    return promise;
   };
 
-  return { onDelete, deleteOpen, setDeleteOpen, ...mutation };
+  return { onDelete, ...mutation };
 };
 
 export const useAdminCreateSkill = (classId: string) => {
@@ -146,10 +142,7 @@ export const useAdminCreateSkill = (classId: string) => {
     },
   });
 
-  const onCreate = async (
-    skill: CharacterSkillFormValues,
-    onSuccess?: () => void,
-  ) => {
+  const onCreate = async (skill: CharacterSkillFormValues) => {
     const { name: skillName } = skill;
     const formData = createCharacterSkillFormData(skill, [classId]);
     const promise = mutation.mutateAsync(formData);
@@ -157,7 +150,6 @@ export const useAdminCreateSkill = (classId: string) => {
     toast.promise(promise, {
       loading: `${skillName} 등록 중...`,
       success: () => {
-        onSuccess?.();
         return {
           type: 'success',
           title: skillName,
@@ -179,10 +171,12 @@ export const useAdminCreateSkill = (classId: string) => {
 
   return { onCreate, isPending: mutation.isPending };
 };
-export const useAdminUpdateSkill = (classId: string) => {
-  const queryClient = useQueryClient();
 
-  return useMutation({
+export const useAdminUpdateSkill = (classId: string, skillId: string) => {
+  const queryClient = useQueryClient();
+  const [updateOpen, setUpdateOpen] = useState(false);
+
+  const mutation = useMutation({
     mutationFn: characterApi.updateSkill,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: characterKeys.skill(classId) });
@@ -191,11 +185,40 @@ export const useAdminUpdateSkill = (classId: string) => {
       console.log(error.message);
     },
   });
+
+  const onEdit = async (skill: CharacterSkillFormValues) => {
+    const formData = createCharacterSkillFormData(skill, [classId]);
+    const promise = mutation.mutateAsync({ formData, skillId });
+
+    toast.promise(promise, {
+      loading: `수정 중...`,
+      success: () => {
+        setUpdateOpen(false);
+        return {
+          type: 'success',
+          title: '수정 완료',
+          description: '스킬이 수정되었습니다.',
+        };
+      },
+      error: (error) => {
+        return {
+          type: 'error',
+          title: '수정 실패',
+          description:
+            error instanceof Error
+              ? error.message
+              : '처리 중 오류가 발생했습니다.',
+        };
+      },
+    });
+  };
+
+  return { onEdit, updateOpen, setUpdateOpen, ...mutation };
 };
-export const useAdminDeleteSkill = (classId: string) => {
+export const useAdminDeleteSkill = (classId: string, skillId: string) => {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  const mutation = useMutation({
     mutationFn: characterApi.deleteSkill,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: characterKeys.skill(classId) });
@@ -204,4 +227,33 @@ export const useAdminDeleteSkill = (classId: string) => {
       console.log(error.message);
     },
   });
+
+  const onDelete = async () => {
+    const promise = mutation.mutateAsync({ classId, skillId });
+
+    toast.promise(promise, {
+      loading: `삭제 중...`,
+      success: () => {
+        return {
+          type: 'success',
+          title: '스킬 삭제',
+          description: '스킬이 삭제되었습니다.',
+        };
+      },
+      error: (error) => {
+        return {
+          type: 'error',
+          title: '스킬 삭제',
+          description:
+            error instanceof Error
+              ? error.message
+              : '처리 중 오류가 발생했습니다.',
+        };
+      },
+    });
+
+    return promise;
+  };
+
+  return { onDelete, ...mutation };
 };

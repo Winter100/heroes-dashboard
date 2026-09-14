@@ -125,7 +125,6 @@ export const useAdminUpsertRaidDetail = (raidId: string) => {
 
 export const useAdminDeleteRaid = (raidId: string) => {
   const queryClient = useQueryClient();
-  const [deleteOpen, setDeleteOpen] = useState(false);
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: () => raidApi.delete(raidId),
@@ -144,14 +143,15 @@ export const useAdminDeleteRaid = (raidId: string) => {
     toast.promise(promise, {
       loading: `삭제 중...`,
       success: () => {
-        setDeleteOpen(false);
         router.push('/dashboard/raid');
         return `삭제 되었습니다.`;
       },
       error: (error) =>
         error instanceof Error ? error.message : '삭제에 실패했습니다.',
     });
+
+    return promise;
   };
 
-  return { onDelete, deleteOpen, setDeleteOpen, ...mutation };
+  return { onDelete, ...mutation };
 };

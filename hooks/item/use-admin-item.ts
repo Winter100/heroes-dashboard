@@ -87,7 +87,6 @@ export const useAdminUpdateItem = (itemId: string) => {
 export const useAdminDeleteItem = (itemId: string) => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const mutation = useMutation({
     mutationFn: () => itemApi.delete(itemId),
@@ -106,16 +105,17 @@ export const useAdminDeleteItem = (itemId: string) => {
     toast.promise(promise, {
       loading: `삭제 중...`,
       success: () => {
-        setDeleteOpen(false);
         router.back();
         return `삭제 되었습니다.`;
       },
       error: (error) =>
         error instanceof Error ? error.message : '삭제에 실패했습니다.',
     });
+
+    return promise;
   };
 
-  return { onDelete, deleteOpen, setDeleteOpen, ...mutation };
+  return { onDelete, ...mutation };
 };
 export const useAdminCreateStep = (itemId: string) => {
   const queryClient = useQueryClient();
@@ -180,7 +180,6 @@ export const useAdminUpdateStep = (itemId: string, stepId: string) => {
 };
 export const useAdminDeleteStep = (itemId: string, stepId: string) => {
   const queryClient = useQueryClient();
-  const [stepDeleteOpen, setStepDeleteOpen] = useState(false);
   const mutation = useMutation({
     mutationFn: itemApi.deleteStep,
     onSuccess: () => {
@@ -199,13 +198,14 @@ export const useAdminDeleteStep = (itemId: string, stepId: string) => {
     toast.promise(promise, {
       loading: `삭제 중...`,
       success: () => {
-        setStepDeleteOpen(false);
         return `삭제 되었습니다.`;
       },
       error: (error) =>
         error instanceof Error ? error.message : '삭제에 실패했습니다.',
     });
+
+    return promise;
   };
 
-  return { onDelete, stepDeleteOpen, setStepDeleteOpen, ...mutation };
+  return { onDelete, ...mutation };
 };
