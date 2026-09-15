@@ -33,7 +33,7 @@ const ItemBaseUpdateDialog = ({ itemId, data }: Props) => {
     >
       <QueryErrorBoundary
         fallback={
-          <Skeleton className='w-24 flex items-center justify-center h-10 bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground'>
+          <Skeleton className='w-24 m-auto flex items-center justify-center h-10 bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground'>
             ...
           </Skeleton>
         }

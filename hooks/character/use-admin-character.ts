@@ -220,6 +220,10 @@ export const useAdminDeleteSkill = (classId: string, skillId: string) => {
   const mutation = useMutation({
     mutationFn: characterApi.deleteSkill,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: characterKeys.lists() });
+      queryClient.invalidateQueries({
+        queryKey: characterKeys.detail(classId),
+      });
       queryClient.invalidateQueries({ queryKey: characterKeys.skill(classId) });
     },
     onError: (error) => {

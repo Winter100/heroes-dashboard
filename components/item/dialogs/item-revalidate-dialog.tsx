@@ -12,6 +12,14 @@ const ItemRevalidateDialog = () => {
       title='아이템 갱신'
     >
       <ActionButton
+        label='아이템 SSG 갱신'
+        onRequest={revalidateApi.recipeSSG}
+      />
+      <ActionButton
+        label='아이템 레시피 갱신'
+        onRequest={revalidateApi.recipes}
+      />
+      <ActionButton
         label='아이템 세트 옵션 갱신'
         onRequest={revalidateApi.itemSetOption}
       />

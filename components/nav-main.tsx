@@ -29,7 +29,7 @@ export function NavMain({
             <SidebarMenuItem
               key={item.title}
               onClick={() => router.push(item.url)}
-              className={cn(pathname === item.url && 'text-blue-300')}
+              className={cn(pathname.includes(item.url) && 'text-blue-300')}
             >
               <SidebarMenuButton tooltip={item.title}>
                 {item.icon}
