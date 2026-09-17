@@ -1,10 +1,10 @@
-import { characterApi } from '@/api/api';
+import { characterApi } from '@/api/character-api';
 import { characterKeys } from '@/queries/character-keys';
 import { Character } from '@/types/character-type';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 export const useCharacter = () => {
-  return useQuery<Character[]>({
+  return useSuspenseQuery<Character[]>({
     queryKey: characterKeys.lists(),
     queryFn: characterApi.get,
     retry: 1,
@@ -17,7 +17,7 @@ export const useCharacter = () => {
 };
 
 export const useCharacterSkillList = (classId: string) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: characterKeys.skill(classId),
     queryFn: () => characterApi.findOne(classId),
     retry: 1,
@@ -25,7 +25,7 @@ export const useCharacterSkillList = (classId: string) => {
 };
 
 export const useCharacterStatistics = () => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: characterKeys.statistics(),
     queryFn: characterApi.getStatistics,
     retry: 1,

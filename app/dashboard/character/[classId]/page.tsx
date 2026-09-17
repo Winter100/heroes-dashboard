@@ -1,11 +1,17 @@
-import CharacterDetail from '@/components/character/character-detail';
+'use client';
+import CharacterDetail from '@/components/character/detail/character-detail';
+import DetailLoading from '@/components/common/detail-loading';
+import QueryErrorBoundary from '@/components/common/query-error-boundary';
+import { useParams } from 'next/navigation';
 
-const Page = async ({ params }: { params: Promise<{ classId: string }> }) => {
-  const { classId } = await params;
+const Page = () => {
+  const { classId } = useParams<{ classId: string }>();
 
   return (
     <div className='max-w-6xl mx-auto w-full'>
-      <CharacterDetail classId={classId} />
+      <QueryErrorBoundary fallback={<DetailLoading />}>
+        <CharacterDetail classId={classId} />
+      </QueryErrorBoundary>
     </div>
   );
 };

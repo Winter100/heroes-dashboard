@@ -2,28 +2,32 @@
 import { ChartBar } from '../chart-bar';
 import { ChartPieLabel } from '../chart-pie-label';
 import { useCharacterStatistics } from '@/hooks/character/use-character';
-import { Card, CardContent } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import QueryError from '../common/query-error';
+import { ChartConfig } from '../ui/chart';
+
+const chartConfig = {
+  count: {
+    label: '출시',
+    color: 'var(--chart-1)',
+  },
+} satisfies ChartConfig;
 
 const CharacterStatistics = () => {
-  const { isLoading, error, data } = useCharacterStatistics();
-  if (isLoading)
-    return (
-      <Card className='w-full'>
-        <CardContent className='flex items-center gap-2 h-72'>
-          <Skeleton className='w-full max-w-sm h-full' />
-          <Skeleton className='w-full h-full' />
-        </CardContent>
-      </Card>
-    );
-
-  if (error) return <QueryError error={error} />;
+  const { data } = useCharacterStatistics();
 
   return (
-    <div className='flex items-center gap-2 w-full'>
-      <ChartPieLabel genderCount={data?.genderCount ?? []} />
-      <ChartBar year={data?.year ?? []} />
+    <div className='items-center gap-2 w-full flex flex-col'>
+      <div className='flex gap-2 text-sm mr-auto text-blue-300'>
+        <span>등록된 캐릭터: {data?.total}</span>
+      </div>
+      <div className='w-full flex flex-row gap-2 items-center'>
+        <ChartPieLabel genderCount={data?.genderCount ?? []} />
+        <ChartBar
+          title='연도별 캐릭터 출시'
+          dataKey='year'
+          data={data?.year ?? []}
+          config={chartConfig}
+        />
+      </div>
     </div>
   );
 };
