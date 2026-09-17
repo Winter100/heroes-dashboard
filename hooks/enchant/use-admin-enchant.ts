@@ -1,11 +1,11 @@
-import { enchantApi } from '@/api/api';
+import { enchantApi } from '@/api/enchant-api';
 import { enchantKeys } from '@/queries/enchant-keys';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   EnchantDetailFormValues,
   EnchantFormValues,
 } from '@/schema/enchant-schema';
-import { toast } from '@/components/ui/toast';
+import { getErrorMessage, showMutationToast } from '@/lib/mutation-toast';
 import { useRouter } from 'next/navigation';
 
 export const useAdminCreateEnchant = () => {
@@ -25,7 +25,7 @@ export const useAdminCreateEnchant = () => {
   const onCreate = (enchantData: EnchantFormValues) => {
     const promise = mutation.mutateAsync(enchantData);
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `${enchantData.name} 생성중...`,
       success: () => {
         return {
@@ -39,9 +39,7 @@ export const useAdminCreateEnchant = () => {
           type: 'error',
           title: enchantData.name,
           description:
-            error instanceof Error
-              ? error.message
-              : '처리 중 오류가 발생했습니다.',
+            getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
         };
       },
     });
@@ -74,13 +72,12 @@ export const useAdminUpdateEnchant = (enchantId: string) => {
       enchantValues: enchantData,
     });
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `${enchantData.name} 수정 중...`,
       success: () => {
         return `${enchantData.name}가 수정되었습니다.`;
       },
-      error: (error) =>
-        error instanceof Error ? error.message : '수정에 실패했습니다.',
+      error: (error) => getErrorMessage(error, '수정에 실패했습니다.'),
     });
     return promise;
   };
@@ -108,13 +105,12 @@ export const useAdminUpsertEnchant = (enchantId: string) => {
   const onEdit = (enchantData: EnchantDetailFormValues) => {
     const promise = mutation.mutateAsync(enchantData);
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `변경 중...`,
       success: () => {
         return `변경 되었습니다.`;
       },
-      error: (error) =>
-        error instanceof Error ? error.message : '변경에 실패했습니다.',
+      error: (error) => getErrorMessage(error, '변경에 실패했습니다.'),
     });
 
     return promise;
@@ -140,14 +136,13 @@ export const useAdminDeleteEnchant = (enchantId: string) => {
   const onDelete = () => {
     const promise = mutation.mutateAsync();
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `삭제 중...`,
       success: () => {
         router.back();
         return `삭제 되었습니다.`;
       },
-      error: (error) =>
-        error instanceof Error ? error.message : '삭제에 실패했습니다.',
+      error: (error) => getErrorMessage(error, '삭제에 실패했습니다.'),
     });
 
     return promise;

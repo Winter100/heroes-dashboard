@@ -1,4 +1,4 @@
-import { enchantApi } from '@/api/api';
+import { enchantApi } from '@/api/enchant-api';
 import { enchantKeys } from '@/queries/enchant-keys';
 import { useSuspenseQuery } from '@tanstack/react-query';
 

@@ -1,5 +1,5 @@
-import { characterApi } from '@/api/api';
-import { toast } from '@/components/ui/toast';
+import { characterApi } from '@/api/character-api';
+import { getErrorMessage, showMutationToast } from '@/lib/mutation-toast';
 import {
   createCharacterFormData,
   createCharacterSkillFormData,
@@ -33,7 +33,7 @@ export const useAdminCreateCharacter = () => {
 
     const promise = mutation.mutateAsync(formData);
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `${className} 생성중...`,
       success: () => {
         return {
@@ -47,9 +47,7 @@ export const useAdminCreateCharacter = () => {
           type: 'error',
           title: className,
           description:
-            error instanceof Error
-              ? error.message
-              : '처리 중 오류가 발생했습니다.',
+            getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
         };
       },
     });
@@ -79,13 +77,12 @@ export const useAdminUpdateCharacter = (classId: string) => {
 
     const promise = mutation.mutateAsync({ formData, classId });
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `${classData.name} 수정 중...`,
       success: () => {
         return `${classData.name}가 수정되었습니다.`;
       },
-      error: (error) =>
-        error instanceof Error ? error.message : '수정에 실패했습니다.',
+      error: (error) => getErrorMessage(error, '수정에 실패했습니다.'),
     });
 
     return promise;
@@ -112,14 +109,13 @@ export const useAdminDeleteCharacter = (classId: string) => {
   const onDelete = (className: string) => {
     const promise = mutation.mutateAsync({ classId, className });
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `${className} 삭제 중...`,
       success: () => {
         router.push('/dashboard/character');
         return `${className}가 삭제되었습니다.`;
       },
-      error: (error) =>
-        error instanceof Error ? error.message : '삭제에 실패했습니다.',
+      error: (error) => getErrorMessage(error, '삭제에 실패했습니다.'),
     });
 
     return promise;
@@ -146,7 +142,7 @@ export const useAdminCreateSkill = (classId: string) => {
     const formData = createCharacterSkillFormData(skill, [classId]);
     const promise = mutation.mutateAsync(formData);
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `${skillName} 등록 중...`,
       success: () => {
         return {
@@ -160,9 +156,7 @@ export const useAdminCreateSkill = (classId: string) => {
           type: 'error',
           title: skillName,
           description:
-            error instanceof Error
-              ? error.message
-              : '처리 중 오류가 발생했습니다.',
+            getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
         };
       },
     });
@@ -188,7 +182,7 @@ export const useAdminUpdateSkill = (classId: string, skillId: string) => {
     const formData = createCharacterSkillFormData(skill, [classId]);
     const promise = mutation.mutateAsync({ formData, skillId });
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `수정 중...`,
       success: () => {
         return {
@@ -202,9 +196,7 @@ export const useAdminUpdateSkill = (classId: string, skillId: string) => {
           type: 'error',
           title: '수정 실패',
           description:
-            error instanceof Error
-              ? error.message
-              : '처리 중 오류가 발생했습니다.',
+            getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
         };
       },
     });
@@ -234,7 +226,7 @@ export const useAdminDeleteSkill = (classId: string, skillId: string) => {
   const onDelete = async () => {
     const promise = mutation.mutateAsync({ classId, skillId });
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `삭제 중...`,
       success: () => {
         return {
@@ -248,9 +240,7 @@ export const useAdminDeleteSkill = (classId: string, skillId: string) => {
           type: 'error',
           title: '스킬 삭제',
           description:
-            error instanceof Error
-              ? error.message
-              : '처리 중 오류가 발생했습니다.',
+            getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
         };
       },
     });

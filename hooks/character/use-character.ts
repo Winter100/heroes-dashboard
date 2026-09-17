@@ -1,4 +1,4 @@
-import { characterApi } from '@/api/api';
+import { characterApi } from '@/api/character-api';
 import { characterKeys } from '@/queries/character-keys';
 import { Character } from '@/types/character-type';
 import { useSuspenseQuery } from '@tanstack/react-query';

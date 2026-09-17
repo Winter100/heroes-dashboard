@@ -1,5 +1,5 @@
-import { itemApi } from '@/api/api';
-import { toast } from '@/components/ui/toast';
+import { itemApi } from '@/api/item-api';
+import { getErrorMessage, showMutationToast } from '@/lib/mutation-toast';
 import { createItemFormData } from '@/lib/utils';
 import { itemKeys } from '@/queries/item-keys';
 import { ItemFormValues, ItemStepFormValues } from '@/schema/item.schema';
@@ -23,7 +23,7 @@ export const useAdminCreateItem = () => {
   const onCreate = (item: ItemFormValues) => {
     const formData = createItemFormData(item);
     const promise = mutation.mutateAsync(formData);
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `${item.name} 생성중...`,
       success: () => {
         return {
@@ -37,9 +37,7 @@ export const useAdminCreateItem = () => {
           type: 'error',
           title: item.name,
           description:
-            error instanceof Error
-              ? error.message
-              : '처리 중 오류가 발생했습니다.',
+            getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
         };
       },
     });
@@ -69,13 +67,12 @@ export const useAdminUpdateItem = (itemId: string) => {
 
     const promise = mutation.mutateAsync({ formData, itemId });
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `${itemData.name} 수정 중...`,
       success: () => {
         return `${itemData.name}가 수정되었습니다.`;
       },
-      error: (error) =>
-        error instanceof Error ? error.message : '수정에 실패했습니다.',
+      error: (error) => getErrorMessage(error, '수정에 실패했습니다.'),
     });
 
     return promise;
@@ -101,14 +98,13 @@ export const useAdminDeleteItem = (itemId: string) => {
   const onDelete = () => {
     const promise = mutation.mutateAsync();
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `삭제 중...`,
       success: () => {
         router.back();
         return `삭제 되었습니다.`;
       },
-      error: (error) =>
-        error instanceof Error ? error.message : '삭제에 실패했습니다.',
+      error: (error) => getErrorMessage(error, '삭제에 실패했습니다.'),
     });
 
     return promise;
@@ -131,13 +127,12 @@ export const useAdminCreateStep = (itemId: string) => {
   const onCreateStep = (stepData: ItemStepFormValues) => {
     const promise = mutation.mutateAsync({ steps: stepData, itemId });
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `${stepData.stepName} 생성 중...`,
       success: () => {
         return `${stepData.stepName}가 생성되었습니다.`;
       },
-      error: (error) =>
-        error instanceof Error ? error.message : '생성에 실패했습니다.',
+      error: (error) => getErrorMessage(error, '생성에 실패했습니다.'),
     });
   };
 
@@ -163,13 +158,12 @@ export const useAdminUpdateStep = (itemId: string, stepId: string) => {
       steps: stepData,
     });
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `수정 중...`,
       success: () => {
         return `수정 되었습니다.`;
       },
-      error: (error) =>
-        error instanceof Error ? error.message : '변경에 실패했습니다.',
+      error: (error) => getErrorMessage(error, '변경에 실패했습니다.'),
     });
 
     return promise;
@@ -194,13 +188,12 @@ export const useAdminDeleteStep = (itemId: string, stepId: string) => {
       stepId: stepId,
     });
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `삭제 중...`,
       success: () => {
         return `삭제 되었습니다.`;
       },
-      error: (error) =>
-        error instanceof Error ? error.message : '삭제에 실패했습니다.',
+      error: (error) => getErrorMessage(error, '삭제에 실패했습니다.'),
     });
 
     return promise;

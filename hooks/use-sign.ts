@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '../store/useAuthStore';
-import { signApi } from '@/api/api';
+import { signApi } from '@/api/auth-api';
 import { useRouter } from 'next/navigation';
 
 export const useLoginMutation = () => {

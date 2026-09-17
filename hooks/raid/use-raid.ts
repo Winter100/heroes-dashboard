@@ -1,4 +1,4 @@
-import { raidApi } from '@/api/api';
+import { raidApi } from '@/api/raid-api';
 import { raidKeys } from '@/queries/raid-keys';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 

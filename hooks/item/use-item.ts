@@ -1,4 +1,4 @@
-import { itemApi } from '@/api/api';
+import { itemApi } from '@/api/item-api';
 import { itemKeys } from '@/queries/item-keys';
 import { useSuspenseQueries, useSuspenseQuery } from '@tanstack/react-query';
 

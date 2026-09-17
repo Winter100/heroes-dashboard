@@ -1,18 +1,8 @@
-export const revalidate_tags = {
+export const revalidateTags = {
   enchant: `enchants?category=ENCHANT`,
-  infusion: `enchants?category=INFUSION`,
-  grind: `items/grind`,
   recipes: `items/recipe`,
   recipeSSG: `items/recipe/ssg`,
   itemSetOption: `items/set-option`,
   raid: `raids/table`,
-  raidDetailName: `raids/name`,
-  raidSSG: `raids/ssg`,
-  partholn: `partholn`,
   characterImage: `characters/image`,
-  notice: 'notice',
-  enchantTable: 'enchants/table',
-  enchantSSG: 'enchants/ssg',
-  enchantDetailById: 'enchants/id',
-  enchantDetailByName: 'enchants/name',
 };

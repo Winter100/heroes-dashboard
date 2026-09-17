@@ -1,5 +1,5 @@
-import { raidApi } from '@/api/api';
-import { toast } from '@/components/ui/toast';
+import { raidApi } from '@/api/raid-api';
+import { getErrorMessage, showMutationToast } from '@/lib/mutation-toast';
 import { createRaidFormData } from '@/lib/utils';
 import { raidKeys } from '@/queries/raid-keys';
 import { RaidEffectsFormValues, RaidFormValues } from '@/schema/raid-schema';
@@ -22,7 +22,7 @@ export const useAdminCreateRaid = () => {
   const onCreate = (raidData: RaidFormValues) => {
     const formData = createRaidFormData(raidData);
     const promise = mutation.mutateAsync(formData);
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `${raidData.battle} 생성중...`,
       success: () => {
         return {
@@ -36,9 +36,7 @@ export const useAdminCreateRaid = () => {
           type: 'error',
           title: raidData.battle,
           description:
-            error instanceof Error
-              ? error.message
-              : '처리 중 오류가 발생했습니다.',
+            getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
         };
       },
     });
@@ -65,13 +63,12 @@ export const useAdminUpdateRaid = (raidId: string) => {
     const formData = createRaidFormData(raidData);
     const promise = mutation.mutateAsync(formData);
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `${raidData.battle} 수정 중...`,
       success: () => {
         return `${raidData.battle}가 수정되었습니다.`;
       },
-      error: (error) =>
-        error instanceof Error ? error.message : '수정에 실패했습니다.',
+      error: (error) => getErrorMessage(error, '수정에 실패했습니다.'),
     });
 
     return promise;
@@ -105,13 +102,12 @@ export const useAdminUpsertRaidDetail = (raidId: string) => {
     };
     const promise = mutation.mutateAsync(upsertData);
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `변경 중...`,
       success: () => {
         return `변경 되었습니다.`;
       },
-      error: (error) =>
-        error instanceof Error ? error.message : '변경에 실패했습니다.',
+      error: (error) => getErrorMessage(error, '변경에 실패했습니다.'),
     });
 
     return promise;
@@ -137,14 +133,13 @@ export const useAdminDeleteRaid = (raidId: string) => {
   const onDelete = () => {
     const promise = mutation.mutateAsync();
 
-    toast.promise(promise, {
+    showMutationToast(promise, {
       loading: `삭제 중...`,
       success: () => {
         router.push('/dashboard/raid');
         return `삭제 되었습니다.`;
       },
-      error: (error) =>
-        error instanceof Error ? error.message : '삭제에 실패했습니다.',
+      error: (error) => getErrorMessage(error, '삭제에 실패했습니다.'),
     });
 
     return promise;

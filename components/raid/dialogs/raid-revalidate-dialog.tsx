@@ -1,6 +1,6 @@
 'use client';
 
-import { revalidateApi } from '@/api/api';
+import { revalidateApi } from '@/api/revalidate-api';
 import { ActionButton } from '../../common/action-button';
 import ActionDialog from '../../common/action-dialog';
 import { Button } from '../../ui/button';
