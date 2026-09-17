@@ -1,5 +1,3 @@
-'use client';
-
 import CharacterCreateDialog from '@/components/character/dialogs/character-create-dialog';
 import CharacterRevalidateDialog from '@/components/character/dialogs/character-revalidate-dialog';
 import CharacterStatistics from '@/components/character/character-statistics';
