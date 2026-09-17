@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import TanstackQueryProvider from '@/components/provider/tanstack-query-provider';
 import { Toaster } from '@/components/ui/toast';
+import { ReactNode } from 'react';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
   description: '망스비 관리를 위한 대시보드',
 };
 
-export default function RootLayout({ children }: LayoutProps<'/'>) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang='ko'
