@@ -18,35 +18,12 @@ import {
 } from '@/components/ui/sidebar';
 import { useLogoutMutaion } from '@/hooks/use-sign';
 import { EllipsisVerticalIcon, LogOutIcon } from 'lucide-react';
-import { toast } from './ui/toast';
+import { useAuthStore } from '@/store/useAuthStore';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const logoutMutation = useLogoutMutaion();
-
-  const onLogout = () => {
-    const promise = logoutMutation.mutateAsync();
-    toast.promise(promise, {
-      loading: `로그아웃 중...`,
-      success: () => {
-        return {
-          type: 'success',
-          title: '로그아웃',
-          description: '성공했습니다',
-        };
-      },
-      error: (error) => {
-        return {
-          type: 'error',
-          title: '로그아웃',
-          description:
-            error instanceof Error
-              ? error.message
-              : '처리 중 오류가 발생했습니다.',
-        };
-      },
-    });
-  };
+  const user = useAuthStore((state) => state.user);
+  const { onLogout, isPending } = useLogoutMutaion();
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -57,10 +34,10 @@ export function NavUser() {
             }
           >
             <Avatar className='size-8 rounded-lg grayscale'>
-              <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
+              <AvatarFallback className='rounded-lg'>H</AvatarFallback>
             </Avatar>
             <div className='grid flex-1 text-left text-sm leading-tight'>
-              <span className='truncate font-medium'>관리자</span>
+              <span className='truncate font-medium'>{user?.name}</span>
             </div>
             <EllipsisVerticalIcon className='ml-auto size-4' />
           </DropdownMenuTrigger>
@@ -74,17 +51,18 @@ export function NavUser() {
               <DropdownMenuLabel className='p-0 font-normal'>
                 <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
                   <Avatar className='size-8'>
-                    <AvatarFallback className='rounded-lg'>CN</AvatarFallback>
+                    <AvatarFallback className='rounded-lg'>H</AvatarFallback>
                   </Avatar>
                   <div className='grid flex-1 text-left text-sm leading-tight'>
-                    <span className='truncate font-medium'>관리자</span>
+                    <span className='truncate font-medium'>{user?.name}</span>
                   </div>
                 </div>
               </DropdownMenuLabel>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              disabled={logoutMutation.isPending}
+              className='cursor-pointer'
+              disabled={isPending}
               onClick={onLogout}
             >
               <LogOutIcon />

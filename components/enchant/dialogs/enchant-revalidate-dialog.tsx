@@ -1,9 +1,9 @@
 'use client';
 
-import { revalidateApi } from '@/api/revalidate-api';
-import { ActionButton } from '../../common/action-button';
+import { revalidateTags } from '@/constant/constant';
 import ActionDialog from '../../common/action-dialog';
 import { Button } from '../../ui/button';
+import DetailRevalidateButton from '@/components/common/detail-revalidate-button';
 
 const EnchantRevalidateDialog = () => {
   return (
@@ -11,9 +11,9 @@ const EnchantRevalidateDialog = () => {
       trigger={<Button variant='secondary'>갱신</Button>}
       title='인챈트 갱신'
     >
-      <ActionButton
-        label='모든 인챈트 정보 갱신'
-        onRequest={revalidateApi.enchant}
+      <DetailRevalidateButton
+        resourceName='모든 인챈트 정보 갱신'
+        tag={revalidateTags.enchantTable}
       />
     </ActionDialog>
   );

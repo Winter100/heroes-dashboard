@@ -1,16 +1,33 @@
-import { useAuthStore } from '@/store/useAuthStore';
+import { useAuthStore, type User } from '@/store/useAuthStore';
 
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL!;
 export const REVALIDATE = process.env.NEXT_PUBLIC_REVALIDATE!;
 
-type RefreshResponse = {
+export type AuthSession = {
   accessToken: string;
+  user: User;
 };
 
-let refreshPromise: Promise<string> | null = null;
+let refreshPromise: Promise<AuthSession> | null = null;
 
-const refreshAccessToken = async (): Promise<string> => {
-  const { setAccessToken, clearAuth } = useAuthStore.getState();
+const isUser = (value: unknown): value is User =>
+  typeof value === 'object' &&
+  value !== null &&
+  'name' in value &&
+  typeof value.name === 'string' &&
+  'role' in value &&
+  (value.role === 'ADMIN' || value.role === 'USER');
+
+const isAuthSession = (value: unknown): value is AuthSession =>
+  typeof value === 'object' &&
+  value !== null &&
+  'accessToken' in value &&
+  typeof value.accessToken === 'string' &&
+  'user' in value &&
+  isUser(value.user);
+
+const requestSessionRefresh = async (): Promise<AuthSession> => {
+  const { setAccessToken, setUser, clearAuth } = useAuthStore.getState();
 
   try {
     const res = await fetch(`${BACKEND_URL}/auth/refresh`, {
@@ -19,29 +36,39 @@ const refreshAccessToken = async (): Promise<string> => {
     });
 
     if (!res.ok) {
+      throw new Error('토큰 재발급에 실패했습니다.');
+    }
+
+    const data: unknown = await res.json();
+
+    if (!isAuthSession(data)) {
+      throw new Error('인증 응답 형식이 올바르지 않습니다.');
+    }
+
+    setAccessToken(data.accessToken);
+    setUser(data.user);
+
+    return data;
+  } catch (error) {
+    try {
       await fetch(`${BACKEND_URL}/auth/signout`, {
         method: 'POST',
         credentials: 'include',
       });
-      clearAuth();
-      window.location.replace('/');
-      throw new Error('토큰 재발급에 실패했습니다.');
-    }
+    } catch {}
 
-    const data = (await res.json()) as RefreshResponse;
-
-    setAccessToken(data.accessToken);
-
-    return data.accessToken;
-  } catch (error) {
     clearAuth();
-    throw error;
+    window.location.replace('/');
+
+    throw error instanceof Error
+      ? error
+      : new Error('토큰 재발급에 실패했습니다.');
   }
 };
 
-const getNewAccessToken = async () => {
+export const refreshSession = (): Promise<AuthSession> => {
   if (!refreshPromise) {
-    refreshPromise = refreshAccessToken().finally(() => {
+    refreshPromise = requestSessionRefresh().finally(() => {
       refreshPromise = null;
     });
   }
@@ -72,7 +99,7 @@ export const apiClient = async <T>(
   let res = await request(accessToken ?? '');
 
   if (res.status === 401) {
-    const newAccessToken = await getNewAccessToken();
+    const { accessToken: newAccessToken } = await refreshSession();
 
     res = await request(newAccessToken);
   }
