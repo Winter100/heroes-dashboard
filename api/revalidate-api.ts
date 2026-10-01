@@ -1,27 +1,19 @@
-import { revalidateTags } from '@/constant/constant';
+import type { RevalidateTag } from '@/constant/constant';
 import { apiClient, REVALIDATE } from '@/utils/api-client';
 
-const revalidateOptions = {
-  headers: { 'revalidate-secret': REVALIDATE },
+type RevalidateRequest = {
+  tag: RevalidateTag;
+  id?: string;
 };
 
 export const revalidateApi = {
-  enchant: async <T>() =>
-    apiClient<T>(`/revalidate/${revalidateTags.enchant}`, revalidateOptions),
-  itemSetOption: async () =>
-    apiClient(
-      `/revalidate/${revalidateTags.itemSetOption}`,
-      revalidateOptions,
-    ),
-  characterImage: async <T>() =>
-    apiClient<T>(
-      `/revalidate/${revalidateTags.characterImage}`,
-      revalidateOptions,
-    ),
-  recipes: async () =>
-    apiClient(`/revalidate/${revalidateTags.recipes}`, revalidateOptions),
-  recipeSSG: async () =>
-    apiClient(`/revalidate/${revalidateTags.recipeSSG}`, revalidateOptions),
-  raid: async () =>
-    apiClient(`/revalidate/${revalidateTags.raid}`, revalidateOptions),
+  request: async ({ tag, id }: RevalidateRequest): Promise<unknown> =>
+    apiClient('/revalidate', {
+      body: JSON.stringify({ tag, id }),
+      headers: {
+        'Content-Type': 'application/json',
+        'revalidate-secret': REVALIDATE,
+      },
+      method: 'POST',
+    }),
 };

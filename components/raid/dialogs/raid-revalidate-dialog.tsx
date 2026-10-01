@@ -1,9 +1,9 @@
 'use client';
 
-import { revalidateApi } from '@/api/revalidate-api';
-import { ActionButton } from '../../common/action-button';
+import { revalidateTags } from '@/constant/constant';
 import ActionDialog from '../../common/action-dialog';
 import { Button } from '../../ui/button';
+import DetailRevalidateButton from '@/components/common/detail-revalidate-button';
 
 const RaidRevalidateDialog = () => {
   return (
@@ -11,7 +11,10 @@ const RaidRevalidateDialog = () => {
       trigger={<Button variant='secondary'>갱신</Button>}
       title='레이드 갱신'
     >
-      <ActionButton label='모든 레이드 갱신' onRequest={revalidateApi.raid} />
+      <DetailRevalidateButton
+        resourceName='모든 레이드 갱신'
+        tag={revalidateTags.raid}
+      />
     </ActionDialog>
   );
 };
