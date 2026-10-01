@@ -1,4 +1,5 @@
 import DashboardResourcePage from '@/components/common/dashboard-resource-page';
+import { ADMIN_ROLES, RoleGate } from '@/components/auth/role-gate';
 import EnchantCreateDialog from '@/components/enchant/dialogs/enchant-create-dialog';
 import EnchantRevalidateDialog from '@/components/enchant/dialogs/enchant-revalidate-dialog';
 import EnchantStatistics from '@/components/enchant/enchant-statistics';
@@ -8,10 +9,10 @@ const Page = () => {
   return (
     <DashboardResourcePage
       actions={
-        <>
-        <EnchantCreateDialog />
-        <EnchantRevalidateDialog />
-        </>
+        <RoleGate allowedRoles={ADMIN_ROLES}>
+          <EnchantCreateDialog />
+          <EnchantRevalidateDialog />
+        </RoleGate>
       }
       statistics={<EnchantStatistics />}
       list={<EnchantList />}
