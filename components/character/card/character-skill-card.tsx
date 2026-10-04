@@ -12,6 +12,7 @@ import { useAdminUpdateSkill } from '@/hooks/character/use-admin-character';
 import CharacterSkillDeleteDialog from '../dialogs/character-skill-delete-dialog';
 import { useState } from 'react';
 import { CharacterSkillFormValues } from '@/schema/character.schema';
+import { ADMIN_ROLES, RoleGate } from '@/components/auth/role-gate';
 
 type Props = {
   name: string;
@@ -53,12 +54,14 @@ const CharacterSkillCard = ({
           <div>{name}</div>
         </CardTitle>
         <CardDescription></CardDescription>
-        <CardAction>
-          <Button variant='secondary' onClick={() => setOpen(true)}>
-            수정
-          </Button>
-          <CharacterSkillDeleteDialog classId={classId} skillId={skillId} />
-        </CardAction>
+        <RoleGate allowedRoles={ADMIN_ROLES}>
+          <CardAction>
+            <Button variant='secondary' onClick={() => setOpen(true)}>
+              수정
+            </Button>
+            <CharacterSkillDeleteDialog classId={classId} skillId={skillId} />
+          </CardAction>
+        </RoleGate>
       </CardHeader>
       <CardContent className='whitespace-pre-line'>
         <p>{description}</p>

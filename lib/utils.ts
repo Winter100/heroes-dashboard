@@ -82,3 +82,31 @@ export const createCharacterSkillFormData = (
 
   return formData;
 };
+
+export const AFFIX_LABELS = {
+  prefix: '접두',
+  suffix: '접미',
+} as const;
+
+type EnchantAffix = keyof typeof AFFIX_LABELS;
+
+export const isEnchantAffix = (affix: string): affix is EnchantAffix =>
+  affix === 'prefix' || affix === 'suffix';
+
+export const isRankOneToSix = (rank: string): boolean => {
+  const rankNumber = Number.parseInt(rank, 10);
+
+  return rankNumber >= 1 && rankNumber <= 5;
+};
+
+export const getEnchantImage = (affix: string, rank: string): string => {
+  if (!isEnchantAffix(affix)) {
+    return '';
+  }
+
+  if (affix === 'prefix') {
+    return isRankOneToSix(rank) ? '/images/prefix6.png' : '/images/prefix7.png';
+  }
+
+  return isRankOneToSix(rank) ? '/images/suffix6.png' : '/images/suffix7.png';
+};

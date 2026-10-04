@@ -7,6 +7,7 @@ import CharacterSkillCard from '../card/character-skill-card';
 import CharacterEditSkillForm from '../forms/character-edit-skill-form';
 import CharacterUpdateDialog from '../dialogs/character-update-dialog';
 import CharacterDeleteDialog from '../dialogs/character-delete-dialog';
+import { ADMIN_ROLES, RoleGate } from '@/components/auth/role-gate';
 
 const CharacterDetail = ({ classId }: { classId: string }) => {
   const { data } = useCharacterSkillList(classId);
@@ -15,13 +16,15 @@ const CharacterDetail = ({ classId }: { classId: string }) => {
 
   return (
     <div className='gap-2 flex-col mx-auto flex items-center'>
-      <div className='mx-auto'>
-        {/* 직업 정보 수정 Dialog */}
-        <CharacterUpdateDialog classId={classId} data={data} />
+      <RoleGate allowedRoles={ADMIN_ROLES}>
+        <div className='mx-auto flex items-center gap-2'>
+          {/* 직업 정보 수정 Dialog */}
+          <CharacterUpdateDialog classId={classId} data={data} />
 
-        {/* 직업 삭제 Dialog */}
-        <CharacterDeleteDialog classId={classId} name={data.name} />
-      </div>
+          {/* 직업 삭제 Dialog */}
+          <CharacterDeleteDialog classId={classId} name={data.name} />
+        </div>
+      </RoleGate>
 
       {/* 직업 카드 */}
       <CharacterCard character={data} />
@@ -31,12 +34,14 @@ const CharacterDetail = ({ classId }: { classId: string }) => {
         {data?.skills.map((skill) => (
           <CharacterSkillCard key={skill.name} classId={classId} {...skill} />
         ))}
-        <CharacterEditSkillForm
-          onSubmit={onCreate}
-          mode='create'
-          onCancel={() => {}}
-          disabled={isPending}
-        />
+        <RoleGate allowedRoles={ADMIN_ROLES}>
+          <CharacterEditSkillForm
+            onSubmit={onCreate}
+            mode='create'
+            onCancel={() => {}}
+            disabled={isPending}
+          />
+        </RoleGate>
       </div>
     </div>
   );

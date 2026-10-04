@@ -1,13 +1,22 @@
 import { create } from 'zustand';
 
+export interface User {
+  name: string;
+  role: 'ADMIN' | 'USER';
+}
+
 interface AuthState {
   accessToken: string | null;
+  user: User | null;
   setAccessToken: (token: string) => void;
+  setUser: (user: User) => void;
   clearAuth: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   accessToken: null,
+  user: null,
   setAccessToken: (token) => set({ accessToken: token }),
-  clearAuth: () => set({ accessToken: null }),
+  setUser: (user) => set({ user }),
+  clearAuth: () => set({ accessToken: null, user: null }),
 }));

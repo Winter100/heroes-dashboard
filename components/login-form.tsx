@@ -20,14 +20,24 @@ import { Input } from '@/components/ui/input';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SigninFormValues, signinSchema } from '@/schema/sign-schema';
-import { toast } from './ui/toast';
-import { useLoginMutation } from '@/hooks/use-sign';
+
+type Props = React.ComponentProps<'div'> & {
+  handleSubmit: ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => void;
+  isPending: boolean;
+};
 
 export function LoginForm({
+  handleSubmit,
+  isPending,
   className,
   ...props
-}: React.ComponentProps<'div'>) {
-  const loginMutation = useLoginMutation();
+}: Props) {
   const form = useForm<SigninFormValues>({
     resolver: zodResolver(signinSchema),
     defaultValues: {
@@ -35,30 +45,6 @@ export function LoginForm({
       password: '',
     },
   });
-
-  const onSubmit = async (signinData: SigninFormValues) => {
-    const mutate = loginMutation.mutateAsync(signinData);
-    toast.promise(mutate, {
-      loading: `로그인 중...`,
-      success: () => {
-        return {
-          type: 'success',
-          title: '로그인 성공',
-          description: '안녕하세요. 관리자님',
-        };
-      },
-      error: (error) => {
-        return {
-          type: 'error',
-          title: '로그인',
-          description:
-            error instanceof Error
-              ? error.message
-              : '처리 중 오류가 발생했습니다.',
-        };
-      },
-    });
-  };
 
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
@@ -70,12 +56,7 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form
-            id='signin'
-            onSubmit={form.handleSubmit(onSubmit, (errors) =>
-              console.log('유효성 검사 실패 목록:', errors),
-            )}
-          >
+          <form id='signin' onSubmit={form.handleSubmit(handleSubmit)}>
             <FieldGroup>
               <Controller
                 name='email'
@@ -84,7 +65,7 @@ export function LoginForm({
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor='email'>이메일</FieldLabel>
                     <Input
-                      disabled={loginMutation.isPending}
+                      disabled={isPending}
                       {...field}
                       type='email'
                       id='email'
@@ -108,7 +89,7 @@ export function LoginForm({
                     <FieldLabel htmlFor='password'>비밀번호</FieldLabel>
                     <Input
                       {...field}
-                      disabled={loginMutation.isPending}
+                      disabled={isPending}
                       type='password'
                       id='password'
                       aria-invalid={fieldState.invalid}
@@ -127,11 +108,7 @@ export function LoginForm({
         </CardContent>
         <CardFooter>
           <Field>
-            <Button
-              disabled={loginMutation.isPending}
-              form='signin'
-              type='submit'
-            >
+            <Button disabled={isPending} form='signin' type='submit'>
               Login
             </Button>
           </Field>

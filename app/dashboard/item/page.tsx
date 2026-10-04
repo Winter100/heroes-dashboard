@@ -1,4 +1,5 @@
 import DashboardResourcePage from '@/components/common/dashboard-resource-page';
+import { ADMIN_ROLES, RoleGate } from '@/components/auth/role-gate';
 import ItemCreateDialog from '@/components/item/dialogs/item-create-dialog';
 import ItemRevalidateDialog from '@/components/item/dialogs/item-revalidate-dialog';
 import ItemStatistics from '@/components/item/item-statistics';
@@ -8,10 +9,10 @@ const Page = () => {
   return (
     <DashboardResourcePage
       actions={
-        <>
-        <ItemCreateDialog />
-        <ItemRevalidateDialog />
-        </>
+        <RoleGate allowedRoles={ADMIN_ROLES}>
+          <ItemCreateDialog />
+          <ItemRevalidateDialog />
+        </RoleGate>
       }
       statistics={<ItemStatistics />}
       list={<ItemList />}

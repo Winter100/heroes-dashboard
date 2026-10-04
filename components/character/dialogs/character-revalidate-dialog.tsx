@@ -1,9 +1,9 @@
 'use client';
 
-import { revalidateApi } from '@/api/revalidate-api';
-import { ActionButton } from '../../common/action-button';
+import { revalidateTags } from '@/constant/constant';
 import ActionDialog from '../../common/action-dialog';
 import { Button } from '../../ui/button';
+import DetailRevalidateButton from '@/components/common/detail-revalidate-button';
 
 const CharacterRevalidateDialog = () => {
   return (
@@ -11,9 +11,9 @@ const CharacterRevalidateDialog = () => {
       trigger={<Button variant='secondary'>갱신</Button>}
       title='캐릭터 관련 갱신'
     >
-      <ActionButton
-        label='캐릭터 이미지 갱신'
-        onRequest={() => revalidateApi.characterImage()}
+      <DetailRevalidateButton
+        resourceName='캐릭터 이미지 갱신'
+        tag={revalidateTags.characterImage}
       />
     </ActionDialog>
   );

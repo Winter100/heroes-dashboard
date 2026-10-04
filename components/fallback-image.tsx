@@ -12,8 +12,13 @@ export const FallbackImage = ({
   ...rest
 }: FallbackImageProps) => {
   const [imgError, setImgError] = useState<boolean>(false);
+  const imageSource = src.toString();
+  const isSupportedSource =
+    imageSource.startsWith('http://') ||
+    imageSource.startsWith('https://') ||
+    imageSource.startsWith('/');
 
-  if (!src || src === '' || !src.toString().startsWith('http')) {
+  if (!imageSource || !isSupportedSource) {
     return (
       <div
         className='flex items-center justify-center bg-black/35 text-gray-500 rounded-md'
