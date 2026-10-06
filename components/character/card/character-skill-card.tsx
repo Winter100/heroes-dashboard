@@ -13,18 +13,22 @@ import CharacterSkillDeleteDialog from '../dialogs/character-skill-delete-dialog
 import { useState } from 'react';
 import { CharacterSkillFormValues } from '@/schema/character.schema';
 import { ADMIN_ROLES, RoleGate } from '@/components/auth/role-gate';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { ImageOff } from 'lucide-react';
 
 type Props = {
   name: string;
   description: string;
   id: string;
   classId: string;
+  image?: string | null;
 };
 const CharacterSkillCard = ({
   id: skillId,
   name,
   description,
   classId,
+  image,
 }: Props) => {
   const [open, setOpen] = useState(false);
 
@@ -50,8 +54,17 @@ const CharacterSkillCard = ({
     <Card key={name} className='max-w-sm w-full h-full min-h-72'>
       <CardHeader>
         <CardTitle className='flex items-center gap-2'>
-          <div className='w-7 h-7 border border-red-300'></div>
-          <div>{name}</div>
+          <Avatar className='size-7 rounded-md after:rounded-md'>
+            <AvatarImage
+              src={image?.trim() || undefined}
+              alt={`${name} 스킬`}
+              className='rounded-md'
+            />
+            <AvatarFallback className='rounded-md' aria-label='이미지 없음'>
+              <ImageOff className='size-4' aria-hidden='true' />
+            </AvatarFallback>
+          </Avatar>
+          <h4>{name}</h4>
         </CardTitle>
         <CardDescription></CardDescription>
         <RoleGate allowedRoles={ADMIN_ROLES}>
