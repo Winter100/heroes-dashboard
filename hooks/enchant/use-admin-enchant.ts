@@ -38,8 +38,7 @@ export const useAdminCreateEnchant = () => {
         return {
           type: 'error',
           title: enchantData.name,
-          description:
-            getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
+          description: getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
         };
       },
     });
@@ -96,6 +95,7 @@ export const useAdminUpsertEnchant = (enchantId: string) => {
         queryKey: enchantKeys.detail(enchantId),
       });
       queryClient.invalidateQueries({ queryKey: enchantKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: enchantKeys.statistics() });
     },
     onError: (error) => {
       console.log(error.message);
@@ -126,6 +126,9 @@ export const useAdminDeleteEnchant = (enchantId: string) => {
     mutationFn: () => enchantApi.delete(enchantId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: enchantKeys.lists() });
+      queryClient.invalidateQueries({
+        queryKey: enchantKeys.detail(enchantId),
+      });
       queryClient.invalidateQueries({ queryKey: enchantKeys.statistics() });
     },
     onError: (error) => {

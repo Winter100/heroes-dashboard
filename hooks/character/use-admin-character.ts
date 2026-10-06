@@ -46,8 +46,7 @@ export const useAdminCreateCharacter = () => {
         return {
           type: 'error',
           title: className,
-          description:
-            getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
+          description: getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
         };
       },
     });
@@ -130,6 +129,10 @@ export const useAdminCreateSkill = (classId: string) => {
   const mutation = useMutation({
     mutationFn: characterApi.createSkill,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: characterKeys.lists() });
+      queryClient.invalidateQueries({
+        queryKey: characterKeys.detail(classId),
+      });
       queryClient.invalidateQueries({ queryKey: characterKeys.skill(classId) });
     },
     onError: (error) => {
@@ -155,14 +158,13 @@ export const useAdminCreateSkill = (classId: string) => {
         return {
           type: 'error',
           title: skillName,
-          description:
-            getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
+          description: getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
         };
       },
     });
   };
 
-  return { onCreate, isPending: mutation.isPending };
+  return { onCreate, ...mutation };
 };
 
 export const useAdminUpdateSkill = (classId: string, skillId: string) => {
@@ -171,6 +173,10 @@ export const useAdminUpdateSkill = (classId: string, skillId: string) => {
   const mutation = useMutation({
     mutationFn: characterApi.updateSkill,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: characterKeys.lists() });
+      queryClient.invalidateQueries({
+        queryKey: characterKeys.detail(classId),
+      });
       queryClient.invalidateQueries({ queryKey: characterKeys.skill(classId) });
     },
     onError: (error) => {
@@ -195,8 +201,7 @@ export const useAdminUpdateSkill = (classId: string, skillId: string) => {
         return {
           type: 'error',
           title: '수정 실패',
-          description:
-            getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
+          description: getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
         };
       },
     });
@@ -239,8 +244,7 @@ export const useAdminDeleteSkill = (classId: string, skillId: string) => {
         return {
           type: 'error',
           title: '스킬 삭제',
-          description:
-            getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
+          description: getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
         };
       },
     });

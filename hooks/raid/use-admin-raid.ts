@@ -35,8 +35,7 @@ export const useAdminCreateRaid = () => {
         return {
           type: 'error',
           title: raidData.battle,
-          description:
-            getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
+          description: getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
         };
       },
     });
@@ -51,6 +50,7 @@ export const useAdminUpdateRaid = (raidId: string) => {
   const mutation = useMutation({
     mutationFn: (formData: FormData) => raidApi.update({ formData, raidId }),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: raidKeys.lists() });
       queryClient.invalidateQueries({ queryKey: raidKeys.detail(raidId) });
       queryClient.invalidateQueries({ queryKey: raidKeys.statistics() });
     },
@@ -88,7 +88,9 @@ export const useAdminUpsertRaidDetail = (raidId: string) => {
       }[];
     }) => raidApi.upsert(raidId, data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: raidKeys.lists() });
       queryClient.invalidateQueries({ queryKey: raidKeys.detail(raidId) });
+      queryClient.invalidateQueries({ queryKey: raidKeys.statistics() });
     },
     onError: (error) => {
       console.log(error.message);
@@ -124,6 +126,7 @@ export const useAdminDeleteRaid = (raidId: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: raidKeys.lists() });
       queryClient.invalidateQueries({ queryKey: raidKeys.statistics() });
+      queryClient.invalidateQueries({ queryKey: raidKeys.detail(raidId) });
     },
     onError: (error) => {
       console.log(error.message);
