@@ -23,6 +23,7 @@ const CharacterCard = ({ character, isDetailLink = false }: Props) => {
       <div className='relative aspect-video flex items-center justify-center w-full'>
         <FallbackImage
           className='w-20 h-auto'
+          loading='eager'
           src={character.image ?? ''}
           alt={character.name}
           fill={!!!character.image}
