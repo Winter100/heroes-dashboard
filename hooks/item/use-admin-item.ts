@@ -36,8 +36,7 @@ export const useAdminCreateItem = () => {
         return {
           type: 'error',
           title: item.name,
-          description:
-            getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
+          description: getErrorMessage(error, '처리 중 오류가 발생했습니다.'),
         };
       },
     });
@@ -56,6 +55,7 @@ export const useAdminUpdateItem = (itemId: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: itemKeys.detail(itemId) });
       queryClient.invalidateQueries({ queryKey: itemKeys.statistics() });
+      queryClient.invalidateQueries({ queryKey: itemKeys.lists() });
     },
     onError: (error) => {
       console.log(error.message);

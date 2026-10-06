@@ -12,7 +12,6 @@ import {
 } from '@/schema/character.schema';
 import { Textarea } from '../../ui/textarea';
 import Image from 'next/image';
-import { cn } from '@/lib/utils';
 
 type Props = {
   mode: 'create' | 'update';
@@ -72,7 +71,7 @@ const CharacterEditSkillForm = ({
         <form id={formId} onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <div className='flex items-center gap-2'>
-              <div className='w-40'>
+              <div className='w-20 shrink-0'>
                 <Controller
                   name='image'
                   control={form.control}
@@ -80,16 +79,15 @@ const CharacterEditSkillForm = ({
                     <Field>
                       <label
                         htmlFor='picture'
-                        className={cn(
-                          'flex h-20 cursor-pointer items-center justify-center overflow-hidden rounded-md border border-dashed',
-                        )}
+                        className='relative flex size-20 cursor-pointer items-center justify-center overflow-hidden rounded-md border border-dashed'
                       >
                         {preview ? (
                           <Image
                             src={preview}
                             alt='이미지 미리보기'
                             fill
-                            className='object-cover'
+                            sizes='80px'
+                            className='object-contain'
                           />
                         ) : (
                           <span className='text-2xl  block text-muted-foreground'>
