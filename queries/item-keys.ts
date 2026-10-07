@@ -1,6 +1,8 @@
 export const itemKeys = {
   all: ['items'] as const,
+  recipes: () => [...itemKeys.all] as const,
   steps: () => [...itemKeys.all, 'steps'] as const,
+  stepsRecipe: (stepId: string) => [...itemKeys.all, 'steps', stepId] as const,
   lists: () => [...itemKeys.all, 'list'] as const,
   list: (filters: string) => [...itemKeys.lists(), { filters }] as const,
   details: () => [...itemKeys.all, 'detail'] as const,

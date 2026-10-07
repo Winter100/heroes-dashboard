@@ -1,8 +1,29 @@
 import type { ItemStepFormValues } from '@/schema/item.schema';
-import type { ItemStatistics, ItemStepType } from '@/types/item-type';
+import {
+  type ItemRecipe,
+  type ItemStepRecipe,
+  type StepRecipeInput,
+  type ItemStatistics,
+  type ItemStepType,
+} from '@/types/item-type';
 import { apiClient } from '@/utils/api-client';
 
 export const itemApi = {
+  getAllRecipe: () => apiClient<ItemRecipe[]>('/items-admin/recipe'),
+  createStepRecipe: ({
+    stepId,
+    recipes,
+  }: {
+    stepId: string;
+    recipes: StepRecipeInput[];
+  }) =>
+    apiClient<unknown>(`/items-admin/recipe/${stepId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ recipes }),
+    }),
+  getStepRecipe: (stepId: string) =>
+    apiClient<ItemStepRecipe>(`/items/recipe/${stepId}`),
   getStatistics: () => apiClient<ItemStatistics>('/statistics/item'),
   get: async () => apiClient<ItemStepType[]>('/items/all'),
   getStats: async () =>
