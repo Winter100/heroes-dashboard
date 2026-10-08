@@ -9,6 +9,7 @@ export const revalidateTags = {
   raid: `raids/table`,
   raidDetail: `raids/name`,
   characterImage: `characters/image`,
+  grind: 'items/grind',
 } as const;
 
 export type RevalidateTag =

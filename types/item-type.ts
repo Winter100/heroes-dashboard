@@ -75,3 +75,42 @@ export type StepRecipeInput = {
   stepId: string;
   quantity: number;
 };
+
+export type ItemGrindResponse = {
+  itemGrind: { grindId: number }[];
+};
+
+export type GrindGetType = {
+  id: number;
+  title: {
+    id: number;
+    name: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  stat: {
+    id: number;
+    name: string;
+    image: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  statOneValue: number;
+  statMaxValue: number;
+  grindSlot: {
+    slot: {
+      id: number;
+      name: string;
+      value: string;
+      createdAt: string;
+      updatedAt: string;
+    };
+  }[];
+  grindIngredient: {
+    item: {
+      id: number;
+      name: string;
+    };
+    quantity: number;
+  }[];
+};

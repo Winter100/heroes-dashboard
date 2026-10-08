@@ -11,6 +11,8 @@ import DetailInfoCard from '@/components/common/detail-info-card';
 import type { ItemStepType } from '@/types/item-type';
 import DetailRevalidateButton from '@/components/common/detail-revalidate-button';
 import { revalidateTags } from '@/constant/constant';
+import { buttonVariants } from '@/components/ui/button';
+import Link from 'next/link';
 
 const ItemAdminStepControls = ({ item }: { item: ItemStepType }) => {
   const { onCreateStep, isPending } = useAdminCreateStep(item.id.toString());
@@ -51,10 +53,16 @@ const ItemDetail = ({ itemId }: { itemId: string }) => {
           <ItemBaseDeleteDialog itemId={itemId} />
 
           <DetailRevalidateButton
-            id={itemId}
-            resourceName='아이템 갱신'
-            tag={revalidateTags.recipes}
+            id={data.name}
+            resourceName='아이템 상세 갱신'
+            tag={revalidateTags.recipeDetail}
           />
+          <Link
+            href={`/dashboard/item/grind/${encodeURIComponent(itemId)}`}
+            className={buttonVariants({ variant: 'outline' })}
+          >
+            연마
+          </Link>
         </div>
       </RoleGate>
 

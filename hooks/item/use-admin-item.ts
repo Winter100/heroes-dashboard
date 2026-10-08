@@ -13,8 +13,7 @@ export const useAdminCreateItem = () => {
   const mutation = useMutation({
     mutationFn: itemApi.create,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: itemKeys.lists() });
-      queryClient.invalidateQueries({ queryKey: itemKeys.statistics() });
+      queryClient.invalidateQueries({ queryKey: itemKeys.all });
     },
     onError: (error) => {
       console.log(error.message);

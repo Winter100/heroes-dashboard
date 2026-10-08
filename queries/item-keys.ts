@@ -11,4 +11,6 @@ export const itemKeys = {
   slots: () => [...itemKeys.details(), 'slots'] as const,
   basicId: () => [...itemKeys.details(), 'basicId'] as const,
   statistics: () => [...itemKeys.all, 'statistics'] as const,
+  grinds: () => [...itemKeys.all, 'grinds'] as const,
+  grind: (itemId: string) => [...itemKeys.grinds(), itemId] as const,
 };

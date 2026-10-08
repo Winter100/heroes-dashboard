@@ -5,10 +5,24 @@ import {
   type StepRecipeInput,
   type ItemStatistics,
   type ItemStepType,
+  type GrindGetType,
+  type ItemGrindResponse,
 } from '@/types/item-type';
 import { apiClient } from '@/utils/api-client';
 
 export const itemApi = {
+  getAllGrind: () => apiClient<GrindGetType[]>(`/items-admin/grind`),
+  getGrind: async (itemId: string) => {
+    const data = await apiClient<ItemGrindResponse | null>(`/items-admin/grind/${encodeURIComponent(itemId)}`);
+    if (data === null) throw new Error('???? ?? ? ????.');
+    return data;
+  },
+  createGrind: ({ itemId, ids }: { itemId: string; ids: number[] }) =>
+    apiClient<unknown>(`/items-admin/grind/${encodeURIComponent(itemId)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids }),
+    }),
   getAllRecipe: () => apiClient<ItemRecipe[]>('/items-admin/recipe'),
   createStepRecipe: ({
     stepId,

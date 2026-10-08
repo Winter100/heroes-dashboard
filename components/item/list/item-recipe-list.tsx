@@ -1,6 +1,8 @@
 'use client';
 
 import { FallbackImage } from '@/components/fallback-image';
+import DetailRevalidateButton from '@/components/common/detail-revalidate-button';
+import { revalidateTags } from '@/constant/constant';
 import RecipeIngredientsForm from '@/components/item/recipe/recipe-ingredients-form';
 import RecipeSearch from '@/components/item/recipe/recipe-search';
 import { useItemRecipeForm } from '@/hooks/item/use-item-recipe-form';
@@ -61,9 +63,18 @@ const ItemRecipeList = ({ stepId }: { stepId: string }) => {
               <p className='font-semibold'>{targetRecipe?.name}</p>
             </div>
           </div>
-          <span className='w-fit shrink-0 rounded-full border bg-muted/50 px-3 py-1.5 text-xs text-muted-foreground'>
-            재료 선택 → 수량 입력 → 생성
-          </span>
+          <div className='flex shrink-0 flex-wrap items-center gap-3'>
+            <span className='w-fit rounded-full border bg-muted/50 px-3 py-1.5 text-xs text-muted-foreground'>
+              재료 선택 → 수량 입력 → 생성
+            </span>
+            {targetRecipe?.name && (
+              <DetailRevalidateButton
+                tag={revalidateTags.recipeDetail}
+                id={targetRecipe.name}
+                resourceName='레시피 갱신'
+              />
+            )}
+          </div>
         </div>
       </header>
       <div className='grid items-start gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]'>
