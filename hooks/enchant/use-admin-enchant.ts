@@ -153,3 +153,26 @@ export const useAdminDeleteEnchant = (enchantId: string) => {
 
   return { onDelete, ...mutation };
 };
+
+export const useAdminCreateEnchantDrop = (enchantId: string) => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: enchantApi.createDrop,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: enchantKeys.detail(enchantId) });
+      void queryClient.invalidateQueries({ queryKey: enchantKeys.lists() });
+    },
+  });
+
+  const onCreateDrop = (battleIds: number[]) => {
+    const promise = mutation.mutateAsync({ enchantId, battleIds });
+    showMutationToast(promise, {
+      loading: '인챈트 드롭 등록 중...',
+      success: () => '인챈트 드롭이 등록되었습니다.',
+      error: (error) => getErrorMessage(error, '인챈트 드롭 등록에 실패했습니다.'),
+    });
+    return promise;
+  };
+
+  return { onCreateDrop, ...mutation };
+};

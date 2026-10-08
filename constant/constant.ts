@@ -1,7 +1,9 @@
 export const revalidateTags = {
+  enchantPreview: `enchants?category=ENCHANT`,
   enchantTable: `enchants/table`,
   enchantDetail: `enchants/name`,
   recipes: `items/recipe`,
+  recipeDetail: `items/recipe/name`,
   recipeSSG: `items/recipe/ssg`,
   itemSetOption: `items/set-option`,
   raid: `raids/table`,
