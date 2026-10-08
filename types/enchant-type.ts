@@ -5,7 +5,12 @@ export type EnchantType = {
   rank: { id: number; name: string };
   effects: { id: number; stat_name: string; stat_value: string }[];
   slot: { id: number; name: string; value: string }[];
-  drop_list: { name: string; image: string; type: string }[];
+  drop_list: {
+    id?: string | number;
+    name: string;
+    image: string;
+    type: string;
+  }[];
 };
 
 export type EnchantStatistics = {

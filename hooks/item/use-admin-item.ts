@@ -1,4 +1,5 @@
 import { itemApi } from '@/api/item-api';
+import type { StepRecipeInput } from '@/types/item-type';
 import { getErrorMessage, showMutationToast } from '@/lib/mutation-toast';
 import { createItemFormData } from '@/lib/utils';
 import { itemKeys } from '@/queries/item-keys';
@@ -12,8 +13,7 @@ export const useAdminCreateItem = () => {
   const mutation = useMutation({
     mutationFn: itemApi.create,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: itemKeys.lists() });
-      queryClient.invalidateQueries({ queryKey: itemKeys.statistics() });
+      queryClient.invalidateQueries({ queryKey: itemKeys.all });
     },
     onError: (error) => {
       console.log(error.message);
@@ -200,4 +200,28 @@ export const useAdminDeleteStep = (itemId: string, stepId: string) => {
   };
 
   return { onDelete, ...mutation };
+};
+
+export const useAdminCreateStepRecipe = (stepId: string) => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: itemApi.createStepRecipe,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: itemKeys.stepsRecipe(stepId),
+      });
+    },
+  });
+
+  const onCreateStepRecipe = (recipes: StepRecipeInput[]) => {
+    const promise = mutation.mutateAsync({ stepId, recipes });
+    showMutationToast(promise, {
+      loading: '레시피 등록 중...',
+      success: () => '레시피가 등록되었습니다.',
+      error: (error) => getErrorMessage(error, '레시피 등록에 실패했습니다.'),
+    });
+    return promise;
+  };
+
+  return { onCreateStepRecipe, ...mutation };
 };

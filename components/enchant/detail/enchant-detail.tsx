@@ -10,6 +10,8 @@ import { ADMIN_ROLES, RoleGate } from '@/components/auth/role-gate';
 import DetailInfoCard from '@/components/common/detail-info-card';
 import DetailRevalidateButton from '@/components/common/detail-revalidate-button';
 import { revalidateTags } from '@/constant/constant';
+import { buttonVariants } from '@/components/ui/button';
+import Link from 'next/link';
 
 const EnchantDetail = ({ enchantId }: { enchantId: string }) => {
   const { data } = useEnchantDetail(enchantId);
@@ -25,6 +27,12 @@ const EnchantDetail = ({ enchantId }: { enchantId: string }) => {
             resourceName='인챈트 갱신'
             tag={revalidateTags.enchantDetail}
           />
+          <Link
+            href={`/dashboard/enchant/drop/${encodeURIComponent(enchantId)}`}
+            className={buttonVariants({ variant: 'outline' })}
+          >
+            드랍
+          </Link>
         </div>
       </RoleGate>
       <EnchantCard enchant={data} />
