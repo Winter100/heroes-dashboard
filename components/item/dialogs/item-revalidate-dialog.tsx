@@ -23,6 +23,10 @@ const ItemRevalidateDialog = () => {
         resourceName='아이템 세트 옵션 갱신'
         tag={revalidateTags.itemSetOption}
       />
+      <DetailRevalidateButton
+        resourceName='아이템 연마 갱신'
+        tag={revalidateTags.grind}
+      />
     </ActionDialog>
   );
 };

@@ -1,6 +1,7 @@
 import { EquipmentStep } from '@/types/item-type';
 import ItemStepEditForm from '../forms/item-step-edit-form';
-import { Button } from '../../ui/button';
+import { Button, buttonVariants } from '../../ui/button';
+import Link from 'next/link';
 import { useAdminUpdateStep } from '@/hooks/item/use-admin-item';
 import ItemDetailStepDeleteDialog from '../dialogs/item-detail-step-delete-dialog';
 import { useState } from 'react';
@@ -24,6 +25,15 @@ const ItemDetailEditContainer = ({ stats, itemId, step }: Props) => {
     <div className='relative'>
       {!open && (
         <div className='absolute inset-0 flex justify-end bg-card/60'>
+          <Link
+            href={`/dashboard/item/recipe/${encodeURIComponent(step.id)}`}
+            className={buttonVariants({
+              variant: 'outline',
+              className: 'mr-2 mt-2',
+            })}
+          >
+            레시피
+          </Link>
           <Button onClick={() => setOpen(true)} className='mr-2 mt-2'>
             수정
           </Button>

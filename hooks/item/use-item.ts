@@ -52,6 +52,23 @@ export const useItemPageData = () => {
   return { stats, basicId };
 };
 
+export const useRecipesData = (stepId: string) => {
+  const [recipes, stepRecipe] = useSuspenseQueries({
+    queries: [
+      {
+        queryKey: itemKeys.recipes(),
+        queryFn: itemApi.getAllRecipe,
+      },
+      {
+        queryKey: itemKeys.stepsRecipe(stepId),
+        queryFn: () => itemApi.getStepRecipe(stepId),
+      },
+    ],
+  });
+
+  return { recipes: recipes.data, stepRecipe: stepRecipe.data };
+};
+
 export const useItemStatistics = () => {
   return useSuspenseQuery({
     queryKey: itemKeys.statistics(),

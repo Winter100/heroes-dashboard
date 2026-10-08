@@ -12,6 +12,10 @@ const EnchantRevalidateDialog = () => {
       title='인챈트 갱신'
     >
       <DetailRevalidateButton
+        resourceName='프리뷰용 인챈트 정보 갱신'
+        tag={revalidateTags.enchantPreview}
+      />
+      <DetailRevalidateButton
         resourceName='모든 인챈트 정보 갱신'
         tag={revalidateTags.enchantTable}
       />
